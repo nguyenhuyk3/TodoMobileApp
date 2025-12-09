@@ -4,11 +4,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'shared/utils/constants.dart';
 
-void main() async {
+Future<void> main() async {
   // Nó đảm bảo Flutter đã sẵn sàng trước khi chạy code bất đồng bộ hoặc dùng plugin.
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Load file .env
+  // Tải file .env
   await dotenv.load(fileName: ".env");
   await Supabase.initialize(
     url: dotenv.env[SUPABASE_URL]!,
@@ -24,7 +23,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello World!!!'))),
+      home: Scaffold(body: Center(child: Text('Hello Worldss!!!'))),
     );
   }
 }
