@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo_mobile_app/features/authentication/registration/data/datasources/registration_local_data_source.dart';
+import 'package:todo_mobile_app/features/authentication/registration/domain/repositories/repository.dart';
+import 'package:todo_mobile_app/features/authentication/registration/presentation/bloc/bloc.dart';
 
 import 'core/constants/keys.dart';
-
+import 'features/authentication/registration/data/repositories/repository_impl.dart';
+import 'features/authentication/registration/presentation/pages/step_one.dart';
 
 Future<void> main() async {
   // Nó đảm bảo Flutter đã sẵn sàng trước khi chạy code bất đồng bộ hoặc dùng plugin.
@@ -15,16 +20,48 @@ Future<void> main() async {
     anonKey: dotenv.env[SUPABASE_ANON_KEY]!,
   );
 
-  runApp(const MainApp());  
+  runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget { 
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  late final RegistrationRepository _registrationRepository;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _registrationRepository = RepositoryImpl(
+      registrationLocalDataSource: RegistrationLocalDataSource(),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello Worldss!!!'))),
+    return MultiRepositoryProvider(
+      providers: [RepositoryProvider.value(value: _registrationRepository)],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create:
+                (_) => RegistrationBloc(
+                  registrationRepository: _registrationRepository,
+                ),
+          ),
+        ],
+        child: MaterialApp(home: RegistrationStepOnePage()),
+      ),
     );
   }
 }

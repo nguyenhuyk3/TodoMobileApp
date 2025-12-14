@@ -1,0 +1,26 @@
+import 'package:dartz/dartz.dart';
+import 'package:todo_mobile_app/core/errors/failure.dart';
+
+/*
+  dartz là functional programming library cho Dart
+  Nó cung cấp các kiểu dữ liệu giúp: 
+    - Tránh try-catch lộn xộn
+    - Xử lý lỗi rõ ràng, an toàn
+    - Code dễ test, dễ đọc
+  Các kiểu hay dùng trong Flutter:
+    - Either<L, R>
+    - Option<T>
+    - Unit
+  Either là gì?
+    - Either là kiểu dữ liệu chỉ có 1 trong 2 giá trị:
+      + Left (L) → ❌ lỗi
+      + Right (R) → ✅ thành công
+    - 👉 Quy ước:
+      + Left = Failure / Error
+      + Right = Data / Success
+*/
+abstract class RegistrationRepository {
+  Future<Either<Failure, Object>> sendRegistrationOTP({
+    required String email,
+  });
+}
