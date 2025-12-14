@@ -4,6 +4,16 @@ import '../../features/authentication/registration/presentation/pages/step_one.d
 import '../constants/others.dart';
 import '../constants/sizes.dart';
 
+/*
+  constraints: const BoxConstraints() trong IconButton là để bỏ kích thước mặc định của IconButton.
+  👉 NÊN dùng khi:
+    - Icon phụ
+    - Icon trang trí
+    - Icon trong form / list item
+
+  Align là widget dùng để căn chỉnh vị trí của 1 widget con bên trong vùng không gian mà nó được cấp.
+  👉 Align = đặt con ở đâu trong khung của cha
+*/
 class AuthenticationForm extends StatelessWidget {
   final Widget child;
   final bool allowBack;
