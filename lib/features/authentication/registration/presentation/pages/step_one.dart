@@ -38,8 +38,6 @@ class RegistrationStepOnePage extends StatelessWidget {
         },
         child: Column(
           children: [
-            const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-
             EmailInput(),
 
             const Spacer(),

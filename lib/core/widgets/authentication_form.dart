@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_mobile_app/core/widgets/logo.dart';
 
 import '../../features/authentication/registration/presentation/pages/step_one.dart';
 import '../constants/others.dart';
@@ -64,16 +65,10 @@ class AuthenticationForm extends StatelessWidget {
                   ),
                 ),
 
-              // Icon
-              Align(
-                alignment: Alignment.centerRight,
-                child: Icon(
-                  Icons.star_outlined,
-                  color: COLORS.PRIMARY_APP_COLOR,
-                  size: IconSizes.ICON_PAGE_SIZE,
-                ),
-              ),
+              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
+              Align(alignment: Alignment.center, child: Logo()),
+              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
@@ -91,7 +86,7 @@ class AuthenticationForm extends StatelessWidget {
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-              // Child content
+              // Child
               Expanded(child: child),
             ],
           ),

@@ -22,6 +22,7 @@ class IconSizes {
   static const double ICON_HEADER_SIZE = 20;
 }
 
+const double X_MIN_HEIGHT_SIZED_BOX = 4;
 const double MIN_HEIGHT_SIZED_BOX = 8;
 const double MAX_HEIGTH_SIZED_BOX = 12;
 
