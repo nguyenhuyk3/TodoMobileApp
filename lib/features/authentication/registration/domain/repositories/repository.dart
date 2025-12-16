@@ -20,6 +20,9 @@ import 'package:todo_mobile_app/core/errors/failure.dart';
       + Right = Data / Success
 */
 abstract class RegistrationRepository {
+  Future<Either<Failure, bool>> checkEmailExists({
+    required String email
+  });
   Future<Either<Failure, Object>> sendRegistrationOTP({
     required String email,
   });

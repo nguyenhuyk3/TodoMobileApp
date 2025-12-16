@@ -15,13 +15,14 @@ part 'event.dart';
 part 'state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  final RegistrationRepository registrationRepository;
+  final RegistrationRepository _registrationRepository;
 
   String _email = '';
   String _password = '';
 
-  RegistrationBloc({required this.registrationRepository})
-    : super(RegistrationInitial()) {
+  RegistrationBloc({required RegistrationRepository registrationRepository})
+    : _registrationRepository = registrationRepository,
+      super(RegistrationInitial()) {
     on<RegistrationEmailChanged>(_onEmailChanged);
     on<RegistrationEmailSubmitted>(_onEmailSubmitted);
     on<RegistrationOtpChanged>(_onOtpChanged);
@@ -56,6 +57,19 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
         return;
       }
+
+      final isEmailExists = await _registrationRepository.checkEmailExists(
+        email: currentState.email.value,
+      );
+
+      isEmailExists.fold(
+        (failure) {
+          emit(RegistrationError(error: failure.message));
+        },
+        (exists) {
+          emit(RegistrationStepTwo(otp: const Otp.pure()));
+        },
+      );
     }
   }
 

@@ -29,7 +29,7 @@ class AuthenticationForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
@@ -39,22 +39,29 @@ class AuthenticationForm extends StatelessWidget {
             children: [
               // Back button (only displayed when allowBack = true)
               if (allowBack)
-                IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new,
-                    color: Colors.black,
-                    size: IconSizes.ICON_HEADER_SIZE,
+                Container(
+                  decoration: BoxDecoration(
+                    color: COLORS.BG_ICON_COLOR,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.black, width: 1),
                   ),
-                  onPressed:
-                      () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegistrationStepOnePage(),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.black,
+                      size: IconSizes.ICON_HEADER_SIZE,
+                    ),
+                    onPressed:
+                        () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegistrationStepOnePage(),
+                          ),
                         ),
-                      ),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    alignment: Alignment.centerLeft,
+                  ),
                 ),
 
               // Icon

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:todo_mobile_app/features/authentication/registration/data/datasources/registration_local_data_source.dart';
+import 'package:todo_mobile_app/features/authentication/registration/data/datasources/registration_remote_data_source.dart';
 import 'package:todo_mobile_app/features/authentication/registration/domain/repositories/repository.dart';
 import 'package:todo_mobile_app/features/authentication/registration/presentation/bloc/bloc.dart';
 
@@ -37,8 +37,12 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
 
+    final registrationLocalDataSource = RegistrationRemoteDataSource(
+      supabaseClient: Supabase.instance.client,
+    );
+
     _registrationRepository = RepositoryImpl(
-      registrationLocalDataSource: RegistrationLocalDataSource(),
+      registrationLocalDataSource: registrationLocalDataSource,
     );
   }
 

@@ -56,6 +56,7 @@ class RegistrationStepOnePage extends StatelessWidget {
 
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
           ],
         ),
       ),

@@ -19,7 +19,7 @@ class TextSizes {
 
 class IconSizes {
   static const double ICON_PAGE_SIZE = 52;
-  static const double ICON_HEADER_SIZE = 24;
+  static const double ICON_HEADER_SIZE = 20;
 }
 
 const double MIN_HEIGHT_SIZED_BOX = 8;
