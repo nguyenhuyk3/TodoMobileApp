@@ -20,9 +20,11 @@ class EmailInput extends StatelessWidget {
       },
       builder: (context, error) {
         final borderRadius = BorderRadius.circular(8);
+        final focusNode = FocusNode();
 
         return TextField(
           key: const Key('registration_emailInput_stepOne_textField'),
+          focusNode: focusNode,
           onChanged:
               (email) => context.read<RegistrationBloc>().add(
                 RegistrationEmailChanged(email: email),
@@ -52,16 +54,16 @@ class EmailInput extends StatelessWidget {
             errorBorder: OutlineInputBorder(
               borderRadius: borderRadius,
               borderSide: BorderSide(
-                color: COLORS.UNFOCUSED_ERROR_BORDER_IP_COLOR,
-                width: 2,
+                color: COLORS.ERROR_COLOR,
+                width: 1.5,
               ),
             ),
 
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: borderRadius,
               borderSide: BorderSide(
-                color: COLORS.FOCUSED_ERROR_BORDER_IP_COLOR,
-                width: 2,
+                color: COLORS.ERROR_COLOR,
+                width: 1.5,
               ),
             ),
 
@@ -69,7 +71,7 @@ class EmailInput extends StatelessWidget {
             labelStyle: TextStyle(
               color: error.isEmpty ? COLORS.LABEL_COLOR : COLORS.ERROR_LABEL,
               fontSize: TextSizes.TITLE_SMALL,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
             ),
             // When label is focused (floating)
             floatingLabelStyle: TextStyle(
@@ -83,10 +85,10 @@ class EmailInput extends StatelessWidget {
 
             errorText: error.isEmpty ? null : error,
             errorStyle: TextStyle(
-              color: COLORS.ERROR_TEXT_COLOR,
+              color: COLORS.ERROR_COLOR,
               fontSize: TextSizes.TITLE_X_SMALL,
             ),
-          ),
+          ),  
         );
       },
     );

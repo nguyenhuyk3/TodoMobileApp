@@ -31,7 +31,7 @@ class AuthenticationForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
+      backgroundColor: COLORS.PRIMARY_BG_COLOR,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
@@ -42,9 +42,9 @@ class AuthenticationForm extends StatelessWidget {
               if (allowBack)
                 Container(
                   decoration: BoxDecoration(
-                    color: COLORS.BG_ICON_COLOR,
+                    color: Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.black, width: 1),
+                    border: Border.all(color: Colors.transparent),
                   ),
                   child: IconButton(
                     icon: const Icon(
@@ -66,8 +66,10 @@ class AuthenticationForm extends StatelessWidget {
                 ),
 
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
               Align(alignment: Alignment.center, child: Logo()),
+
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
               const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
@@ -77,8 +79,8 @@ class AuthenticationForm extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: HeaderSizes.HEADER_PAGE_TITLE,
-                  fontWeight: FontWeight.w700,
+                  fontSize: HeaderSizes.HEADER_SECTION_TITLE,
+                  fontWeight: FontWeight.w400,
                   color: COLORS.HEADER_PAGE_COLOR,
                 ),
               ),

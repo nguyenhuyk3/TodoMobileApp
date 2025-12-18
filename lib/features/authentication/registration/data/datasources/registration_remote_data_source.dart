@@ -16,4 +16,22 @@ class RegistrationRemoteDataSource {
             .maybeSingle() !=
         null;
   }
+
+  Future<void> sendEmailOtp({required String email}) async {
+    await _supabaseClient.auth.signInWithOtp(
+      email: email,
+      shouldCreateUser: false,
+    );
+  }
+
+  Future<void> verifyEmailOtp({
+    required String email,
+    required String otp,
+  }) async {
+    await _supabaseClient.auth.verifyOTP(
+      email: email,
+      token: otp,
+      type: OtpType.email,
+    );
+  }
 }

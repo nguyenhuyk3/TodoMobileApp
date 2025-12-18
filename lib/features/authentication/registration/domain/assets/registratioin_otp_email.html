@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Helvetica, Arial, sans-serif;
+            color: #333;
+            background-color: #ffffff;
+            font-size: 16px;
+        }
+
+        .container {
+            margin: 0 auto;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 6px;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            color: #000;
+        }
+
+        .otp {
+            background: linear-gradient(to right, #00bc69, #00bca8);
+            margin: 20px auto;
+            padding: 12px 24px;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            width: fit-content;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .email-info {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        a {
+            color: #00bc69;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!--Subject: Login Verification Required for Your [App Name] Account-->
+    <div class="container">
+        <div class="header">
+            <a>Email đến từ 3B</a>
+        </div>
+        <p>
+            Chúng tôi đã nhận được yêu cầu đăng ký tài khoản cho ứng dụng
+            <strong>Planner Productivity</strong>.
+            Để đảm bảo an toàn, vui lòng sử dụng mã OTP bên dưới để xác minh email của bạn:
+        </p>
+        <h2 class="otp">{{ .Token }}</h2>
+        <p style="font-size: 0.9em">
+            <strong>Mã OTP của bạn chỉ có hiệu lực trong 1 phút.</strong>
+        </p>
+        <hr style="border: none; border-top: 0.5px solid #131111" />
+        <div class="footer">
+            <p>Email này được gửi tự động, vui lòng không trả lời.</p>
+            <p>
+                © 2024 Công ty TNHH 3B – Mọi quyền được bảo lưu
+            </p>
+        </div>
+    </div>
+    <div style="text-align: center">
+        <!-- <div class="email-info">
+            <span>
+                Email được gửi từ
+                <a href="">{{.from_email}}</a>
+            </span>
+        </div> -->
+        <div class="email-info">
+            Email gửi đến: <strong>{{ .Email }}</strong>
+        </div>
+        <!-- <div class="email-info">
+            Truy cập website:
+            <a href="{{ .SiteURL }}">{{ .SiteURL }}</a>
+        </div> -->
+    </div>
+</body>
+<!--    This template is made Redwan one from Ocoxe. -->
+<!-- https://www.ocoxe.com -->
+
+</html>
