@@ -101,7 +101,7 @@ class AuthenticationForm extends StatelessWidget {
 
                   Align(alignment: Alignment.center, child: Logo()),
 
-                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 4),
+                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 3),
 
                   Text(
                     title,
@@ -115,6 +115,8 @@ class AuthenticationForm extends StatelessWidget {
                   const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
                   Expanded(child: child),
+
+                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
                 ],
               ),
             ),

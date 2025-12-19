@@ -20,6 +20,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   String _email = '';
   String _password = '';
 
+  String get email => _email;
+
   RegistrationBloc({required RegistrationRepository registrationRepository})
     : _registrationRepository = registrationRepository,
       super(RegistrationInitial()) {
@@ -45,36 +47,45 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     RegistrationEmailSubmitted event,
     Emitter<RegistrationState> emit,
   ) async {
+    // Lấy trạng thái hiện tại để truy cập vào giá trị email
     final currentState = state;
 
     if (currentState is RegistrationStepOne) {
+      // 1. KIỂM TRA VALIDATION (CLIENT SIDE)
+      // Nếu người dùng chưa nhập hoặc nhập sai định dạng email
       final error = ValidationErrorMessage.getEmailErrorMessage(
         error: currentState.email.error,
       );
 
       if (error != null) {
+        // Phát ra lỗi và kết thúc sớm (return) để không gọi API tốn tài nguyên
         emit(RegistrationError(error: error));
 
         return;
       }
-
-      _email = currentState.email.value;
-
+      // 2. CHUẨN BỊ DỮ LIỆU
+      _email =
+          currentState.email.value; // Lưu vào biến cục bộ để dùng cho bước OTP
+      // 3. BẬT TRẠNG THÁI LOADING
       emit(const RegistrationLoading());
-
-      final isEmailExists = await _registrationRepository.checkEmailExists(
-        email: currentState.email.value,
-      );
+      // Giả lập thời gian chờ (Có thể xóa khi dùng thật)
       await Future.delayed(const Duration(seconds: 2));
+      // 4. GỌI API KIỂM TRA EMAIL TRÊN SERVER
+      // final isEmailExists = await _registrationRepository.checkEmailExists(
+      //   email: currentState.email.value,
+      // );
 
-      isEmailExists.fold(
-        (failure) {
-          emit(RegistrationError(error: failure.message));
-        },
-        (exists) {
-          emit(RegistrationStepTwo(otp: const Otp.pure()));
-        },
-      );
+      //  // 5. XỬ LÝ KẾT QUẢ TỪ REPOSITORY (Sử dụng fold cho dartz/fpdart)
+      // isEmailExists.fold(
+      //   (failure) {
+      //     emit(RegistrationError(error: failure.message));
+      //   },
+      //   (exists) {
+      //     emit(RegistrationStepTwo(otp: const Otp.pure()));
+      //   },
+      // );
+
+      emit(RegistrationStepTwo(otp: const Otp.pure()));
     }
   }
 

@@ -8,6 +8,7 @@ import '../../../../../core/widgets/authentication_form.dart';
 import '../../../../../core/widgets/primary_button.dart';
 import '../bloc/bloc.dart';
 import '../widgets/step_one/email_input.dart';
+import 'step_two.dart';
 
 class RegistrationStepOnePage extends StatelessWidget {
   const RegistrationStepOnePage({super.key});
@@ -30,7 +31,7 @@ class RegistrationStepOnePage extends StatelessWidget {
     // Chúng ta muốn đảm bảo khi người dùng vừa vào trang "Đăng ký", Email sẽ được reset về trống.
     // Việc check "state is RegistrationInitial" giúp tránh việc mỗi lần UI build lại (do gõ phím)
     // thì email lại bị reset (vì addPostFrameCallback sẽ chạy sau mỗi lần build).
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.read<RegistrationBloc>().state is RegistrationInitial) {
         context.read<RegistrationBloc>().add(
@@ -51,7 +52,7 @@ class RegistrationStepOnePage extends StatelessWidget {
                 builder:
                     (_) => BlocProvider.value(
                       value: context.read<RegistrationBloc>(),
-                      child: const RegistrationStepOnePage(),
+                      child: const RegistrationStepTwoPage(),
                     ),
               ),
             );
@@ -65,25 +66,25 @@ class RegistrationStepOnePage extends StatelessWidget {
 
             Builder(
               builder: (context) {
-                final state = context.watch<RegistrationBloc>().state;
-                final isLoading = state is RegistrationLoading;
-
-                return PrimaryButton(
-                  title: 'Gửi mã xác thực OTP',
-                  isLoading: isLoading,
-                  onPressed:
-                      isLoading
-                          ? null
-                          : () {
-                            context.read<RegistrationBloc>().add(
-                              RegistrationEmailSubmitted(),
-                            );
-                          },
+                return BlocSelector<RegistrationBloc, RegistrationState, bool>(
+                  selector: (state) => state is RegistrationLoading,
+                  builder: (context, isLoading) {
+                    return PrimaryButton(
+                      title: 'Gửi mã xác thực OTP',
+                      isLoading: isLoading,
+                      onPressed:
+                          isLoading
+                              ? null
+                              : () {
+                                context.read<RegistrationBloc>().add(
+                                  RegistrationEmailSubmitted(),
+                                );
+                              },
+                    );
+                  },
                 );
               },
             ),
-
-            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 3),
           ],
         ),
       ),

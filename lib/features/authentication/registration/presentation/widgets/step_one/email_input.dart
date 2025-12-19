@@ -46,6 +46,8 @@ class _EmailInputState extends State<EmailInput> {
       },
       builder: (context, error) {
         final hasError = error.isNotEmpty;
+        final state = context.watch<RegistrationBloc>().state;
+        final isLoading = state is RegistrationLoading;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,24 +118,31 @@ class _EmailInputState extends State<EmailInput> {
                                 : COLORS.UNFOCUSED_BORDER_IP_COLOR),
                     size: IconSizes.ICON_INPUT_SIZE,
                   ),
+                  // suffixIcon:
+                  // - Chỉ hiển thị khi TextField có nội dung (_controller.text.isNotEmpty)
+                  // - Nếu đang loading → ẩn icon để tránh user thao tác
+                  // - Khi không loading → hiển thị nút clear (icon cancel)
                   suffixIcon:
                       _controller.text.isNotEmpty
-                          ? IconButton(
-                            icon: Icon(
-                              Icons.cancel,
-                              size: IconSizes.ICON_INPUT_SIZE,
-                              color:
-                                  hasError
-                                      ? COLORS.ERROR_COLOR
-                                      : COLORS.FOCUSED_BORDER_IP_COLOR,
-                            ),
-                            onPressed: () {
-                              _controller.clear();
-                              context.read<RegistrationBloc>().add(
-                                const RegistrationEmailChanged(email: ''),
-                              );
-                            },
-                          )
+                          ? (isLoading
+                              ? null
+                              : IconButton(
+                                icon: Icon(
+                                  Icons.cancel,
+                                  size: IconSizes.ICON_INPUT_SIZE,
+                                  color:
+                                      hasError
+                                          ? COLORS.ERROR_COLOR
+                                          : COLORS.FOCUSED_BORDER_IP_COLOR,
+                                ),
+                                onPressed: () {
+                                  _controller.clear();
+                                  
+                                  context.read<RegistrationBloc>().add(
+                                    const RegistrationEmailChanged(email: ''),
+                                  );
+                                },
+                              ))
                           : null,
                   // Border configs
                   contentPadding: const EdgeInsets.symmetric(

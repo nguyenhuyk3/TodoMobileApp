@@ -10,7 +10,7 @@ class HeaderSizes {
 } 
 
 class TextSizes {
-  static const double TITLE_LARGE = 20;     // Screen / Dialog title
+  static const double TITLE_LARGE = 22;     // Screen / Dialog title
   static const double TITLE_MEDIUM = 18;    // Section title
   static const double TITLE_SMALL = 16;     // Card title
   static const double TITLE_X_SMALL = 14;   // Sub title
