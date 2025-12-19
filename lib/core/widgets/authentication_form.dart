@@ -30,68 +30,59 @@ class AuthenticationForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       backgroundColor: COLORS.PRIMARY_BG_COLOR,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Back button (only displayed when allowBack = true)
-              if (allowBack)
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.transparent),
+        child: Stack(
+          children: [
+            if (allowBack)
+              Positioned(
+                left: 10,
+                top: MIN_HEIGHT_SIZED_BOX,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios_new,
+                    size: IconSizes.ICON_HEADER_SIZE,
+                    color: COLORS.ICON_PRIMARY_COLOR,
                   ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.black,
-                      size: IconSizes.ICON_HEADER_SIZE,
-                    ),
-                    onPressed:
-                        () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegistrationStepOnePage(),
-                          ),
+                  onPressed:
+                      () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => RegistrationStepOnePage(),
                         ),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    alignment: Alignment.centerLeft,
-                  ),
-                ),
-
-              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-
-              Align(alignment: Alignment.center, child: Logo()),
-
-              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-
-              // Title
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: HeaderSizes.HEADER_SECTION_TITLE,
-                  fontWeight: FontWeight.w400,
-                  color: COLORS.HEADER_PAGE_COLOR,
+                      ),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                 ),
               ),
 
-              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-              const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 5),
 
-              // Child
-              Expanded(child: child),
-            ],
-          ),
+                  Align(alignment: Alignment.center, child: Logo()),
+
+                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 4),
+
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: HeaderSizes.HEADER_SECTION_TITLE,
+                      fontWeight: FontWeight.w400,
+                      color: COLORS.HEADER_PAGE_COLOR,
+                    ),
+                  ),
+
+                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 2),
+
+                  Expanded(child: child),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -19,11 +19,14 @@ class TextSizes {
 
 class IconSizes {
   static const double ICON_PAGE_SIZE = 52;
-  static const double ICON_HEADER_SIZE = 20;
+  static const double ICON_HEADER_SIZE = 28;
+  static const double ICON_INPUT_SIZE = 20;
 }
 
 const double X_MIN_HEIGHT_SIZED_BOX = 4;
 const double MIN_HEIGHT_SIZED_BOX = 8;
 const double MAX_HEIGTH_SIZED_BOX = 12;
+
+const double X_MIN_WIDTH_SIZED_BOX = 4;
 
 const double TEXT_IN_BUTTON_SIZE_AT_THE_END = 18;

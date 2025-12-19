@@ -17,9 +17,10 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all<Color>(
-          COLORS.PRIMARY_APP_COLOR,
+          COLORS.PRIMARY_BUTTON_COLOR,
         ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
@@ -27,6 +28,9 @@ class PrimaryButton extends StatelessWidget {
             side: const BorderSide(color: Colors.transparent, width: 1),
           ),
         ),
+        // padding: WidgetStateProperty.all(
+        //   const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        // ),
         minimumSize: WidgetStateProperty.all(
           Size(double.infinity, MediaQuery.of(context).size.height * 0.06),
         ),
