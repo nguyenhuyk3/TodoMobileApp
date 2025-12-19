@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:todo_mobile_app/core/widgets/logo.dart';
 
-import '../../features/authentication/registration/presentation/pages/step_one.dart';
 import '../constants/others.dart';
 import '../constants/sizes.dart';
+import 'logo.dart';
 
 /*
   constraints: const BoxConstraints() trong IconButton là để bỏ kích thước mặc định của IconButton.
@@ -14,17 +13,37 @@ import '../constants/sizes.dart';
 
   Align là widget dùng để căn chỉnh vị trí của 1 widget con bên trong vùng không gian mà nó được cấp.
   👉 Align = đặt con ở đâu trong khung của cha
+
+  BoxDecoration là gì?
+  👉 Dùng để trang trí cho Container:
+    - nền
+    - bo góc
+    - viền
+    - đổ bóng
+
+  BoxShadow dùng để làm gì?
+  👉 Tạo bóng đổ (shadow) phía sau widget
+
+  blurRadius là gì?
+  📌 Độ mờ / độ lan của bóng
+    - Giá trị càng lớn → bóng mềm, loang, nhẹ
+    - Giá trị nhỏ → bóng gắt, sắc cạnh
+
+  offset là gì?
+  👉 Vị trí lệch của bóng so với widget
 */
 class AuthenticationForm extends StatelessWidget {
   final Widget child;
   final bool allowBack;
   final String title;
+  final VoidCallback? onBack;
 
   const AuthenticationForm({
     super.key,
     required this.child,
     this.allowBack = false,
     required this.title,
+    this.onBack,
   });
 
   @override
@@ -36,23 +55,32 @@ class AuthenticationForm extends StatelessWidget {
           children: [
             if (allowBack)
               Positioned(
-                left: 10,
-                top: MIN_HEIGHT_SIZED_BOX,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
-                    size: IconSizes.ICON_HEADER_SIZE,
-                    color: COLORS.ICON_PRIMARY_COLOR,
-                  ),
-                  onPressed:
-                      () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => RegistrationStepOnePage(),
+                left: 15,
+                top: MAX_HEIGTH_SIZED_BOX,
+                child: InkWell(
+                  onTap: onBack ?? () => Navigator.maybePop(context),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: COLORS.PRIMARY_BG_COLOR,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade200),
+                      boxShadow: [
+                        BoxShadow(
+                          // ignore: deprecated_member_use
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
-                      ),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.arrow_back_ios_new,
+                      size: IconSizes.ICON_HEADER_SIZE,
+                      color: COLORS.ICON_PRIMARY_COLOR,
+                    ),
+                  ),
                 ),
               ),
 
@@ -61,7 +89,7 @@ class AuthenticationForm extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 5),
+                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 6),
 
                   Align(alignment: Alignment.center, child: Logo()),
 
@@ -76,7 +104,7 @@ class AuthenticationForm extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 2),
+                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
                   Expanded(child: child),
                 ],

@@ -58,9 +58,14 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         return;
       }
 
+      _email = currentState.email.value;
+
+      emit(const RegistrationLoading());
+
       final isEmailExists = await _registrationRepository.checkEmailExists(
         email: currentState.email.value,
       );
+      await Future.delayed(const Duration(seconds: 2));
 
       isEmailExists.fold(
         (failure) {

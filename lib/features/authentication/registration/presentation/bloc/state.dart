@@ -13,6 +13,13 @@ class RegistrationInitial extends RegistrationState {
   const RegistrationInitial() : super(status: FormzSubmissionStatus.initial);
 }
 
+class RegistrationLoading extends RegistrationState {
+  const RegistrationLoading() : super(status: FormzSubmissionStatus.inProgress);
+
+  @override
+  List<Object?> get props => [];
+}
+
 class RegistrationStepOne extends RegistrationState {
   final Email email;
 
