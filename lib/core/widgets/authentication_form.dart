@@ -31,6 +31,14 @@ import 'logo.dart';
 
   offset là gì?
   👉 Vị trí lệch của bóng so với widget
+
+    InkWell trong Flutter là widget dùng để bắt sự kiện chạm (tap) và tạo hiệu ứng 
+  gợn sóng (ripple effect) theo phong cách Material Design.
+    Hiểu ngắn gọn 👇
+    InkWell = vùng có thể bấm + hiệu ứng sóng nước
+    InkWell dùng để làm gì?
+      ✔️ Bắt tap
+      ✔️ Hiệu ứng ripple khi chạm
 */
 class AuthenticationForm extends StatelessWidget {
   final Widget child;
