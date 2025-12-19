@@ -3,11 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../core/constants/sizes.dart';
-import '../../../../../core/widgets/authentication_form.dart';
-import '../../../../../core/widgets/primary_button.dart';
-import '../bloc/bloc.dart';
-import '../widgets/step_one/email_input.dart';
+import '../../../../../../../core/widgets/authentication_form.dart';
+import '../../../../../../../core/widgets/primary_button.dart';
+import '../../../bloc/bloc.dart';
+import '../email_input.dart';
 import 'step_two.dart';
 
 class RegistrationStepOnePage extends StatelessWidget {

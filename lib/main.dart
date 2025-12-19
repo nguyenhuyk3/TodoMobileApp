@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:todo_mobile_app/features/authentication/registration/data/datasources/registration_remote_data_source.dart';
-import 'package:todo_mobile_app/features/authentication/registration/domain/repositories/repository.dart';
-import 'package:todo_mobile_app/features/authentication/registration/presentation/bloc/bloc.dart';
+import 'package:todo_mobile_app/features/authentication/data/datasources/authentication_remote_data_source.dart';
+import 'package:todo_mobile_app/features/authentication/domain/repositories/repository.dart';
+import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/registration/bloc/bloc.dart';
 
 import 'core/constants/keys.dart';
-import 'features/authentication/registration/data/repositories/repository_impl.dart';
-import 'features/authentication/registration/presentation/pages/step_one.dart';
+import 'features/authentication/data/repositories/repository_impl.dart';
+import 'features/authentication/presentation/registration/widgets/step_one/pages/step_one.dart';
 
 Future<void> main() async {
   // Nó đảm bảo Flutter đã sẵn sàng trước khi chạy code bất đồng bộ hoặc dùng plugin.
@@ -31,18 +32,18 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  late final RegistrationRepository _registrationRepository;
+  late final AuthenticationRepository _authenticationRepository;
 
   @override
   void initState() {
     super.initState();
 
-    final registrationLocalDataSource = RegistrationRemoteDataSource(
+    final authenticationRemoteDataSource = AuthenticationRemoteDataSource(
       supabaseClient: Supabase.instance.client,
     );
 
-    _registrationRepository = RepositoryImpl(
-      registrationLocalDataSource: registrationLocalDataSource,
+    _authenticationRepository = AuthenticationRepositoryImpl(
+      authenticationRemoteDataSource: authenticationRemoteDataSource,
     );
   }
 
@@ -54,13 +55,15 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-      providers: [RepositoryProvider.value(value: _registrationRepository)],
+      providers: [RepositoryProvider.value(value: _authenticationRepository)],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create:
                 (_) => RegistrationBloc(
-                  registrationRepository: _registrationRepository,
+                  checkEmailExistsUseCase: CheckEmailExistsUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
                 ),
           ),
         ],

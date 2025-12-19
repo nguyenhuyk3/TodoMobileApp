@@ -3,27 +3,27 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
 
 import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/validator/validation_error_message.dart';
 import '../../../inputs/email.dart';
 import '../../../inputs/otp.dart';
 import '../../../inputs/password.dart';
-import '../../domain/repositories/repository.dart';
 
 part 'event.dart';
 part 'state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  final RegistrationRepository _registrationRepository;
+  final CheckEmailExistsUseCase _checkEmailExistsUseCase;
 
   String _email = '';
   String _password = '';
 
   String get email => _email;
 
-  RegistrationBloc({required RegistrationRepository registrationRepository})
-    : _registrationRepository = registrationRepository,
+  RegistrationBloc({required CheckEmailExistsUseCase checkEmailExistsUseCase})
+    : _checkEmailExistsUseCase = checkEmailExistsUseCase,
       super(RegistrationInitial()) {
     on<RegistrationEmailChanged>(_onEmailChanged);
     on<RegistrationEmailSubmitted>(_onEmailSubmitted);
@@ -71,21 +71,18 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       // Giả lập thời gian chờ (Có thể xóa khi dùng thật)
       await Future.delayed(const Duration(seconds: 2));
       // 4. GỌI API KIỂM TRA EMAIL TRÊN SERVER
-      // final isEmailExists = await _registrationRepository.checkEmailExists(
-      //   email: currentState.email.value,
-      // );
-
-      //  // 5. XỬ LÝ KẾT QUẢ TỪ REPOSITORY (Sử dụng fold cho dartz/fpdart)
-      // isEmailExists.fold(
-      //   (failure) {
-      //     emit(RegistrationError(error: failure.message));
-      //   },
-      //   (exists) {
-      //     emit(RegistrationStepTwo(otp: const Otp.pure()));
-      //   },
-      // );
-
-      emit(RegistrationStepTwo(otp: const Otp.pure()));
+      final isEmailExists = await _checkEmailExistsUseCase.excute(
+        email: currentState.email.value,
+      );
+      // 5. XỬ LÝ KẾT QUẢ TỪ REPOSITORY (Sử dụng fold cho dartz/fpdart)
+      isEmailExists.fold(
+        (failure) {
+          emit(RegistrationError(error: failure.message));
+        },
+        (_) {
+          emit(RegistrationStepTwo(otp: const Otp.pure()));
+        },
+      );
     }
   }
 

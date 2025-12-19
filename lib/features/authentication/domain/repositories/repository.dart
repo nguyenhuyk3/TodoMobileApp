@@ -19,7 +19,7 @@ import 'package:todo_mobile_app/core/errors/failure.dart';
       + Left = Failure / Error
       + Right = Data / Success
 */
-abstract class RegistrationRepository {
+abstract class AuthenticationRepository {
   Future<Either<Failure, bool>> checkEmailExists({
     required String email
   });

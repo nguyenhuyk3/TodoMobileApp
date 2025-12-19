@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';
 import 'package:todo_mobile_app/core/constants/sizes.dart';
 
-import '../../../../../core/constants/others.dart';
-import '../../../../../core/widgets/authentication_form.dart';
-import '../../../../../core/widgets/primary_button.dart';
-import '../bloc/bloc.dart';
+import '../../../../../../../core/constants/others.dart';
+import '../../../../../../../core/widgets/authentication_form.dart';
+import '../../../../../../../core/widgets/primary_button.dart';
+import '../../../bloc/bloc.dart';
 
 class RegistrationStepTwoPage extends StatefulWidget {
   const RegistrationStepTwoPage({super.key});

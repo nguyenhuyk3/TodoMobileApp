@@ -1,11 +1,11 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../../core/constants/others.dart';
+import '../../../../core/constants/others.dart';
 
-class RegistrationRemoteDataSource {
+class AuthenticationRemoteDataSource {
   final SupabaseClient _supabaseClient;
 
-  RegistrationRemoteDataSource({required SupabaseClient supabaseClient})
+  AuthenticationRemoteDataSource({required SupabaseClient supabaseClient})
     : _supabaseClient = supabaseClient;
 
   Future<bool> checkEmailExists({required String email}) async {
@@ -18,13 +18,13 @@ class RegistrationRemoteDataSource {
   }
 
   Future<void> sendEmailOtp({required String email}) async {
-    await _supabaseClient.auth.signInWithOtp(
+    await _supabaseClient.auth.signInWithOtp(     
       email: email,
       shouldCreateUser: false,
     );
   }
 
-  Future<void> verifyEmailOtp({
+  Future<void> verifyEmailOtp({ 
     required String email,
     required String otp,
   }) async {
