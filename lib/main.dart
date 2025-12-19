@@ -9,7 +9,7 @@ import 'package:todo_mobile_app/features/authentication/presentation/registratio
 
 import 'core/constants/keys.dart';
 import 'features/authentication/data/repositories/repository_impl.dart';
-import 'features/authentication/presentation/registration/widgets/step_one/pages/step_one.dart';
+import 'features/authentication/presentation/registration/pages/step_one.dart';
 
 Future<void> main() async {
   // Nó đảm bảo Flutter đã sẵn sàng trước khi chạy code bất đồng bộ hoặc dùng plugin.

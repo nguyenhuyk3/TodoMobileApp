@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:todo_mobile_app/core/constants/others.dart';
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
 
 import '../../../../../core/errors/failure.dart';
@@ -90,6 +91,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     RegistrationOtpChanged event,
     Emitter<RegistrationState> emit,
   ) async {
+    LOGGER.i(state);
+
     emit(RegistrationStepTwo(otp: Otp.dirty(event.otp)));
   }
 
