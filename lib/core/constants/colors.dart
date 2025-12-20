@@ -25,6 +25,7 @@ class AppColors {
 
   // Text
   final PRIMARY_TEXT_COLOR = Color(0xFF2C2C2C);
+  final HINT_TEXT_COLOR = Colors.grey.shade400;
 
   // App
   final PRIMARY_APP_COLOR = Color.fromRGBO(249, 202, 33, 1);

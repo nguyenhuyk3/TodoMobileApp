@@ -1,56 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/registration/pages/step_one.dart';
 
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
 import '../bloc/bloc.dart';
-import '../widgets/step_two/otp_info_section.dart';
-import '../widgets/step_two/otp_pin_put.dart';
-import '../widgets/step_two/otp_submit_button.dart';
-import '../widgets/step_two/otp_timer_resent.dart';
-import 'step_three.dart';
+import '../widgets/step_three/confirmed_password_button.dart';
+import '../widgets/step_three/password_input.dart';
 
-class RegistrationStepTwoPage extends StatelessWidget {
-  const RegistrationStepTwoPage({super.key});
+class RegistrationStepThreePage extends StatelessWidget {
+  const RegistrationStepThreePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final email = context.read<RegistrationBloc>().email;
-
     return AuthenticationForm(
-      title: 'Nhập mã OTP',
+      title: 'Thiết lập mật khẩu',
       child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
-          if (state is RegistrationStepThree) {
+          if (state is RegistrationStepFour) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder:
                     (_) => BlocProvider.value(
                       value: context.read<RegistrationBloc>(),
-                      // Need to change
-                      child: const RegistrationStepThreePage(),
+                      child: RegistrationStepOnePage(),
                     ),
               ),
             );
           }
         },
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            OtpInfoSection(email: email),
-
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-            const OtpPinInput(),
+            PasswordInput(label: 'Mật khẩu', hintText: 'Hãy nhập mật khẩu'),
 
-            const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
 
-            const OtpTimerResend(),
+            PasswordInput(
+              label: 'Mật khẩu xác nhận',
+              hintText: 'Hãy nhập mật khẩu xác nhận',
+              isConfirmedPassword: true,
+            ),
 
             const Spacer(),
 
-            const OtpSubmitButton(),
+            NextStepButton(),
           ],
         ),
       ),

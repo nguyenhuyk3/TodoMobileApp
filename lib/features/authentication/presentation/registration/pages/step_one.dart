@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/registration/widgets/step_one/send_otp_button.dart';
 
 import '../../../../../core/widgets/authentication_form.dart';
-import '../../../../../core/widgets/primary_button.dart';
 import '../bloc/bloc.dart';
 import '../widgets/step_one/email_input.dart';
 import 'step_two.dart';
@@ -42,6 +42,7 @@ class RegistrationStepOnePage extends StatelessWidget {
     return AuthenticationForm(
       title: 'Đăng ký',
       allowBack: true,
+      resizeToAvoidBottomInset: true,
       child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is RegistrationStepTwo) {
@@ -63,27 +64,7 @@ class RegistrationStepOnePage extends StatelessWidget {
 
             const Spacer(),
 
-            Builder(
-              builder: (context) {
-                return BlocSelector<RegistrationBloc, RegistrationState, bool>(
-                  selector: (state) => state is RegistrationLoading,
-                  builder: (context, isLoading) {
-                    return PrimaryButton(
-                      title: 'Gửi mã xác thực OTP',
-                      isLoading: isLoading,
-                      onPressed:
-                          isLoading
-                              ? null
-                              : () {
-                                context.read<RegistrationBloc>().add(
-                                  RegistrationEmailSubmitted(),
-                                );
-                              },
-                    );
-                  },
-                );
-              },
-            ),
+            const SendOTPButton()
           ],
         ),
       ),

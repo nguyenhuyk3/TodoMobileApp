@@ -44,6 +44,7 @@ class AuthenticationForm extends StatelessWidget {
   final Widget child;
   final bool allowBack;
   final String title;
+  final bool resizeToAvoidBottomInset;
   final VoidCallback? onBack;
 
   const AuthenticationForm({
@@ -51,13 +52,14 @@ class AuthenticationForm extends StatelessWidget {
     required this.child,
     this.allowBack = false,
     required this.title,
+    this.resizeToAvoidBottomInset = false,
     this.onBack,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: COLORS.PRIMARY_BG_COLOR,
       body: SafeArea(
         child: Stack(

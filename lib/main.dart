@@ -70,6 +70,11 @@ class _MainAppState extends State<MainApp> {
                   verifyOTPUseCase: VerifyOTPUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
+                  // )..add(
+                  //   RegistrationPasswordChanged(
+                  //     password: '',
+                  //     confirmedPassword: '',
+                  //   ),
                 ),
           ),
         ],

@@ -79,29 +79,33 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       // Giả lập thời gian chờ (Có thể xóa khi dùng thật)
       await Future.delayed(const Duration(seconds: 2));
       // 4. GỌI API KIỂM TRA EMAIL TRÊN SERVER
-      final isEmailExists = await _checkEmailExistsUseCase.execute(
-        email: currentState.email.value,
-      );
-      // Thay vì dùng fold lồng nhau, ta dùng pattern matching hoặc biến trung gian
-      // Ở đây dùng await để xử lý tuần tự:
-      final isEmailExistsResult = isEmailExists.fold((l) => l, (r) => r);
+      // final isEmailExists = await _checkEmailExistsUseCase.execute(
+      //   email: currentState.email.value,
+      // );
+      // // Thay vì dùng fold lồng nhau, ta dùng pattern matching hoặc biến trung gian
+      // // Ở đây dùng await để xử lý tuần tự:
+      // final isEmailExistsResult = isEmailExists.fold((l) => l, (r) => r);
 
-      if (isEmailExistsResult is Failure) {
-        emit(RegistrationError(error: isEmailExistsResult.message));
+      // if (isEmailExistsResult is Failure) {
+      //   emit(RegistrationError(error: isEmailExistsResult.message));
 
-        return;
+      //   return;
+      // }
+
+      // final sendOtpResult = await _sendOTPUseCase.execute(email: _email);
+
+      // sendOtpResult.fold(
+      //   (failure) {
+      //     emit(RegistrationError(error: failure.message));
+      //   },
+      //   (_) {
+      //     emit(RegistrationStepTwo(otp: const Otp.pure()));
+      //   },
+      // );
+
+      if (currentState.email.value == 'abc@gmail.com') {
+        emit(RegistrationStepTwo(otp: const Otp.pure()));
       }
-
-      final sendOtpResult = await _sendOTPUseCase.execute(email: _email);
-
-      sendOtpResult.fold(
-        (failure) {
-          emit(RegistrationError(error: failure.message));
-        },
-        (_) {
-          emit(RegistrationStepTwo(otp: const Otp.pure()));
-        },
-      );
     }
   }
 
@@ -125,7 +129,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       // );
 
       if (event.otp == '111111') {
-        emit(RegistrationStepOne(email: Email.dirty('')));
+        emit(
+          RegistrationStepThree(
+            password: const Password.pure(),
+            confirmedPassword: '',
+            error: '',
+          ),
+        );
       }
     }
   }
