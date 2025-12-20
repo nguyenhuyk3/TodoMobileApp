@@ -32,7 +32,7 @@ import 'logo.dart';
   offset là gì?
   👉 Vị trí lệch của bóng so với widget
 
-    InkWell trong Flutter là widget dùng để bắt sự kiện chạm (tap) và tạo hiệu ứng 
+  InkWell trong Flutter là widget dùng để bắt sự kiện chạm (tap) và tạo hiệu ứng 
   gợn sóng (ripple effect) theo phong cách Material Design.
     Hiểu ngắn gọn 👇
     InkWell = vùng có thể bấm + hiệu ứng sóng nước
@@ -57,6 +57,7 @@ class AuthenticationForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: COLORS.PRIMARY_BG_COLOR,
       body: SafeArea(
         child: Stack(
@@ -97,7 +98,7 @@ class AuthenticationForm extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 6),
+                  SizedBox(height: MAX_HEIGTH_SIZED_BOX * (allowBack ? 6 : 4)),
 
                   Align(alignment: Alignment.center, child: Logo()),
 

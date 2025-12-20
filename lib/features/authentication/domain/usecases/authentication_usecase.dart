@@ -15,3 +15,22 @@ abstract class AuthenticationUsecase {
     required AuthenticationRepository authenticationRepository,
   }) : _authenticationRepository = authenticationRepository;
 }
+
+class SendOTPUseCase extends AuthenticationUsecase {
+  SendOTPUseCase({required super.authenticationRepository});
+
+  Future<Either<Failure, Object>> execute({required String email}) {
+    return authenticationRepository.sendOTP(email: email);
+  }
+}
+
+class VerifyOTPUseCase extends AuthenticationUsecase {
+  VerifyOTPUseCase({required super.authenticationRepository});
+
+  Future<Either<Failure, Object>> execute({
+    required String email,
+    required String otp,
+  }) {
+    return authenticationRepository.verifyOTP(email: email, otp: otp);
+  }
+}

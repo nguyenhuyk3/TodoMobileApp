@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
 import '../../../../../../core/utils/ticker.dart';
+import '../../bloc/bloc.dart';
 import '../../timer/bloc/bloc.dart';
 
 class OtpTimerResend extends StatelessWidget {
@@ -67,6 +68,6 @@ class OtpTimerResend extends StatelessWidget {
     context.read<TimerBloc>().add(
       const TimerStarted(duration: TIME_FOR_RESENDING_MAIL),
     );
-    // context.read<RegistrationBloc>().add(RegistrationResendRequested()); // Nếu có
+    context.read<RegistrationBloc>().add(RegistrationResendOTPRequested());
   }
 }

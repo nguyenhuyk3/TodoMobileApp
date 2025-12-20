@@ -17,10 +17,10 @@ class AuthenticationRemoteDataSource {
         null;
   }
 
-  Future<void> sendEmailOtp({required String email}) async {
+  Future<void> sendEmailOTP({required String email}) async {
     await _supabaseClient.auth.signInWithOtp(     
       email: email,
-      shouldCreateUser: false,
+      shouldCreateUser: true,
     );
   }
 

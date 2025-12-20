@@ -64,6 +64,12 @@ class _MainAppState extends State<MainApp> {
                   checkEmailExistsUseCase: CheckEmailExistsUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
+                  sendOTPUseCase: SendOTPUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
+                  verifyOTPUseCase: VerifyOTPUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
                 ),
           ),
         ],

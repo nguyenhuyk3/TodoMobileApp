@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../domain/repositories/repository.dart';
@@ -11,12 +12,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   AuthenticationRepositoryImpl({
     required AuthenticationRemoteDataSource authenticationRemoteDataSource,
   }) : _authenticationRemoteDataSource = authenticationRemoteDataSource;
-
-  @override
-  Future<Either<Failure, Object>> sendRegistrationOTP({required String email}) {
-    // TODO: implement sendRegistrationOTP
-    throw UnimplementedError();
-  }
 
   @override
   Future<Either<Failure, bool>> checkEmailExists({
@@ -32,6 +27,38 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       }
 
       return const Right(true);
+    } catch (e) {
+      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Object>> sendOTP({required String email}) async {
+    try {
+      await _authenticationRemoteDataSource.sendEmailOTP(email: email);
+
+      return Right(Object());
+    } on AuthException catch (e) {
+      return Left(Failure(error: mapAuthException(e), details: e));
+    } catch (e) {
+      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Object>> verifyOTP({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      await _authenticationRemoteDataSource.verifyEmailOtp(
+        email: email,
+        otp: otp,
+      );
+
+      return Right(Object());
+    } on AuthException catch (e) {
+      return Left(Failure(error: mapAuthException(e), details: e));
     } catch (e) {
       return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
     }

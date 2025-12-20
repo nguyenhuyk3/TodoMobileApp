@@ -18,26 +18,40 @@ class RegistrationStepTwoPage extends StatelessWidget {
 
     return AuthenticationForm(
       title: 'Nhập mã OTP',
-      allowBack: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          OtpInfoSection(email: email),
-          
-          const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+      child: BlocListener<RegistrationBloc, RegistrationState>(
+        listener: (context, state) {
+          if (state is RegistrationStepOne) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (_) => BlocProvider.value(
+                      value: context.read<RegistrationBloc>(),
+                      // Need to change
+                      child: const RegistrationStepTwoPage(),
+                    ),
+              ),
+            );
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            OtpInfoSection(email: email),
 
-          const OtpPinInput(),
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-          const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+            const OtpPinInput(),
 
-          const OtpTimerResend(),
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-          const Spacer(),
+            const OtpTimerResend(),
 
-          const OtpSubmitButton(),
+            const Spacer(),
 
-          const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-        ],
+            const OtpSubmitButton(),
+          ],
+        ),
       ),
     );
   }

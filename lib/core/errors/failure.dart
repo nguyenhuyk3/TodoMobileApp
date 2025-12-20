@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 enum ErrorInformation {
   // Authentication
   EMPTY_PASSWORD(message: 'Mật khẩu không được bỏ trống'),
@@ -10,11 +12,49 @@ enum ErrorInformation {
   EMAIL_NOT_EXISTS(message: 'Email không tồn tại trong hệ thống'),
   EMAIL_ALREADY_EXISTS(message: 'Email đã được sử dụng'),
 
+  // OTP / Auth
+  OTP_TOO_MANY_REQUESTS(message: 'Bạn đã yêu cầu mã OTP quá nhiều lần'),
+  OTP_INVALID(message: 'Mã OTP không hợp lệ hoặc đã hết hạn'),
+  OTP_SEND_FAILED(message: 'Không thể gửi mã OTP'),
+  AUTH_INVALID_CREDENTIALS(message: 'Thông tin đăng nhập không hợp lệ'),
+  OTP_EXPIRED(message: 'Mã OTP đã hết hạn'),
+  OTP_VERIFY_FAILED(message: 'Xác thực OTP thất bại'),
+
   UNDEFINED_ERROR(message: 'Lỗi không xác định được');
 
   final String message;
 
   const ErrorInformation({required this.message});
+}
+
+ErrorInformation mapAuthException(AuthException e) {
+  final message = e.message.toLowerCase();
+
+  if (message.contains('invalid login credentials')) {
+    return ErrorInformation.EMAIL_NOT_EXISTS;
+  }
+
+  if (message.contains('user already registered')) {
+    return ErrorInformation.EMAIL_ALREADY_EXISTS;
+  }
+
+  if (message.contains('too many requests') || message.contains('rate limit')) {
+    return ErrorInformation.OTP_TOO_MANY_REQUESTS;
+  }
+
+  if (message.contains('otp') && message.contains('invalid')) {
+    return ErrorInformation.OTP_INVALID;
+  }
+
+  if (message.contains('invalid') || message.contains('token')) {
+    return ErrorInformation.OTP_INVALID;
+  }
+
+  if (message.contains('expired')) {
+    return ErrorInformation.OTP_EXPIRED;
+  }
+
+  return ErrorInformation.UNDEFINED_ERROR;
 }
 
 class Failure {

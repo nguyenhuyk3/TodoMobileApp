@@ -187,6 +187,7 @@ class _EmailInputState extends State<EmailInput> {
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
               ),
             ),
+            
             // Tùy chỉnh Error Message dưới TextField (mượt hơn)
             if (hasError)
               Padding(

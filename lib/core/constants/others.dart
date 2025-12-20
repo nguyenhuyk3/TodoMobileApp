@@ -7,7 +7,7 @@ import 'tables.dart';
 
 const MINIMUM_LENGTH_FOR_PASSWORD = 8;
 const LENGTH_OF_OTP = 6;
-const TIME_FOR_RESENDING_MAIL = 10;
+const TIME_FOR_RESENDING_MAIL = 60;
 
 final COLORS = AppColors();
 final TABLES = Tables();

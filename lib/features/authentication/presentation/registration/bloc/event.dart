@@ -29,6 +29,8 @@ class RegistrationOtpChanged extends RegistrationEvent {
   List<Object?> get props => [otp];
 }
 
+class RegistrationResendOTPRequested extends RegistrationEvent {}
+
 class RegistrationOtpSubmitted extends RegistrationEvent {}
 
 // Step 3
