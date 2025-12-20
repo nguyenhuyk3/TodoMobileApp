@@ -25,6 +25,7 @@ class AppColors {
 
   // Text
   final PRIMARY_TEXT_COLOR = Color(0xFF2C2C2C);
+  final SECONDARY_TEXT_COLOR = const Color.fromARGB(255, 152, 151, 150);
   final HINT_TEXT_COLOR = Colors.grey.shade400;
 
   // App

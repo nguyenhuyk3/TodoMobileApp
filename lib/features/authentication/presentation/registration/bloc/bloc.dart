@@ -7,6 +7,7 @@ import 'package:todo_mobile_app/core/constants/others.dart';
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
 
 import '../../../../../core/errors/failure.dart';
+import '../../../../../core/utils/date.dart';
 import '../../../../../core/utils/validator/validation_error_message.dart';
 import '../../../inputs/email.dart';
 import '../../../inputs/otp.dart';
@@ -256,7 +257,12 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       } else {
         _password = currentState.password.value;
 
-        emit(RegistrationStepFour(fullName: '', birthDate: ''));
+        emit(
+          RegistrationStepFour(
+            fullName: '',
+            birthDate: BIRTH_DATE_DEFAUL_VALUE,
+          ),
+        );
       }
     }
   }
@@ -293,6 +299,21 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
         return;
       }
+
+      final request = {
+        'account': {'email': _email, 'password': _password},
+        'information': {
+          'name': currentState.fullName,
+          'sex': currentState.sex,
+          'birthDate': convertToDDMMYYYY(currentState.birthDate),
+        },
+      };
+
+      emit(const RegistrationLoading());
+
+      await Future.delayed(const Duration(seconds: 2));
+
+      emit(const RegistrationSuccess());
     }
   }
 

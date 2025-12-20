@@ -4,27 +4,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
 import '../bloc/bloc.dart';
-import '../widgets/step_three/confirmed_password_button.dart';
-import '../widgets/step_three/password_input.dart';
-import 'step_four.dart';
+import '../widgets/step_four/birth_date_picker.dart';
+import '../widgets/step_four/completion_button.dart';
+import '../widgets/step_four/full_name_input.dart';
+import '../widgets/step_four/sex_selection.dart';
+import 'step_one.dart';
 
-class RegistrationStepThreePage extends StatelessWidget {
-  const RegistrationStepThreePage({super.key});
+class RegistrationStepFourPage extends StatelessWidget {
+  const RegistrationStepFourPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AuthenticationForm(
-      title: 'Thiết lập mật khẩu',
+      title: 'Thông tin cá nhân',
       child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
-          if (state is RegistrationStepFour) {
+          if (state is RegistrationSuccess) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder:
                     (_) => BlocProvider.value(
                       value: context.read<RegistrationBloc>(),
-                      child: RegistrationStepFourPage(),
+                      child: RegistrationStepOnePage(),
                     ),
               ),
             );
@@ -34,19 +36,19 @@ class RegistrationStepThreePage extends StatelessWidget {
           children: [
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-            PasswordInput(label: 'Mật khẩu', hintText: 'Hãy nhập mật khẩu'),
+            FullNameInput(),
 
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
 
-            PasswordInput(
-              label: 'Mật khẩu xác nhận',
-              hintText: 'Hãy nhập mật khẩu xác nhận',
-              isConfirmedPassword: true,
-            ),
+            BirthDatePicker(),
+
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
+
+            SexSelection(),
 
             const Spacer(),
 
-            NextStepButton(),
+            CompletionButton(),
           ],
         ),
       ),

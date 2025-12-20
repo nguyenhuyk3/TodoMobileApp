@@ -51,10 +51,11 @@ class PrimaryButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          elevation: 1, // Sử dụng nếu không có thuộc tính boxShadow từ BoxDecoration
+          elevation:
+              2, // Sử dụng nếu không có thuộc tính boxShadow từ BoxDecoration
           padding: const EdgeInsets.symmetric(horizontal: 24),
           // Hiệu ứng loang khi nhấn (Ripple effect)
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          // tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         child:
             isLoading
@@ -72,15 +73,14 @@ class PrimaryButton extends StatelessWidget {
                     if (icon != null) ...[
                       Icon(icon, size: 20, color: COLORS.PRIMARY_TEXT_COLOR),
 
-                      const SizedBox(width: 8),
+                      const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 2),
                     ],
                     Text(
                       title,
                       style: TextStyle(
                         color: COLORS.PRIMARY_TEXT_COLOR,
                         fontSize: TextSizes.TITLE_MEDIUM,
-                        fontWeight:
-                            FontWeight.w500,
+                        fontWeight: FontWeight.w500,
                         letterSpacing: 0.7, // Dùng để giãn chữ theo chiều ngang
                       ),
                     ),
