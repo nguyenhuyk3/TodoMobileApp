@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_mobile_app/core/constants/others.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/login/pages/login.dart';
 
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
@@ -18,17 +18,16 @@ class ForgotPasswordStepThreePage extends StatelessWidget {
       child: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
         listener: (context, state) {
           if (state is ForgotPasswordSuccess) {
-            LOGGER.i('Đi tới bước 4 của Quên mật khẩu');
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder:
-            //         (_) => BlocProvider.value(
-            //           value: context.read<ForgotPasswordBloc>(),
-            //           child: RegistrationStepFourPage(),
-            //         ),
-            //   ),
-            // );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (_) => BlocProvider.value(
+                      value: context.read<ForgotPasswordBloc>(),
+                      child: LoginPage(),
+                    ),
+              ),
+            );
           }
         },
         child: Column(

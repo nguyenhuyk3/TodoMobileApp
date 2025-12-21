@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
 import '../bloc/bloc.dart';
 import '../widgets/step_one/email_input.dart';
@@ -42,7 +43,15 @@ class ForgotPasswordStepOnePage extends StatelessWidget {
           }
         },
         child: Column(
-          children: [const EmailInput(), const Spacer(), const SendOTPButton()],
+          children: [
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+
+            const EmailInput(),
+
+            const Spacer(),
+
+            const SendOTPButton(),
+          ],
         ),
       ),
     );

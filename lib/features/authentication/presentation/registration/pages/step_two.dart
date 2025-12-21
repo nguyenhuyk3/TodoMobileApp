@@ -38,6 +38,8 @@ class RegistrationStepTwoPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+
             OtpInfoSection(email: email),
 
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),

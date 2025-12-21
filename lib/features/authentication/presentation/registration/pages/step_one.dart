@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/widgets/step_one/send_otp_button.dart';
 
+import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
 import '../bloc/bloc.dart';
 import '../widgets/step_one/email_input.dart';
@@ -60,11 +61,13 @@ class RegistrationStepOnePage extends StatelessWidget {
         },
         child: Column(
           children: [
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+            
             const EmailInput(),
 
             const Spacer(),
 
-            const SendOTPButton()
+            const SendOTPButton(),
           ],
         ),
       ),

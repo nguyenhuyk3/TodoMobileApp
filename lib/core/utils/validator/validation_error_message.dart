@@ -3,15 +3,16 @@ import 'package:todo_mobile_app/core/errors/failure.dart';
 import '../../../features/authentication/inputs/email.dart';
 import '../../../features/authentication/inputs/otp.dart';
 import '../../../features/authentication/inputs/password.dart';
+import '../../constants/errors.dart';
 import '../../constants/others.dart';
 
 class ValidationErrorMessage {
   static String? getEmailErrorMessage({EmailValidationError? error}) {
     switch (error) {
       case EmailValidationError.empty:
-        return "Email không được để trống";
+        return EMAIL_CAN_NOT_BE_BLANK;
       case EmailValidationError.invalid:
-        return "Email không hợp lệ";
+        return INVALID_EMAIL_ERROR;
       default:
         return null;
     }

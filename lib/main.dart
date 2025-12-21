@@ -7,11 +7,13 @@ import 'package:todo_mobile_app/features/authentication/domain/repositories/repo
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/pages/step_one.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/login/pages/login.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/bloc/bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/pages/step_one.dart';
 
 import 'core/constants/keys.dart';
 import 'features/authentication/data/repositories/repository_impl.dart';
+import 'features/authentication/presentation/login/bloc/bloc.dart';
 
 Future<void> main() async {
   // Nó đảm bảo Flutter đã sẵn sàng trước khi chạy code bất đồng bộ hoặc dùng plugin.
@@ -75,8 +77,9 @@ class _MainAppState extends State<MainApp> {
                 ),
           ),
           BlocProvider(create: (_) => ForgotPasswordBloc()),
+          BlocProvider(create: (_) => LoginBloc()),
         ],
-        child: MaterialApp(home: ForgotPasswordStepOnePage()),
+        child: MaterialApp(home: LoginPage()),
       ),
     );
   }

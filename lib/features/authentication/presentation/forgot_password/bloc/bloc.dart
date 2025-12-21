@@ -75,7 +75,6 @@ class ForgotPasswordBloc
       }
     }
   }
-
   // ==========================  || ========================== //
 
   // Step 2
@@ -148,7 +147,6 @@ class ForgotPasswordBloc
       }
     }
   }
-
   // ========================== || ========================== //
 
   // Step 3
@@ -170,8 +168,6 @@ class ForgotPasswordBloc
     Emitter<ForgotPasswordState> emit,
   ) async {
     final currentState = state;
-
-    LOGGER.i(currentState);
 
     if (currentState is ForgotPasswordStepThree) {
       final password = currentState.password;
@@ -204,7 +200,6 @@ class ForgotPasswordBloc
       }
 
       if (currentState.password.value != currentState.confirmedPassword) {
-        LOGGER.i(1);
         emit(
           ForgotPasswordStepThree(
             password: password,
@@ -213,7 +208,6 @@ class ForgotPasswordBloc
           ),
         );
       } else {
-        LOGGER.i(2);
         emit(ForgotPasswordLoading());
 
         await Future.delayed(const Duration(seconds: 2));
@@ -222,6 +216,5 @@ class ForgotPasswordBloc
       }
     }
   }
-
   // ========================== || ========================== //
 }

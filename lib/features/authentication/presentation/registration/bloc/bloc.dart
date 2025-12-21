@@ -49,6 +49,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     on<RegistrationReset>(_onRegistrationReset);
   }
 
+  // Step 1
   Future<void> _onEmailChanged(
     RegistrationEmailChanged event,
     Emitter<RegistrationState> emit,
@@ -109,7 +110,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       }
     }
   }
+  // ========================== || ========================== //
 
+  // Step 2
   Future<void> _onOtpChanged(
     RegistrationOtpChanged event,
     Emitter<RegistrationState> emit,
@@ -196,7 +199,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       );
     }
   }
+  // ========================== || ========================== //
 
+  // Step 3
   Future<void> _onPasswordChanged(
     RegistrationPasswordChanged event,
     Emitter<RegistrationState> emit,
@@ -266,7 +271,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       }
     }
   }
+  // ========================== || ========================== //
 
+  // Step 4
   Future<void> _onInformationChanged(
     RegistrationInformationChanged event,
     Emitter<RegistrationState> emit,
@@ -316,6 +323,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       emit(const RegistrationSuccess());
     }
   }
+  // ========================== || ========================== //
 
   FutureOr<void> _onRegistrationReset(
     RegistrationReset event,

@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
+import '../../login/pages/login.dart';
 import '../bloc/bloc.dart';
 import '../widgets/step_four/birth_date_picker.dart';
 import '../widgets/step_four/completion_button.dart';
 import '../widgets/step_four/full_name_input.dart';
 import '../widgets/step_four/sex_selection.dart';
-import 'step_one.dart';
 
 class RegistrationStepFourPage extends StatelessWidget {
   const RegistrationStepFourPage({super.key});
@@ -26,7 +26,7 @@ class RegistrationStepFourPage extends StatelessWidget {
                 builder:
                     (_) => BlocProvider.value(
                       value: context.read<RegistrationBloc>(),
-                      child: RegistrationStepOnePage(),
+                      child: LoginPage(),
                     ),
               ),
             );
