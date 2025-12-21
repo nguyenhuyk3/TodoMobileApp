@@ -68,6 +68,6 @@ class OtpTimerResend extends StatelessWidget {
     context.read<TimerBloc>().add(
       const TimerStarted(duration: TIME_FOR_RESENDING_MAIL),
     );
-    context.read<RegistrationBloc>().add(RegistrationResendOTPRequested());
+    context.read<ForgotPasswordBloc>().add(ForgotPasswordResendOTPRequested());
   }
 }

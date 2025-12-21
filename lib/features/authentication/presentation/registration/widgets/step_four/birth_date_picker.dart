@@ -26,8 +26,6 @@ class BirthDatePicker extends StatelessWidget {
         "${effectiveDate.month.toString().padLeft(2, '0')}/"
         "${effectiveDate.year}";
 
-    LOGGER.e(formattedDate);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

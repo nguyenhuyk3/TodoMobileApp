@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
 
-import '../../../../../../core/constants/others.dart';
-import '../../../../../../core/constants/sizes.dart';
-import '../../bloc/bloc.dart';
+import '../../../../../../../core/constants/others.dart';
+import '../../../../../../../core/constants/sizes.dart';
 
-class FullNameInput extends StatefulWidget {
+class EmailInput extends StatefulWidget {
+  const EmailInput({super.key});
+
   @override
-  State<FullNameInput> createState() => FullNameInputState();
+  State<EmailInput> createState() => _EmailInputState();
 }
 
-class FullNameInputState extends State<FullNameInput> {
-  final FocusNode _focusNode = FocusNode();
+class _EmailInputState extends State<EmailInput> {
+  late final TextEditingController _controller;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
 
-    _focusNode.addListener(() => setState(() {}));
+    _controller = TextEditingController();
+    _focusNode = FocusNode();
   }
 
   @override
   void dispose() {
+    _controller.dispose();
     _focusNode.dispose();
 
     super.dispose();
@@ -29,14 +34,19 @@ class FullNameInputState extends State<FullNameInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<RegistrationBloc, RegistrationState, String>(
-      selector: (state) => state is RegistrationStepFour ? state.error : '',
+    return BlocSelector<ForgotPasswordBloc, ForgotPasswordState, String>(
+      selector: (state) {
+        return (state is ForgotPasswordError) ? state.error : '';
+      },
       builder: (context, error) {
         final hasError = error.isNotEmpty;
+        final state = context.watch<ForgotPasswordBloc>().state;
+        final isLoading = state is ForgotPasswordLoading;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Hiệu ứng bao quanh nhẹ nhàng hơn
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               decoration: BoxDecoration(
@@ -53,20 +63,15 @@ class FullNameInputState extends State<FullNameInput> {
                 ],
               ),
               child: TextField(
+                key: const Key('registration_emailInput_stepOne_textField'),
+                controller: _controller,
                 focusNode: _focusNode,
-                onChanged: (fullName) {
-                  final currentState = context.read<RegistrationBloc>().state;
-
-                  if (currentState is RegistrationStepFour) {
-                    context.read<RegistrationBloc>().add(
-                      RegistrationInformationChanged(
-                        fullName: fullName,
-                        birthDate: currentState.birthDate,
-                        sex: currentState.sex,
-                      ),
-                    );
-                  }
-                },
+                onChanged:
+                    (email) => context.read<ForgotPasswordBloc>().add(
+                      ForgotPasswordEmailChanged(email: email),
+                    ),
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
                 style: const TextStyle(
                   fontSize: TextSizes.TITLE_SMALL,
                   fontWeight: FontWeight.w500,
@@ -77,12 +82,13 @@ class FullNameInputState extends State<FullNameInput> {
                       _focusNode.hasFocus
                           ? Colors.white
                           : COLORS.INPUT_BG_COLOR,
-                  hintText: 'Nhập họ và tên',
+                  hintText: 'Nhập địa chỉ email',
                   hintStyle: TextStyle(
-                    color: COLORS.HINT_TEXT_COLOR,
+                    color: Colors.grey.shade400,
                     fontSize: TextSizes.TITLE_X_SMALL,
                   ),
-                  labelText: 'Họ và tên',
+                  // Label nổi
+                  labelText: 'Địa chỉ Email',
                   labelStyle: TextStyle(
                     color: hasError ? COLORS.ERROR_COLOR : COLORS.LABEL_COLOR,
                     fontSize: TextSizes.TITLE_SMALL,
@@ -95,18 +101,51 @@ class FullNameInputState extends State<FullNameInput> {
                     fontWeight: FontWeight.bold,
                     fontSize: TextSizes.TITLE_XX_SMALL,
                   ),
+                  // Icons
                   prefixIcon: Icon(
-                    Icons.person_outline_rounded,
+                    Icons.mail_rounded,
                     color:
                         hasError
                             ? COLORS.ERROR_COLOR
                             : (_focusNode.hasFocus
                                 ? COLORS.FOCUSED_BORDER_IP_COLOR
                                 : COLORS.UNFOCUSED_BORDER_IP_COLOR),
+                    size: IconSizes.ICON_INPUT_SIZE,
                   ),
+                  // suffixIcon:
+                  // - Chỉ hiển thị khi TextField có nội dung (_controller.text.isNotEmpty)
+                  // - Nếu đang loading → ẩn icon để tránh user thao tác
+                  // - Khi không loading → hiển thị nút clear (icon cancel)
+                  suffixIcon:
+                      _controller.text.isNotEmpty
+                          ? (isLoading
+                              ? null
+                              : IconButton(
+                                icon: Icon(
+                                  Icons.cancel,
+                                  size: IconSizes.ICON_INPUT_SIZE,
+                                  color:
+                                      hasError
+                                          ? COLORS.ERROR_COLOR
+                                          : COLORS.FOCUSED_BORDER_IP_COLOR,
+                                ),
+                                onPressed: () {
+                                  _controller.clear();
+
+                                  context.read<ForgotPasswordBloc>().add(
+                                    const ForgotPasswordEmailChanged(email: ''),
+                                  );
+                                },
+                              ))
+                          : null,
+                  // Border configs
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -128,10 +167,22 @@ class FullNameInputState extends State<FullNameInput> {
                       width: 1,
                     ),
                   ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: COLORS.ERROR_COLOR, width: 1),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: COLORS.ERROR_COLOR, width: 1),
+                  ),
+                  // Xóa errorText mặc định để custom vị trí đẹp hơn
+                  errorText: null,
                 ),
-                onTapOutside: (_) => _focusNode.unfocus(),
+                onTapOutside: (event) => FocusScope.of(context).unfocus(),
               ),
             ),
+
+            // Tùy chỉnh Error Message dưới TextField (mượt hơn)
             if (hasError)
               Padding(
                 padding: const EdgeInsets.only(top: 8, left: 12),
@@ -143,13 +194,14 @@ class FullNameInputState extends State<FullNameInput> {
                       color: COLORS.ERROR_COLOR,
                     ),
 
-                    const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 2),
+                    const SizedBox(width: X_MIN_WIDTH_SIZED_BOX),
 
                     Text(
                       error,
                       style: TextStyle(
                         color: COLORS.ERROR_COLOR,
                         fontSize: TextSizes.TITLE_XX_SMALL,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ],

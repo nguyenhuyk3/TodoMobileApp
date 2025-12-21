@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_mobile_app/features/authentication/data/datasources/authentication_remote_data_source.dart';
 import 'package:todo_mobile_app/features/authentication/domain/repositories/repository.dart';
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/pages/step_one.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/bloc/bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/pages/step_one.dart';
 
@@ -72,8 +74,9 @@ class _MainAppState extends State<MainApp> {
                   ),
                 ),
           ),
+          BlocProvider(create: (_) => ForgotPasswordBloc()),
         ],
-        child: MaterialApp(home: RegistrationStepOnePage()),
+        child: MaterialApp(home: ForgotPasswordStepOnePage()),
       ),
     );
   }

@@ -72,6 +72,33 @@ class SexSelection extends StatelessWidget {
             );
           }
         },
+      /*
+          AnimatedContainer dùng để tạo hiệu ứng chuyển trạng thái mượt
+          khi item được chọn / bỏ chọn.
+
+          - duration: 300ms
+          👉 Thời gian animation khi các thuộc tính thay đổi.
+
+          - padding: vertical 14
+          👉 Giữ chiều cao item ổn định, dễ bấm.
+
+          - background color:
+          👉 isSelected = true:
+            + Dùng màu focus với opacity 0.1 để tạo hiệu ứng highlight nhẹ
+          👉 isSelected = false:
+            + Màu nền input mặc định
+
+          - border:
+          👉 isSelected = true:
+            + Viền đậm hơn (1.5)
+            + Màu focus → thể hiện trạng thái đang chọn
+          👉 isSelected = false:
+            + Viền mỏng (0.7)
+            + Màu unfocused
+
+          - borderRadius: 12
+          👉 Bo góc mềm, đồng bộ với design input/card
+      */
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           padding: const EdgeInsets.symmetric(vertical: 14),
