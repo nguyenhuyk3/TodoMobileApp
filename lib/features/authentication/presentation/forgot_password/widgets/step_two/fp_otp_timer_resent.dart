@@ -7,8 +7,8 @@ import '../../../../../../core/utils/ticker.dart';
 import '../../bloc/bloc.dart';
 import '../../../timer/bloc/bloc.dart';
 
-class OtpTimerResend extends StatelessWidget {
-  const OtpTimerResend({super.key});
+class FPOtpTimerResend extends StatelessWidget {
+  const FPOtpTimerResend({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class OtpTimerResend extends StatelessWidget {
                       fontSize: TextSizes.TITLE_X_SMALL,
                     ),
                   ),
-                  
+
                   if (!isCompleted)
                     Text(
                       '$minutesStr:$secondsStr',

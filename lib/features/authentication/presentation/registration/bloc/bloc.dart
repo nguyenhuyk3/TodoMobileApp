@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -119,32 +118,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     Emitter<RegistrationState> emit,
   ) async {
     emit(RegistrationStepTwo(otp: Otp.dirty(event.otp)));
-
-    // if (event.otp.length == LENGTH_OF_OTP) {
-    //   final verifyOTPResult = await _verifyOTPUseCase.execute(
-    //     email: email,
-    //     otp: event.otp,
-    //   );
-
-    //   emit(const RegistrationLoading());
-
-    //   await Future.delayed(const Duration(seconds: 2));
-
-    //   verifyOTPResult.fold(
-    //     (failure) {
-    //       emit(RegistrationError(error: failure.message));
-    //     },
-    //     (_) {
-    //       emit(
-    //         RegistrationStepThree(
-    //           password: const Password.pure(),
-    //           confirmedPassword: '',
-    //           error: '',
-    //         ),
-    //       );
-    //     },
-    //   );
-    // }
   }
 
   FutureOr<void> _onResendOTPRequested(
@@ -195,7 +168,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       verifyOTPResult.fold(
         (failure) {
           emit(RegistrationError(error: failure.message));
-          // emit(RegistrationStepTwo(otp: Otp.dirty(currentState.otp.value)));
         },
         (_) {
           emit(
