@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_mobile_app/core/widgets/error_displayer.dart';
 
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
+import '../../../../../../core/errors/failure.dart';
 import '../../bloc/bloc.dart';
 
-class FullNameInput extends StatefulWidget {
+class RegistrationFullNameInput extends StatefulWidget {
   @override
-  State<FullNameInput> createState() => FullNameInputState();
+  State<RegistrationFullNameInput> createState() => RegistrationFullNameInputState();
 }
 
-class FullNameInputState extends State<FullNameInput> {
+class RegistrationFullNameInputState extends State<RegistrationFullNameInput> {
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -32,7 +34,11 @@ class FullNameInputState extends State<FullNameInput> {
     return BlocSelector<RegistrationBloc, RegistrationState, String>(
       selector: (state) => state is RegistrationStepFour ? state.error : '',
       builder: (context, error) {
-        final hasError = error.isNotEmpty;
+        // CHỈ hiển thị lỗi nếu lỗi đó là EMPTY_FULL_NAME
+        final bool isNameError =
+            error == ErrorInformation.EMPTY_FULL_NAME.message;
+        final String displayError = isNameError ? error : '';
+        final hasError = displayError.isNotEmpty;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,29 +138,7 @@ class FullNameInputState extends State<FullNameInput> {
                 onTapOutside: (_) => _focusNode.unfocus(),
               ),
             ),
-            if (hasError)
-              Padding(
-                padding: const EdgeInsets.only(top: 8, left: 12),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: IconSizes.ICON_MINI_SIZE,
-                      color: COLORS.ERROR_COLOR,
-                    ),
-
-                    const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 2),
-
-                    Text(
-                      error,
-                      style: TextStyle(
-                        color: COLORS.ERROR_COLOR,
-                        fontSize: TextSizes.TITLE_XX_SMALL,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            if (hasError) ErrorDisplayer(message: error),
           ],
         );
       },

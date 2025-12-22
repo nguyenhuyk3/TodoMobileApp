@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_mobile_app/features/authentication/presentation/registration/widgets/step_four/registration_error_message_displayer.dart';
 
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
 import '../../login/pages/login.dart';
 import '../bloc/bloc.dart';
-import '../widgets/step_four/birth_date_picker.dart';
-import '../widgets/step_four/completion_button.dart';
-import '../widgets/step_four/full_name_input.dart';
-import '../widgets/step_four/sex_selection.dart';
+import '../widgets/step_four/registration_birth_date_picker.dart';
+import '../widgets/step_four/registration_completion_button.dart';
+import '../widgets/step_four/registration_full_name_input.dart';
+import '../widgets/step_four/registration_sex_selection.dart';
 
 class RegistrationStepFourPage extends StatelessWidget {
   const RegistrationStepFourPage({super.key});
@@ -36,19 +37,23 @@ class RegistrationStepFourPage extends StatelessWidget {
           children: [
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-            FullNameInput(),
+            RegistrationFullNameInput(),
 
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
 
-            BirthDatePicker(),
+            RegistrationBirthDatePicker(),
 
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
 
-            SexSelection(),
+            RegistrationSexSelection(),
 
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
+
+            RegistrationErrorMessageDisplayer(),
+            
             const Spacer(),
 
-            CompletionButton(),
+            RegistrationCompletionButton(),
           ],
         ),
       ),

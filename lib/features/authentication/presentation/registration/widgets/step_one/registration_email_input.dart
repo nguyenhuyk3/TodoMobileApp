@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
+import '../../../../../../core/widgets/error_displayer.dart';
 import '../../bloc/bloc.dart';
 
 /*
@@ -11,14 +12,14 @@ import '../../bloc/bloc.dart';
     Hiểu ngắn gọn 👇
       FocusNode = “con trỏ biết widget nào đang được focus”
 */
-class EmailInput extends StatefulWidget {
-  const EmailInput({super.key});
+class RegistrationEmailInput extends StatefulWidget {
+  const RegistrationEmailInput({super.key});
 
   @override
-  State<EmailInput> createState() => _EmailInputState();
+  State<RegistrationEmailInput> createState() => _RegistrationEmailInputState();
 }
 
-class _EmailInputState extends State<EmailInput> {
+class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
 
@@ -40,14 +41,12 @@ class _EmailInputState extends State<EmailInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<RegistrationBloc, RegistrationState, String>(
-      selector: (state) {
-        return (state is RegistrationError) ? state.error : '';
-      },
-      builder: (context, error) {
+    return BlocBuilder<RegistrationBloc, RegistrationState>(
+      builder: (context, state) {
+        final String error = (state is RegistrationError) ? state.error : '';
+        final isStepOne = state is RegistrationStepOne;
+        final isLoading = isStepOne && state.isLoading;
         final hasError = error.isNotEmpty;
-        final state = context.watch<RegistrationBloc>().state;
-        final isLoading = state is RegistrationLoading;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,26 +122,24 @@ class _EmailInputState extends State<EmailInput> {
                   // - Nếu đang loading → ẩn icon để tránh user thao tác
                   // - Khi không loading → hiển thị nút clear (icon cancel)
                   suffixIcon:
-                      _controller.text.isNotEmpty
-                          ? (isLoading
-                              ? null
-                              : IconButton(
-                                icon: Icon(
-                                  Icons.cancel,
-                                  size: IconSizes.ICON_INPUT_SIZE,
-                                  color:
-                                      hasError
-                                          ? COLORS.ERROR_COLOR
-                                          : COLORS.FOCUSED_BORDER_IP_COLOR,
-                                ),
-                                onPressed: () {
-                                  _controller.clear();
-                                  
-                                  context.read<RegistrationBloc>().add(
-                                    const RegistrationEmailChanged(email: ''),
-                                  );
-                                },
-                              ))
+                      (_controller.text.isNotEmpty && isStepOne && !isLoading)
+                          ? IconButton(
+                            icon: Icon(
+                              Icons.cancel,
+                              size: IconSizes.ICON_INPUT_SIZE,
+                              color:
+                                  hasError
+                                      ? COLORS.ERROR_COLOR
+                                      : COLORS.FOCUSED_BORDER_IP_COLOR,
+                            ),
+                            onPressed: () {
+                              _controller.clear();
+                              
+                              context.read<RegistrationBloc>().add(
+                                const RegistrationEmailChanged(email: ''),
+                              );
+                            },
+                          )
                           : null,
                   // Border configs
                   contentPadding: const EdgeInsets.symmetric(
@@ -187,32 +184,9 @@ class _EmailInputState extends State<EmailInput> {
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
               ),
             ),
-            
+
             // Tùy chỉnh Error Message dưới TextField (mượt hơn)
-            if (hasError)
-              Padding(
-                padding: const EdgeInsets.only(top: 8, left: 12),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: IconSizes.ICON_MINI_SIZE,
-                      color: COLORS.ERROR_COLOR,
-                    ),
-
-                    const SizedBox(width: X_MIN_WIDTH_SIZED_BOX),
-
-                    Text(
-                      error,
-                      style: TextStyle(
-                        color: COLORS.ERROR_COLOR,
-                        fontSize: TextSizes.TITLE_XX_SMALL,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            if (hasError) ErrorDisplayer(message: error),
           ],
         );
       },

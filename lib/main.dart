@@ -6,8 +6,6 @@ import 'package:todo_mobile_app/features/authentication/data/datasources/authent
 import 'package:todo_mobile_app/features/authentication/domain/repositories/repository.dart';
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
-import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/pages/step_one.dart';
-import 'package:todo_mobile_app/features/authentication/presentation/login/pages/login.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/bloc/bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/pages/step_one.dart';
 
@@ -74,12 +72,15 @@ class _MainAppState extends State<MainApp> {
                   verifyOTPUseCase: VerifyOTPUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
-                ),
+                  registerUseCase: RegisterUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
+                )..add(RegistrationEmailChanged(email: '')),
           ),
           BlocProvider(create: (_) => ForgotPasswordBloc()),
           BlocProvider(create: (_) => LoginBloc()),
         ],
-        child: MaterialApp(home: LoginPage()),
+        child: MaterialApp(home: RegistrationStepOnePage()),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:todo_mobile_app/core/errors/failure.dart';
 
+import '../entities/user_registration.dart';
+
 /*
   dartz là functional programming library cho Dart
   Nó cung cấp các kiểu dữ liệu giúp: 
@@ -26,4 +28,5 @@ abstract class AuthenticationRepository {
     required String email,
     required String otp,
   });
+  Future<Either<Failure, bool>> register(UserRegistrationEntity user);
 }

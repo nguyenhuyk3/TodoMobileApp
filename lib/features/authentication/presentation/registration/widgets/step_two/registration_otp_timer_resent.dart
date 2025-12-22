@@ -7,8 +7,8 @@ import '../../../../../../core/utils/ticker.dart';
 import '../../bloc/bloc.dart';
 import '../../../timer/bloc/bloc.dart';
 
-class OtpTimerResend extends StatelessWidget {
-  const OtpTimerResend({super.key});
+class RegistrationOtpTimerResend extends StatelessWidget {
+  const RegistrationOtpTimerResend({super.key});
 
   @override
   Widget build(BuildContext context) {

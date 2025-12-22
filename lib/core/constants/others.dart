@@ -12,5 +12,4 @@ const BIRTH_DATE_DEFAUL_VALUE = '2000-01-01T00:00:00.000';
 
 final COLORS = AppColors();
 final TABLES = Tables();
-
 final LOGGER = Logger();

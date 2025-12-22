@@ -5,7 +5,7 @@ import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
 import '../../bloc/bloc.dart';
 
-class SexSelection extends StatelessWidget {
+class RegistrationSexSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentSex = context.select<RegistrationBloc, String>((bloc) {

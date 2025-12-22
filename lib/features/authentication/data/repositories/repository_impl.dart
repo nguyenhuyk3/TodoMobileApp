@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo_mobile_app/features/authentication/domain/entities/user_registration.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../domain/repositories/repository.dart';
@@ -57,6 +58,22 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       );
 
       return Right(Object());
+    } on AuthException catch (e) {
+      return Left(Failure(error: mapAuthException(e), details: e));
+    } catch (e) {
+      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> register(UserRegistrationEntity user) async {
+    try {
+      await _authenticationRemoteDataSource.register(user: user);
+
+      return Left(Failure(error: ErrorInformation.DB_RLS_VIOLATION));
+      // return const Right(true);
+    } on PostgrestException catch (e) {
+      return Left(Failure(error: mapPostgrestException(e), details: e));
     } on AuthException catch (e) {
       return Left(Failure(error: mapAuthException(e), details: e));
     } catch (e) {

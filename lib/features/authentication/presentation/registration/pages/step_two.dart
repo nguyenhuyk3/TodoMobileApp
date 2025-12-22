@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
 import '../bloc/bloc.dart';
-import '../widgets/step_two/otp_info_section.dart';
-import '../widgets/step_two/otp_pin_put.dart';
-import '../widgets/step_two/otp_submit_button.dart';
-import '../widgets/step_two/otp_timer_resent.dart';
+import '../widgets/step_two/registration_otp_info_section.dart';
+import '../widgets/step_two/registration_otp_pin_put.dart';
+import '../widgets/step_two/registration_otp_submit_button.dart';
+import '../widgets/step_two/registration_otp_timer_resent.dart';
 import 'step_three.dart';
 
 class RegistrationStepTwoPage extends StatelessWidget {
@@ -40,19 +40,19 @@ class RegistrationStepTwoPage extends StatelessWidget {
           children: [
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-            OtpInfoSection(email: email),
+            RegistrationOtpInfoSection(email: email),
 
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-            const OtpPinInput(),
+            const RegistrationOtpPinInput(),
 
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-            const OtpTimerResend(),
+            const RegistrationOtpTimerResend(),
 
             const Spacer(),
 
-            const OtpSubmitButton(),
+            const RegistrationOtpSubmitButton(),
           ],
         ),
       ),

@@ -22,12 +22,25 @@ class RegistrationLoading extends RegistrationState {
 
 class RegistrationStepOne extends RegistrationState {
   final Email email;
+  final bool isLoading;
 
-  const RegistrationStepOne({required this.email})
-    : super(status: FormzSubmissionStatus.inProgress);
+  const RegistrationStepOne({
+    required this.email,
+    this.isLoading = false,
+  }) : super(status: FormzSubmissionStatus.inProgress);
+
+  RegistrationStepOne copyWith({
+    Email? email,
+    bool? isLoading,
+  }) {
+    return RegistrationStepOne(
+      email: email ?? this.email,
+      isLoading: isLoading ?? this.isLoading,
+    );
+  }
 
   @override
-  List<Object?> get props => [email];
+  List<Object?> get props => [email, isLoading, status];
 }
 
 class RegistrationStepTwo extends RegistrationState {
@@ -60,16 +73,35 @@ class RegistrationStepFour extends RegistrationState {
   final String birthDate;
   final String sex;
   final String error;
+  // Nếu trạng thái này mà còn chứa những field khác ngoài input thôi thì phải cần thêm trường này
+  final bool isLoading;
 
   const RegistrationStepFour({
     required this.fullName,
     required this.birthDate,
     this.sex = 'male',
     this.error = '',
+    this.isLoading = false,
   }) : super(status: FormzSubmissionStatus.inProgress);
 
   @override
-  List<Object?> get props => [fullName, birthDate, sex, error];
+  List<Object?> get props => [fullName, birthDate, sex, error, isLoading];
+
+  RegistrationStepFour copyWith({
+    String? fullName,
+    String? birthDate,
+    String? sex,
+    String? error,
+    bool? isLoading,
+  }) {
+    return RegistrationStepFour(
+      fullName: fullName ?? this.fullName,
+      birthDate: birthDate ?? this.birthDate,
+      sex: sex ?? this.sex,
+      error: error ?? this.error,
+      isLoading: isLoading ?? this.isLoading,
+    );
+  }
 }
 
 // If other classes only have one attribute, this class will be used with that class.

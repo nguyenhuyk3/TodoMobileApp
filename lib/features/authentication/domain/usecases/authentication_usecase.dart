@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../entities/user_registration.dart';
 import '../repositories/repository.dart';
 
 part 'registration_usecase.dart';

@@ -20,7 +20,6 @@ class OtpTimerResend extends StatelessWidget {
       child: BlocBuilder<TimerBloc, TimerState>(
         builder: (context, state) {
           final isCompleted = state is TimerRunComplete;
-
           final minutesStr = ((state.duration / 60) % 60)
               .floor()
               .toString()
@@ -32,7 +31,17 @@ class OtpTimerResend extends StatelessWidget {
 
           return Center(
             child: GestureDetector(
-              onTap: isCompleted ? () => _handleResend(context) : null,
+              onTap:
+                  isCompleted
+                      ? () => {
+                        context.read<TimerBloc>().add(
+                          const TimerStarted(duration: TIME_FOR_RESENDING_MAIL),
+                        ),
+                        context.read<ForgotPasswordBloc>().add(
+                          ForgotPasswordResendOTPRequested(),
+                        ),
+                      }
+                      : null,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -47,6 +56,7 @@ class OtpTimerResend extends StatelessWidget {
                       fontSize: TextSizes.TITLE_X_SMALL,
                     ),
                   ),
+                  
                   if (!isCompleted)
                     Text(
                       '$minutesStr:$secondsStr',
@@ -62,12 +72,5 @@ class OtpTimerResend extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void _handleResend(BuildContext context) {
-    context.read<TimerBloc>().add(
-      const TimerStarted(duration: TIME_FOR_RESENDING_MAIL),
-    );
-    context.read<ForgotPasswordBloc>().add(ForgotPasswordResendOTPRequested());
   }
 }

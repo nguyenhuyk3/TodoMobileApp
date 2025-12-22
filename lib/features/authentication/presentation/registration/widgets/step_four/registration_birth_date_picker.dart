@@ -5,10 +5,11 @@ import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
 import '../../bloc/bloc.dart';
 
-class BirthDatePicker extends StatelessWidget {
+class RegistrationBirthDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 1. Lấy ngày sinh từ state
+    // birthDateStr có định dạng ISO 8601: YYYY-MM-DDTHH:MM:SS.mmmuuuZ
     final birthDateStr = context.select<RegistrationBloc, String>((bloc) {
       final state = bloc.state;
 
@@ -20,7 +21,7 @@ class BirthDatePicker extends StatelessWidget {
         birthDateStr.isNotEmpty
             ? DateTime.parse(birthDateStr)
             : DateTime(2000, 1, 1);
-    // Định dạng thành DD/MM/YYYY
+    // Chuyển về định dạng mà người Việt hay sử dụng là DD/MM/YYYY để hiển thị lên UI
     final formattedDate =
         "${effectiveDate.day.toString().padLeft(2, '0')}/"
         "${effectiveDate.month.toString().padLeft(2, '0')}/"
@@ -52,6 +53,9 @@ class BirthDatePicker extends StatelessWidget {
 
             if (picked != null) {
               final currentState = context.read<RegistrationBloc>().state;
+
+              // picked = YYYY-MM-DD HH:MM:SS.mmmuuuZ, ex: 2000-01-20 00:00:00.000
+              // picked.toIso8601String() = YYYY-MM-DDTHH:MM:SS.mmmuuuZ ex: 2000-01-20T00:00:00.000
 
               if (currentState is RegistrationStepFour) {
                 context.read<RegistrationBloc>().add(

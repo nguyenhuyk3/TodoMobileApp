@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:todo_mobile_app/core/constants/others.dart';
+import 'package:todo_mobile_app/features/authentication/domain/entities/extensions.dart';
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
 
 import '../../../../../core/errors/failure.dart';
-import '../../../../../core/utils/date.dart';
 import '../../../../../core/utils/validator/validation_error_message.dart';
+import '../../../domain/entities/user_registration.dart';
 import '../../../inputs/email.dart';
 import '../../../inputs/otp.dart';
 import '../../../inputs/password.dart';
@@ -20,6 +22,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final CheckEmailExistsUseCase _checkEmailExistsUseCase;
   final SendOTPUseCase _sendOTPUseCase;
   final VerifyOTPUseCase _verifyOTPUseCase;
+  final RegisterUseCase _registerUseCase;
 
   String _email = '';
   String _password = '';
@@ -30,9 +33,11 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     required CheckEmailExistsUseCase checkEmailExistsUseCase,
     required SendOTPUseCase sendOTPUseCase,
     required VerifyOTPUseCase verifyOTPUseCase,
+    required RegisterUseCase registerUseCase,
   }) : _checkEmailExistsUseCase = checkEmailExistsUseCase,
        _sendOTPUseCase = sendOTPUseCase,
        _verifyOTPUseCase = verifyOTPUseCase,
+       _registerUseCase = registerUseCase,
 
        super(RegistrationInitial()) {
     on<RegistrationEmailChanged>(_onEmailChanged);
@@ -77,37 +82,33 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       // 2. CHUẨN BỊ DỮ LIỆU
       _email = currentState.email.value;
       // 3. BẬT TRẠNG THÁI LOADING
-      emit(const RegistrationLoading());
+      emit(currentState.copyWith(isLoading: true));
       // Giả lập thời gian chờ (Có thể xóa khi dùng thật)
       await Future.delayed(const Duration(seconds: 2));
       // 4. GỌI API KIỂM TRA EMAIL TRÊN SERVER
-      // final isEmailExists = await _checkEmailExistsUseCase.execute(
-      //   email: currentState.email.value,
-      // );
-      // // Thay vì dùng fold lồng nhau, ta dùng pattern matching hoặc biến trung gian
-      // // Ở đây dùng await để xử lý tuần tự:
-      // final isEmailExistsResult = isEmailExists.fold((l) => l, (r) => r);
+      final isEmailExists = await _checkEmailExistsUseCase.execute(
+        email: currentState.email.value,
+      );
+      // Thay vì dùng fold lồng nhau, ta dùng pattern matching hoặc biến trung gian
+      // Ở đây dùng await để xử lý tuần tự:
+      final isEmailExistsResult = isEmailExists.fold((l) => l, (r) => r);
 
-      // if (isEmailExistsResult is Failure) {
-      //   emit(RegistrationError(error: isEmailExistsResult.message));
+      if (isEmailExistsResult is Failure) {
+        emit(RegistrationError(error: isEmailExistsResult.message));
 
-      //   return;
-      // }
-
-      // final sendOtpResult = await _sendOTPUseCase.execute(email: _email);
-
-      // sendOtpResult.fold(
-      //   (failure) {
-      //     emit(RegistrationError(error: failure.message));
-      //   },
-      //   (_) {
-      //     emit(RegistrationStepTwo(otp: const Otp.pure()));
-      //   },
-      // );
-
-      if (currentState.email.value == 'abc@gmail.com') {
-        emit(RegistrationStepTwo(otp: const Otp.pure()));
+        return;
       }
+
+      final sendOtpResult = await _sendOTPUseCase.execute(email: _email);
+
+      sendOtpResult.fold(
+        (failure) {
+          emit(RegistrationError(error: failure.message));
+        },
+        (_) {
+          emit(RegistrationStepTwo(otp: const Otp.pure()));
+        },
+      );
     }
   }
   // ========================== || ========================== //
@@ -117,31 +118,33 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     RegistrationOtpChanged event,
     Emitter<RegistrationState> emit,
   ) async {
-    if (event.otp.length == LENGTH_OF_OTP) {
-      // final verifyOTPResult = await _verifyOTPUseCase.execute(
-      //   email: email,
-      //   otp: event.otp,
-      // );
+    emit(RegistrationStepTwo(otp: Otp.dirty(event.otp)));
 
-      // verifyOTPResult.fold(
-      //   (failure) {
-      //     emit(RegistrationStepTwo(otp: Otp.dirty(event.otp)));
-      //   },
-      //   (_) {
-      //     emit(RegistrationStepOne(email: Email.dirty('')));
-      //   },
-      // );
+    // if (event.otp.length == LENGTH_OF_OTP) {
+    //   final verifyOTPResult = await _verifyOTPUseCase.execute(
+    //     email: email,
+    //     otp: event.otp,
+    //   );
 
-      if (event.otp == '111111') {
-        emit(
-          RegistrationStepThree(
-            password: const Password.pure(),
-            confirmedPassword: '',
-            error: '',
-          ),
-        );
-      }
-    }
+    //   emit(const RegistrationLoading());
+
+    //   await Future.delayed(const Duration(seconds: 2));
+
+    //   verifyOTPResult.fold(
+    //     (failure) {
+    //       emit(RegistrationError(error: failure.message));
+    //     },
+    //     (_) {
+    //       emit(
+    //         RegistrationStepThree(
+    //           password: const Password.pure(),
+    //           confirmedPassword: '',
+    //           error: '',
+    //         ),
+    //       );
+    //     },
+    //   );
+    // }
   }
 
   FutureOr<void> _onResendOTPRequested(
@@ -183,7 +186,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
       emit(const RegistrationLoading());
 
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
 
       final verifyOTPResult = await _verifyOTPUseCase.execute(
         email: email,
@@ -191,10 +194,17 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       );
       verifyOTPResult.fold(
         (failure) {
-          emit(RegistrationStepTwo(otp: Otp.dirty(currentState.otp.value)));
+          emit(RegistrationError(error: failure.message));
+          // emit(RegistrationStepTwo(otp: Otp.dirty(currentState.otp.value)));
         },
         (_) {
-          // Emit next state
+          emit(
+            RegistrationStepThree(
+              password: Password.pure(),
+              confirmedPassword: '',
+              error: '',
+            ),
+          );
         },
       );
     }
@@ -307,20 +317,40 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         return;
       }
 
-      final request = {
-        'account': {'email': _email, 'password': _password},
-        'information': {
-          'name': currentState.fullName,
-          'sex': currentState.sex,
-          'birthDate': convertToDDMMYYYY(currentState.birthDate),
-        },
-      };
+      // currentState.birthDate = YYYY-MM-DD, ex: 2000-01-20T00:00:00.000
+      // DateTime.parse(currentState.birthDate) = YYYY-MM-DD 00:00:00.000, ex: 2000-01-20 00:00:00.000
+      final userEntity = UserRegistrationEntity(
+        email: _email,
+        password: _password,
+        fullName: currentState.fullName,
+        dob: DateTime.parse(
+          currentState.birthDate,
+        ), // Convert String ISO -> DateTime
+        sex: currentState.sex.toSex(),
+        avatarUrl: null,
+      );
 
-      emit(const RegistrationLoading());
+      emit(currentState.copyWith(isLoading: true));
+
+      final result = await _registerUseCase.execute(userEntity);
 
       await Future.delayed(const Duration(seconds: 2));
 
-      emit(const RegistrationSuccess());
+      result.fold(
+        (failure) {
+          emit(
+            RegistrationStepFour(
+              fullName: currentState.fullName,
+              birthDate: currentState.birthDate,
+              sex: currentState.sex,
+              error: failure.message,
+            ),
+          );
+        },
+        (success) {
+          emit(const RegistrationSuccess());
+        },
+      );
     }
   }
   // ========================== || ========================== //

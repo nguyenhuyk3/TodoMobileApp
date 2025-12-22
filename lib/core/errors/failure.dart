@@ -20,6 +20,13 @@ enum ErrorInformation {
   OTP_EXPIRED(message: 'Mã OTP đã hết hạn'),
   OTP_VERIFY_FAILED(message: 'Xác thực OTP thất bại'),
 
+  // Database
+  DB_NOT_NULL_VIOLATION(message: 'Thiếu dữ liệu bắt buộc'),
+  DB_FOREIGN_KEY_VIOLATION(message: 'Dữ liệu liên kết không tồn tại'),
+  DB_INVALID_FORMAT(message: 'Dữ liệu không đúng định dạng'),
+  DB_PERMISSION_DENIED(message: 'Không có quyền thực hiện thao tác'),
+  DB_RLS_VIOLATION(message: 'Dữ liệu bị chặn bởi chính sách bảo mật'),
+
   UNDEFINED_ERROR(message: 'Lỗi không xác định được');
 
   final String message;
@@ -55,6 +62,31 @@ ErrorInformation mapAuthException(AuthException e) {
   }
 
   return ErrorInformation.UNDEFINED_ERROR;
+}
+
+ErrorInformation mapPostgrestException(PostgrestException e) {
+  switch (e.code) {
+    case '23505':
+      return ErrorInformation.EMAIL_ALREADY_EXISTS;
+
+    case '23502':
+      return ErrorInformation.DB_NOT_NULL_VIOLATION;
+
+    case '23503':
+      return ErrorInformation.DB_FOREIGN_KEY_VIOLATION;
+
+    case '22P02':
+      return ErrorInformation.DB_INVALID_FORMAT;
+
+    case '42501':
+      return ErrorInformation.DB_PERMISSION_DENIED;
+
+    case 'PGRST116':
+      return ErrorInformation.DB_RLS_VIOLATION;
+
+    default:
+      return ErrorInformation.UNDEFINED_ERROR;
+  }
 }
 
 class Failure {

@@ -7,3 +7,11 @@ class CheckEmailExistsUseCase extends AuthenticationUsecase {
     return authenticationRepository.checkEmailExists(email: email);
   }
 }
+
+class RegisterUseCase extends AuthenticationUsecase {
+  RegisterUseCase({required super.authenticationRepository});
+
+  Future<Either<Failure, bool>> execute(UserRegistrationEntity user) {
+    return authenticationRepository.register(user);
+  }
+}

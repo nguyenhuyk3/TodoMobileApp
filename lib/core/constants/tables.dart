@@ -2,4 +2,5 @@
 
 class Tables {
   final String USERS = 'users';
+  final String PERSONAL_INFORMATION = 'personal_information';
 }

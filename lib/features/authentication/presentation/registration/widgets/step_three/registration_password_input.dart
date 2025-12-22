@@ -4,15 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
 import '../../../../../../core/errors/failure.dart';
+import '../../../../../../core/widgets/error_displayer.dart';
 import '../../../password/bloc/bloc.dart';
 import '../../bloc/bloc.dart';
 
-class PasswordInput extends StatefulWidget {
+class RegistrationPasswordInput extends StatefulWidget {
   final String label;
   final String hintText;
   final bool isConfirmedPassword;
 
-  const PasswordInput({
+  const RegistrationPasswordInput({
     super.key,
     required this.label,
     required this.hintText,
@@ -20,10 +21,11 @@ class PasswordInput extends StatefulWidget {
   });
 
   @override
-  State<PasswordInput> createState() => _PasswordInputState();
+  State<RegistrationPasswordInput> createState() =>
+      _RegistrationPasswordInputState();
 }
 
-class _PasswordInputState extends State<PasswordInput> {
+class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
   late final FocusNode _focusNode;
 
   @override
@@ -90,8 +92,8 @@ class _PasswordInputState extends State<PasswordInput> {
                     if (_focusNode.hasFocus)
                       BoxShadow(
                         color: (hasError ? COLORS.ERROR_COLOR : Colors.black)
-                            // ignore: deprecated_member_use
-                            .withOpacity(0.1),
+                        // ignore: deprecated_member_use
+                        .withOpacity(0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -214,32 +216,7 @@ class _PasswordInputState extends State<PasswordInput> {
           ),
 
           // HIỂN THỊ LỖI CỤ THỂ CHO TỪNG Ô
-          if (hasError)
-            Padding(
-              padding: const EdgeInsets.only(top: 8, left: 12),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: IconSizes.ICON_MINI_SIZE,
-                    color: COLORS.ERROR_COLOR,
-                  ),
-
-                  const SizedBox(width: X_MIN_WIDTH_SIZED_BOX),
-
-                  Expanded(
-                    child: Text(
-                      displayError,
-                      style: TextStyle(
-                        color: COLORS.ERROR_COLOR,
-                        fontSize: TextSizes.TITLE_XX_SMALL,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          if (hasError) ErrorDisplayer(message: displayError),
         ],
       ),
     );

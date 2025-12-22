@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
 
-class OtpInfoSection extends StatelessWidget {
+class RegistrationOtpInfoSection extends StatelessWidget {
   final String email;
-  const OtpInfoSection({super.key, required this.email});
+  
+  const RegistrationOtpInfoSection({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
