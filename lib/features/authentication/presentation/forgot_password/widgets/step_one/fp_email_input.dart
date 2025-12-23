@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_mobile_app/core/widgets/error_displayer.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
 
 import '../../../../../../../core/constants/others.dart';
 import '../../../../../../../core/constants/sizes.dart';
 
-class EmailInput extends StatefulWidget {
-  const EmailInput({super.key});
+class FPEmailInput extends StatefulWidget {
+  const FPEmailInput({super.key});
 
   @override
-  State<EmailInput> createState() => _EmailInputState();
+  State<FPEmailInput> createState() => _FPEmailInputState();
 }
 
-class _EmailInputState extends State<EmailInput> {
+class _FPEmailInputState extends State<FPEmailInput> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
 
@@ -183,30 +184,7 @@ class _EmailInputState extends State<EmailInput> {
             ),
 
             // Tùy chỉnh Error Message dưới TextField (mượt hơn)
-            if (hasError)
-              Padding(
-                padding: const EdgeInsets.only(top: 8, left: 12),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: IconSizes.ICON_MINI_SIZE,
-                      color: COLORS.ERROR_COLOR,
-                    ),
-
-                    const SizedBox(width: X_MIN_WIDTH_SIZED_BOX),
-
-                    Text(
-                      error,
-                      style: TextStyle(
-                        color: COLORS.ERROR_COLOR,
-                        fontSize: TextSizes.TITLE_XX_SMALL,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            if (hasError) ErrorDisplayer(message: error),
           ],
         );
       },

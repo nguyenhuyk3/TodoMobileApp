@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/widgets/primary_button.dart';
 import '../../bloc/bloc.dart';
 
-class ConfirmedPasswordButton extends StatelessWidget {
-  const ConfirmedPasswordButton({super.key});
+class FPConfirmedPasswordButton extends StatelessWidget {
+  const FPConfirmedPasswordButton({super.key});
 
   @override
   Widget build(BuildContext context) {

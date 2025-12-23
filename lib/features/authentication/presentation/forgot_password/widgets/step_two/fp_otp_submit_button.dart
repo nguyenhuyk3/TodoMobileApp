@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/widgets/primary_button.dart';
 import '../../bloc/bloc.dart';
 
-class OtpSubmitButton extends StatelessWidget {
-  const OtpSubmitButton({super.key});
+class FPOtpSubmitButton extends StatelessWidget {
+  const FPOtpSubmitButton({super.key});
 
   @override
   Widget build(BuildContext context) {

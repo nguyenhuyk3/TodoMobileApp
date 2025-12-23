@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
 import '../bloc/bloc.dart';
-import '../widgets/step_one/email_input.dart';
-import '../widgets/step_one/send_otp_button.dart';
+import '../widgets/step_one/fp_email_input.dart';
+import '../widgets/step_one/fp_send_otp_button.dart';
 import 'step_two.dart';
 
 class ForgotPasswordStepOnePage extends StatelessWidget {
@@ -46,11 +46,11 @@ class ForgotPasswordStepOnePage extends StatelessWidget {
           children: [
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-            const EmailInput(),
+            const FPEmailInput(),
 
             const Spacer(),
 
-            const SendOTPButton(),
+            const FPSendOTPButton(),
           ],
         ),
       ),

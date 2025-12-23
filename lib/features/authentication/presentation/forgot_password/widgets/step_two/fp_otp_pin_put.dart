@@ -4,10 +4,11 @@ import 'package:pinput/pinput.dart';
 
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
+import '../../../../../../core/widgets/error_displayer.dart';
 import '../../bloc/bloc.dart';
 
-class OtpPinInput extends StatelessWidget {
-  const OtpPinInput({super.key});
+class FPOtpPinInput extends StatelessWidget {
+  const FPOtpPinInput({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,33 +69,7 @@ class OtpPinInput extends StatelessWidget {
             ),
 
             // HIỂN THỊ THÔNG BÁO LỖI PHÍA DƯỚI
-            if (hasError)
-              Padding(
-                padding: const EdgeInsets.only(top: 12, left: 12),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: IconSizes.ICON_MINI_SIZE,
-                      color: COLORS.ERROR_COLOR,
-                    ),
-
-                    const SizedBox(width: X_MIN_WIDTH_SIZED_BOX),
-
-                    Expanded(
-                      // Dùng Expanded để tránh lỗi tràn chữ nếu message dài
-                      child: Text(
-                        error,
-                        style: TextStyle(
-                          color: COLORS.ERROR_COLOR,
-                          fontSize: TextSizes.TITLE_XX_SMALL,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            if (hasError) ErrorDisplayer(message: error),
           ],
         );
       },
