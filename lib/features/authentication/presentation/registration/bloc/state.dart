@@ -20,6 +20,13 @@ class RegistrationLoading extends RegistrationState {
   List<Object?> get props => [];
 }
 
+/*
+
+*/
+
+// Nếu như state này được sử dụng trước khi chuyển sang step tiếp theo
+// Thì nên có thêm trường isLoading để biểu thị trạng thái loading khi submit
+// Tránh sử dụng chung với RegistrationLoading vì nó sẽ làm mất trạng thái của các field input
 class RegistrationStepOne extends RegistrationState {
   final Email email;
   final bool isLoading;
