@@ -9,17 +9,20 @@ class FPConfirmedPasswordButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
-      buildWhen:
-          (prev, curr) =>
-              curr is ForgotPasswordLoading || prev is ForgotPasswordLoading,
-      builder: (context, state) {
+    return BlocSelector<ForgotPasswordBloc, ForgotPasswordState, bool>(
+      selector: (state) => state is ForgotPasswordStepThree && state.isLoading,
+      builder: (context, isLoading) {
         return PrimaryButton(
           title: 'Xác nhận',
-          isLoading: state is ForgotPasswordLoading,
-          onPressed: () {
-            context.read<ForgotPasswordBloc>().add(ForgotPasswordSubmitted());
-          },
+          isLoading: isLoading,
+          onPressed:
+              isLoading
+                  ? null
+                  : () {
+                    context.read<ForgotPasswordBloc>().add(
+                      ForgotPasswordSubmitted(),
+                    );
+                  },
         );
       },
     );

@@ -5,6 +5,7 @@ import '../entities/user_registration.dart';
 import '../repositories/repository.dart';
 
 part 'registration_usecase.dart';
+part 'forgot_password_usecasse.dart';
 
 abstract class AuthenticationUsecase {
   final AuthenticationRepository _authenticationRepository;

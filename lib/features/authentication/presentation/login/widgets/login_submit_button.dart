@@ -17,10 +17,11 @@ class LoginSubmitButton extends StatelessWidget {
               prev.status == FormzSubmissionStatus.inProgress,
       builder: (context, state) {
         return PrimaryButton(
-          title: 'Xác nhận',
+          title: 'Đăng nhập',
           isLoading: state.status == FormzSubmissionStatus.inProgress,
-          onPressed:
-              () => context.read<LoginBloc>().add(const LoginSubmitted()),
+          onPressed: () {
+            context.read<LoginBloc>().add(const LoginSubmitted());
+          },
         );
       },
     );

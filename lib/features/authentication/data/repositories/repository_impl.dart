@@ -85,4 +85,25 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> updatePassword({
+    required String email,
+    required String newPassword,
+  }) async {
+    try {
+      await _authenticationRemoteDataSource.updatePassword(
+        email: email,
+        newPassword: newPassword,
+      );
+
+      return const Right(true);
+    } on PostgrestException catch (e) {
+      return Left(Failure(error: mapPostgrestException(e), details: e));
+    } on AuthException catch (e) {
+      return Left(Failure(error: mapAuthException(e), details: e));
+    } catch (e) {
+      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+    }
+  }
 }

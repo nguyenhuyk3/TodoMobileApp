@@ -127,9 +127,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     final currentState = state;
 
     if (currentState is RegistrationStepTwo) {
-      final sendOTResult = await _sendOTPUseCase.execute(email: _email);
+      final sendOTPResult = await _sendOTPUseCase.execute(email: _email);
 
-      sendOTResult.fold(
+      sendOTPResult.fold(
         (failure) {
           emit(RegistrationError(error: failure.message));
         },

@@ -29,4 +29,5 @@ abstract class AuthenticationRepository {
     required String otp,
   });
   Future<Either<Failure, bool>> register(UserRegistrationEntity user);
+  Future<Either<Failure, bool>> updatePassword({required String email, required String newPassword});
 }

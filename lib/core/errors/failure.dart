@@ -20,6 +20,9 @@ enum ErrorInformation {
   OTP_EXPIRED(message: 'Mã OTP đã hết hạn'),
   OTP_VERIFY_FAILED(message: 'Xác thực OTP thất bại'),
 
+  // Password
+  PASSWORD_UPDATE_FAILED(message: 'Cập nhật mật khẩu thất bại'),
+
   // Database
   DB_NOT_NULL_VIOLATION(message: 'Thiếu dữ liệu bắt buộc'),
   DB_FOREIGN_KEY_VIOLATION(message: 'Dữ liệu liên kết không tồn tại'),

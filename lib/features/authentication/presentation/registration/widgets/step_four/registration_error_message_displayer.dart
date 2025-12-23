@@ -10,7 +10,7 @@ class RegistrationErrorMessageDisplayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (BlocSelector<RegistrationBloc, RegistrationState, String>(
+    return BlocSelector<RegistrationBloc, RegistrationState, String>(
       selector: (state) => state is RegistrationStepFour ? state.error : '',
       builder: (context, error) {
         // KIỂM TRA: Có lỗi và lỗi đó KHÔNG PHẢI là EMPTY_FULL_NAME
@@ -28,6 +28,6 @@ class RegistrationErrorMessageDisplayer extends StatelessWidget {
           ],
         );
       },
-    ));
+    );
   }
 }

@@ -77,7 +77,23 @@ class _MainAppState extends State<MainApp> {
                   ),
                 ),
           ),
-          BlocProvider(create: (_) => ForgotPasswordBloc()),
+          BlocProvider(
+            create:
+                (_) => ForgotPasswordBloc(
+                  checkEmailExistsUseCase: CheckEmailExistsUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
+                  sendOTPUseCase: SendOTPUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
+                  verifyOTPUseCase: VerifyOTPUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
+                  updatePasswordUseCase: UpdatePasswordUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
+                ),
+          ),
           BlocProvider(create: (_) => LoginBloc()),
         ],
         child: MaterialApp(home: LoginPage()),

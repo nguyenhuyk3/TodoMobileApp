@@ -4,8 +4,10 @@ import 'package:todo_mobile_app/features/authentication/presentation/login/pages
 
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
+import '../../../../../core/widgets/custom_snack_bar.dart';
 import '../bloc/bloc.dart';
 import '../widgets/step_three/fp_confirmed_password_button.dart';
+import '../widgets/step_three/fp_error_message_displayer.dart';
 import '../widgets/step_three/fp_password_input.dart';
 
 class ForgotPasswordStepThreePage extends StatelessWidget {
@@ -28,6 +30,12 @@ class ForgotPasswordStepThreePage extends StatelessWidget {
                     ),
               ),
             );
+
+            CustomSnackBar(
+              context: context,
+              message: 'Cập nhập mật khẩu thành công',
+              isSuccess: true,
+            );
           }
         },
         child: Column(
@@ -43,6 +51,10 @@ class ForgotPasswordStepThreePage extends StatelessWidget {
               hintText: 'Hãy nhập mật khẩu xác nhận',
               isConfirmedPassword: true,
             ),
+
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 4),
+
+            FPErrorMessageDisplayer(),
 
             const Spacer(),
 

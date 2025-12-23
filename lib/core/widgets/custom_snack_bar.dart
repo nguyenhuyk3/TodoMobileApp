@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
 
+import '../constants/others.dart';
+import '../constants/sizes.dart';
+
 void CustomSnackBar({
   required BuildContext context,
   required String message,
   required bool isSuccess,
+  bool isCentered = true,
 }) {
   final snackBar = SnackBar(
     content: Text(
+      textAlign: isCentered ? TextAlign.center : TextAlign.left,
       message,
       style: TextStyle(
-        color:
-            isSuccess
-                ? const Color(0xFF155724) // success text
-                : const Color(0xFF721C24), // error text
+        color: Colors.white,
+        fontSize: TextSizes.TITLE_SMALL,
+        fontWeight: FontWeight.w500,
       ),
     ),
     backgroundColor:
         isSuccess
-            ? const Color(0xFFD4EDDA) // success background
-            : const Color(0xFFF8D7DA), // error background,
+            ? COLORS
+                .SUCCESS_COLOR // success background
+            : COLORS.ERROR_COLOR, // error background,
     behavior: SnackBarBehavior.floating,
     elevation: 4,
-    duration: const Duration(seconds: 2),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    duration: const Duration(seconds: 1),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   );
 
   ScaffoldMessenger.of(context)

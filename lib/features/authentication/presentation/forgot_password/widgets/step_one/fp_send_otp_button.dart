@@ -12,7 +12,8 @@ class FPSendOTPButton extends StatelessWidget {
     return Builder(
       builder: (context) {
         return BlocSelector<ForgotPasswordBloc, ForgotPasswordState, bool>(
-          selector: (state) => state is ForgotPasswordLoading,
+          selector:
+              (state) => state is ForgotPasswordStepOne && state.isLoading,
           builder: (context, isLoading) {
             return PrimaryButton(
               title: 'Gửi mã xác thực OTP',

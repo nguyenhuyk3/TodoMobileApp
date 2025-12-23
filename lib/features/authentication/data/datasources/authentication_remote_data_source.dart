@@ -21,7 +21,7 @@ class AuthenticationRemoteDataSource {
   Future<void> sendEmailOTP({required String email}) async {
     await _supabaseClient.auth.signInWithOtp(
       email: email,
-      shouldCreateUser: true,
+      shouldCreateUser: false,
     );
   }
 
@@ -58,5 +58,18 @@ class AuthenticationRemoteDataSource {
       'pi_sex': user.sex.name,
       'pi_avatar_url': user.avatarUrl ?? "",
     });
+  }
+
+  Future<void> updatePassword({
+    required String email,
+    required String newPassword,
+  }) async {
+    await _supabaseClient
+        .from(TABLES.USERS)
+        .update({
+          'u_password': newPassword,
+          'u_updated_at': DateTime.now().toIso8601String(),
+        })
+        .eq('u_email', email);
   }
 }

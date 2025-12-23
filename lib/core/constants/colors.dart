@@ -16,6 +16,7 @@ class AppColors {
   final LABEL_COLOR = Colors.black;
 
   final ERROR_COLOR = Colors.redAccent;
+  final SUCCESS_COLOR = const Color.fromARGB(255, 10, 202, 32);
 
   // Button
   final PRIMARY_BUTTON_COLOR = Color.fromRGBO(253, 205, 32, 1);

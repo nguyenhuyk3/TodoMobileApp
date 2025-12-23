@@ -35,14 +35,12 @@ class _FPEmailInputState extends State<FPEmailInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<ForgotPasswordBloc, ForgotPasswordState, String>(
-      selector: (state) {
-        return (state is ForgotPasswordError) ? state.error : '';
-      },
-      builder: (context, error) {
+    return BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+      builder: (context, state) {
+        final String error = (state is ForgotPasswordError) ? state.error : '';
+        final isStepOne = state is ForgotPasswordStepOne;
+        final isLoading = isStepOne && state.isLoading;
         final hasError = error.isNotEmpty;
-        final state = context.watch<ForgotPasswordBloc>().state;
-        final isLoading = state is ForgotPasswordLoading;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,26 +116,24 @@ class _FPEmailInputState extends State<FPEmailInput> {
                   // - Nếu đang loading → ẩn icon để tránh user thao tác
                   // - Khi không loading → hiển thị nút clear (icon cancel)
                   suffixIcon:
-                      _controller.text.isNotEmpty
-                          ? (isLoading
-                              ? null
-                              : IconButton(
-                                icon: Icon(
-                                  Icons.cancel,
-                                  size: IconSizes.ICON_INPUT_SIZE,
-                                  color:
-                                      hasError
-                                          ? COLORS.ERROR_COLOR
-                                          : COLORS.FOCUSED_BORDER_IP_COLOR,
-                                ),
-                                onPressed: () {
-                                  _controller.clear();
+                      (_controller.text.isNotEmpty && isStepOne && !isLoading)
+                          ? IconButton(
+                            icon: Icon(
+                              Icons.cancel,
+                              size: IconSizes.ICON_INPUT_SIZE,
+                              color:
+                                  hasError
+                                      ? COLORS.ERROR_COLOR
+                                      : COLORS.FOCUSED_BORDER_IP_COLOR,
+                            ),
+                            onPressed: () {
+                              _controller.clear();
 
-                                  context.read<ForgotPasswordBloc>().add(
-                                    const ForgotPasswordEmailChanged(email: ''),
-                                  );
-                                },
-                              ))
+                              context.read<ForgotPasswordBloc>().add(
+                                const ForgotPasswordEmailChanged(email: ''),
+                              );
+                            },
+                          )
                           : null,
                   // Border configs
                   contentPadding: const EdgeInsets.symmetric(
