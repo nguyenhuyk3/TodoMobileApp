@@ -19,7 +19,7 @@ class RegistrationErrorMessageDisplayer extends StatelessWidget {
             error != ErrorInformation.EMPTY_FULL_NAME.message;
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (hasGeneralError)
               ErrorDisplayer(message: error)

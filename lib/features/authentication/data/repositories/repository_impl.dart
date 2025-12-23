@@ -70,13 +70,18 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       await _authenticationRemoteDataSource.register(user: user);
 
-      return Left(Failure(error: ErrorInformation.DB_RLS_VIOLATION));
-      // return const Right(true);
+      return const Right(true);
     } on PostgrestException catch (e) {
+      // LOGGER.e('PostgrestException: ${e.message}');
+
       return Left(Failure(error: mapPostgrestException(e), details: e));
     } on AuthException catch (e) {
+      // LOGGER.e('AuthException: ${e.message}');
+
       return Left(Failure(error: mapAuthException(e), details: e));
     } catch (e) {
+      // LOGGER.e('Undefined exception: $e');
+
       return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
     }
   }
