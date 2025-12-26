@@ -38,7 +38,6 @@ class AuthenticationRemoteDataSource {
   }
 
   Future<void> register({required UserRegistrationEntity user}) async {
-    // 1. Chèn vào bảng 'users' trước để lấy u_id
     await _supabaseClient.rpc(
       'register_user_function',
       params: {

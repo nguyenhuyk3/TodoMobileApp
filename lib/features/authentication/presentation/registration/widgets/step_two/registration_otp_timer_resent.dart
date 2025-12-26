@@ -20,7 +20,6 @@ class RegistrationOtpTimerResend extends StatelessWidget {
       child: BlocBuilder<TimerBloc, TimerState>(
         builder: (context, state) {
           final isCompleted = state is TimerRunComplete;
-
           final minutesStr = ((state.duration / 60) % 60)
               .floor()
               .toString()
@@ -32,7 +31,17 @@ class RegistrationOtpTimerResend extends StatelessWidget {
 
           return Center(
             child: GestureDetector(
-              onTap: isCompleted ? () => _handleResend(context) : null,
+              onTap:
+                  isCompleted
+                      ? () => {
+                        context.read<TimerBloc>().add(
+                          const TimerStarted(duration: TIME_FOR_RESENDING_MAIL),
+                        ),
+                        context.read<RegistrationBloc>().add(
+                          RegistrationResendOTPRequested(),
+                        ),
+                      }
+                      : null,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -62,12 +71,5 @@ class RegistrationOtpTimerResend extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void _handleResend(BuildContext context) {
-    context.read<TimerBloc>().add(
-      const TimerStarted(duration: TIME_FOR_RESENDING_MAIL),
-    );
-    context.read<RegistrationBloc>().add(RegistrationResendOTPRequested());
   }
 }
