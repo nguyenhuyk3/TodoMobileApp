@@ -42,7 +42,6 @@ class _MainAppState extends State<MainApp> {
 
     final authenticationRemoteDataSource = AuthenticationRemoteDataSource(
       supabaseClient: Supabase.instance.client,
-      // securityRepository: BCryptSecurityService(),
     );
 
     _authenticationRepository = AuthenticationService(

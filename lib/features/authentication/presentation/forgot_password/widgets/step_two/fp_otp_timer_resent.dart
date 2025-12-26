@@ -50,7 +50,7 @@ class FPOtpTimerResend extends StatelessWidget {
                     style: TextStyle(
                       color:
                           isCompleted
-                              ? COLORS.PRIMARY_APP_COLOR
+                              ? COLORS.PRIMARY_BUTTON_COLOR
                               : COLORS.PRIMARY_TEXT_COLOR,
                       fontWeight: FontWeight.bold,
                       fontSize: TextSizes.TITLE_X_SMALL,

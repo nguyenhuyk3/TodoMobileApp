@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import '../../../../../../core/widgets/primary_button.dart';
+import '../../../../../core/utils/toats.dart';
 import '../bloc/bloc.dart';
 
 class LoginSubmitButton extends StatelessWidget {
@@ -20,7 +21,11 @@ class LoginSubmitButton extends StatelessWidget {
           title: 'Đăng nhập',
           isLoading: state.status == FormzSubmissionStatus.inProgress,
           onPressed: () {
-            context.read<LoginBloc>().add(const LoginSubmitted());
+            // context.read<LoginBloc>().add(const LoginSubmitted());
+            ToastUtils.showWarning(
+              context: context,
+              message: 'Đăng nhập thành công',
+            );
           },
         );
       },

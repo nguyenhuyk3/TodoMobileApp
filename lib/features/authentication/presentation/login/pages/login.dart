@@ -5,7 +5,6 @@ import 'package:todo_mobile_app/core/widgets/authentication_form.dart';
 import 'package:todo_mobile_app/features/home/pages/home_page.dart';
 
 import '../../../../../core/constants/sizes.dart';
-import '../../../../../core/widgets/custom_snack_bar.dart';
 import '../bloc/bloc.dart';
 import '../widgets/login_email_input.dart';
 import '../widgets/login_password_input.dart';
@@ -23,18 +22,7 @@ class LoginPage extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) async {
         if (state.status.isFailure) {
-          CustomSnackBar(
-            context: context,
-            isSuccess: false,
-            message: 'Đăng nhập thất bại!!',
-          );
         } else if (state.status.isSuccess) {
-          CustomSnackBar(
-            context: context,
-            isSuccess: true,
-            message: 'Đăng nhập thành công!!',
-          );
-
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (_) => HomePage()),
@@ -67,7 +55,7 @@ class LoginPage extends StatelessWidget {
             LoginSocialLoginButton(),
 
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 2),
-            
+
             LoginRedirectToRegistrationPage(),
 
             const Spacer(),

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/login/pages/login.dart';
 
 import '../../../../../core/constants/sizes.dart';
+import '../../../../../core/utils/toats.dart';
 import '../../../../../core/widgets/authentication_form.dart';
-import '../../../../../core/widgets/custom_snack_bar.dart';
 import '../bloc/bloc.dart';
 import '../widgets/step_three/fp_confirmed_password_button.dart';
 import '../widgets/step_three/fp_error_message_displayer.dart';
@@ -31,10 +31,9 @@ class ForgotPasswordStepThreePage extends StatelessWidget {
               ),
             );
 
-            CustomSnackBar(
+            ToastUtils.showSuccess(
               context: context,
               message: 'Cập nhập mật khẩu thành công',
-              isSuccess: true,
             );
           }
         },

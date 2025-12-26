@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants/others.dart';
 import '../constants/sizes.dart';
 
-void CustomSnackBar({
+void showCustomSnackBar({
   required BuildContext context,
   required String message,
   required bool isSuccess,
