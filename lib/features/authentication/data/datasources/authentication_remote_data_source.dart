@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/constants/others.dart';
@@ -38,38 +39,33 @@ class AuthenticationRemoteDataSource {
 
   Future<void> register({required UserRegistrationEntity user}) async {
     // 1. Chèn vào bảng 'users' trước để lấy u_id
-    final response =
-        await _supabaseClient
-            .from('users')
-            .insert({
-              'u_email': user.email,
-              'u_password': user.password,
-              'u_source': 'app',
-            })
-            .select('u_id')
-            .single();
-    final String userId = response['u_id'];
-
-    // 2. Chèn vào bảng 'personal_information' sử dụng u_id vừa lấy được
-    await _supabaseClient.from(TABLES.PERSONAL_INFORMATION).insert({
-      'u_id': userId,
-      'pi_full_name': user.fullName,
-      'pi_date_of_birth': user.dob.toIso8601String(),
-      'pi_sex': user.sex.name,
-      'pi_avatar_url': user.avatarUrl ?? "",
-    });
+    await _supabaseClient.rpc(
+      'register_user_function',
+      params: {
+        'p_email': user.email,
+        'p_password': user.password, // Gửi pass thô, server tự mã hóa
+        'p_full_name': user.fullName,
+        // Database nhận type 'date' sẽ tự parse
+        // Chuyển sang định dạng chuỗi 'yyyy-MM-dd'
+        'p_dob': DateFormat('yyyy-MM-dd').format(user.dob),
+        'p_sex': user.sex.name, // gửi "male" hoặc "female"
+        'p_avatar_url': user.avatarUrl ?? "",
+      },
+    );
   }
 
   Future<void> updatePassword({
     required String email,
     required String newPassword,
   }) async {
-    await _supabaseClient
-        .from(TABLES.USERS)
-        .update({
-          'u_password': newPassword,
-          'u_updated_at': DateTime.now().toIso8601String(),
-        })
-        .eq('u_email', email);
+    // Không được update trực tiếp, cần dùng 1 hàm RPC nhỏ hoặc query raw
+    // để gọi crypt(), nhưng Supabase client dart không support query raw
+    // chứa function DB dễ dàng, nên tốt nhất là tạo thêm 1 RPC.
+
+    // Nếu bạn muốn nhanh, tạo 1 hàm SQL RPC "change_user_password(email, pass)"
+    await _supabaseClient.rpc(
+      'change_user_password',
+      params: {'p_email': email, 'p_new_password': newPassword},
+    );
   }
 }

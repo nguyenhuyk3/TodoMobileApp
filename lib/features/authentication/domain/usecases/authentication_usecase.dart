@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../entities/user_registration.dart';
-import '../repositories/repository.dart';
+import '../repositories/authentication.dart';
 
 part 'registration_usecase.dart';
 part 'forgot_password_usecasse.dart';

@@ -11,6 +11,9 @@ import '../../bloc/bloc.dart';
   của một widget có thể nhận input (TextField, TextFormField, Button, v.v.).
     Hiểu ngắn gọn 👇
       FocusNode = “con trỏ biết widget nào đang được focus”
+
+    TextEditingController là bộ điều khiển nội dung của TextField.
+    Controller quản lý "View State" (vị trí con trỏ, vùng chọn), Bloc quản lý "Data State" (giá trị email).
 */
 class RegistrationEmailInput extends StatefulWidget {
   const RegistrationEmailInput({super.key});

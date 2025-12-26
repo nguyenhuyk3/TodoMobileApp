@@ -4,13 +4,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_mobile_app/features/authentication/domain/entities/user_registration.dart';
 
 import '../../../../core/errors/failure.dart';
-import '../../domain/repositories/repository.dart';
+import '../../../../core/errors/supabase_error_mapper.dart';
+import '../../domain/repositories/authentication.dart';
 import '../datasources/authentication_remote_data_source.dart';
 
-class AuthenticationRepositoryImpl implements AuthenticationRepository {
+class AuthenticationService implements AuthenticationRepository {
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
 
-  AuthenticationRepositoryImpl({
+  AuthenticationService({
     required AuthenticationRemoteDataSource authenticationRemoteDataSource,
   }) : _authenticationRemoteDataSource = authenticationRemoteDataSource;
 

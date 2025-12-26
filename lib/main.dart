@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_mobile_app/features/authentication/data/datasources/authentication_remote_data_source.dart';
-import 'package:todo_mobile_app/features/authentication/domain/repositories/repository.dart';
+import 'package:todo_mobile_app/features/authentication/domain/repositories/authentication.dart';
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/bloc/bloc.dart';
 
 import 'core/constants/keys.dart';
-import 'features/authentication/data/repositories/repository_impl.dart';
+import 'features/authentication/data/repositories/authentication_service.dart';
 import 'features/authentication/presentation/login/bloc/bloc.dart';
 import 'features/authentication/presentation/login/pages/login.dart';
 
@@ -42,9 +42,10 @@ class _MainAppState extends State<MainApp> {
 
     final authenticationRemoteDataSource = AuthenticationRemoteDataSource(
       supabaseClient: Supabase.instance.client,
+      // securityRepository: BCryptSecurityService(),
     );
 
-    _authenticationRepository = AuthenticationRepositoryImpl(
+    _authenticationRepository = AuthenticationService(
       authenticationRemoteDataSource: authenticationRemoteDataSource,
     );
   }
