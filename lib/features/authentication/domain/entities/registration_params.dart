@@ -1,19 +1,19 @@
 import 'enums.dart';
 
-class UserRegistrationEntity {
+class RegistrationParams {
   final String email;
   final String password;
   final String fullName;
-  final DateTime dob;
+  final DateTime dateOfBirth;
   final Sex sex;
-  final String? avatarUrl;
+  final String avatarUrl;
 
-  UserRegistrationEntity({
+  RegistrationParams({
     required this.email,
     required this.password,
     required this.fullName,
-    required this.dob,
+    required this.dateOfBirth,
     required this.sex,
-    this.avatarUrl,
+    this.avatarUrl = '',
   });
 }

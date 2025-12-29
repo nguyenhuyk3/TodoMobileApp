@@ -10,17 +10,24 @@ class RegistrationOtpSubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationBloc, RegistrationState>(
-      buildWhen:
-          (prev, curr) =>
-              curr is RegistrationLoading || prev is RegistrationLoading,
+      buildWhen: (previous, current) {
+        if (previous is RegistrationStepTwo && current is RegistrationStepTwo) {
+          return previous.isLoading != current.isLoading;
+        }
+        return false;
+      },
       builder: (context, state) {
+        final isLoading = state is RegistrationStepTwo && state.isLoading;
+
         return PrimaryButton(
           title: 'Xác nhận',
-          isLoading: state is RegistrationLoading,
+          isLoading: isLoading,
           onPressed:
-              () => context.read<RegistrationBloc>().add(
-                RegistrationOtpSubmitted(),
-              ),
+              isLoading
+                  ? null
+                  : () => context.read<RegistrationBloc>().add(
+                    RegistrationOtpSubmitted(),
+                  ),
         );
       },
     );

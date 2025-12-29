@@ -13,7 +13,7 @@ class RegistrationBirthDatePicker extends StatelessWidget {
     final birthDateStr = context.select<RegistrationBloc, String>((bloc) {
       final state = bloc.state;
 
-      return state is RegistrationStepFour ? state.birthDate : '';
+      return state is RegistrationStepOne ? state.birthDate : '';
     });
     // 2. Logic xác định ngày để hiển thị
     // Nếu birthDateStr rỗng, ta sử dụng fallback là 2000-01-01
@@ -57,7 +57,7 @@ class RegistrationBirthDatePicker extends StatelessWidget {
               // picked = YYYY-MM-DD HH:MM:SS.mmmuuuZ, ex: 2000-01-20 00:00:00.000
               // picked.toIso8601String() = YYYY-MM-DDTHH:MM:SS.mmmuuuZ ex: 2000-01-20T00:00:00.000
 
-              if (currentState is RegistrationStepFour) {
+              if (currentState is RegistrationStepOne) {
                 context.read<RegistrationBloc>().add(
                   RegistrationInformationChanged(
                     fullName: currentState.fullName,

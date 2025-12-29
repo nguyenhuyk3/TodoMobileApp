@@ -9,8 +9,8 @@ class RegistrationSexSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentSex = context.select<RegistrationBloc, String>((bloc) {
-      return bloc.state is RegistrationStepFour
-          ? (bloc.state as RegistrationStepFour).sex
+      return bloc.state is RegistrationStepOne
+          ? (bloc.state as RegistrationStepOne).sex
           : 'male';
     });
 
@@ -62,7 +62,7 @@ class RegistrationSexSelection extends StatelessWidget {
         onTap: () {
           final state = context.read<RegistrationBloc>().state;
 
-          if (state is RegistrationStepFour) {
+          if (state is RegistrationStepOne) {
             context.read<RegistrationBloc>().add(
               RegistrationInformationChanged(
                 fullName: state.fullName,

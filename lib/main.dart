@@ -63,16 +63,13 @@ class _MainAppState extends State<MainApp> {
           BlocProvider(
             create:
                 (_) => RegistrationBloc(
-                  checkEmailExistsUseCase: CheckEmailExistsUseCase(
+                  registerUseCase: RegisterUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
-                  sendOTPUseCase: SendOTPUseCase(
+                  resendOTPUseCase: ResendOTPUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
                   verifyOTPUseCase: VerifyOTPUseCase(
-                    authenticationRepository: _authenticationRepository,
-                  ),
-                  registerUseCase: RegisterUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
                 ),
@@ -83,9 +80,9 @@ class _MainAppState extends State<MainApp> {
                   checkEmailExistsUseCase: CheckEmailExistsUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
-                  sendOTPUseCase: SendOTPUseCase(
-                    authenticationRepository: _authenticationRepository,
-                  ),
+                  // sendOTPUseCase: SendOTPUseCase(
+                  //   authenticationRepository: _authenticationRepository,
+                  // ),
                   verifyOTPUseCase: VerifyOTPUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
@@ -94,7 +91,14 @@ class _MainAppState extends State<MainApp> {
                   ),
                 ),
           ),
-          BlocProvider(create: (_) => LoginBloc()),
+          BlocProvider(
+            create:
+                (_) => LoginBloc(
+                  loginUseCase: LoginUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
+                ),
+          ),
         ],
         child: MaterialApp(home: LoginPage()),
       ),

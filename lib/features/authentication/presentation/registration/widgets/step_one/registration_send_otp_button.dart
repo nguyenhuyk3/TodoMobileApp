@@ -22,7 +22,7 @@ class RegistrationSendOTPButton extends StatelessWidget {
                       ? null
                       : () {
                         context.read<RegistrationBloc>().add(
-                          RegistrationEmailSubmitted(),
+                          RegistrationStepOneSubmitted(),
                         );
                       },
             );

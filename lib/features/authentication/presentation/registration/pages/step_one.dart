@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/constants/sizes.dart';
-import '../../../../../core/widgets/authentication_form.dart';
+import '../../../../../core/widgets/long_authentication_form.dart';
 import '../bloc/bloc.dart';
+import '../widgets/step_one/registration_birth_date_picker.dart';
+import '../widgets/step_one/registration_error_message_displayer.dart';
+import '../widgets/step_one/registration_full_name_input.dart';
+import '../widgets/step_one/registration_sex_selection.dart';
 import '../widgets/step_one/registration_email_input.dart';
 import '../widgets/step_one/registration_send_otp_button.dart';
+import '../widgets/step_one/registration_password_input.dart';
 import 'step_two.dart';
 
 class RegistrationStepOnePage extends StatelessWidget {
@@ -32,18 +37,19 @@ class RegistrationStepOnePage extends StatelessWidget {
     // Việc check "state is RegistrationInitial" giúp tránh việc mỗi lần UI build lại (do gõ phím)
     // thì email lại bị reset (vì addPostFrameCallback sẽ chạy sau mỗi lần build).
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (context.read<RegistrationBloc>().state is RegistrationInitial) {
-        context.read<RegistrationBloc>().add(
-          const RegistrationEmailChanged(email: ''),
-        );
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (context.read<RegistrationBloc>().state is RegistrationStepOne) {
+    //     context.read<RegistrationBloc>().add(
+    //       const RegistrationEmailChanged(email: ''),
+    //     );
+    //   }
+    // });
 
-    return AuthenticationForm(
+    return LongAuthenticationForm(
       title: 'Đăng ký',
       allowBack: true,
       resizeToAvoidBottomInset: true,
+      showLogo: false,
       child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is RegistrationStepTwo) {
@@ -60,12 +66,44 @@ class RegistrationStepOnePage extends StatelessWidget {
           }
         },
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
-            
+
             const RegistrationEmailInput(),
 
-            const Spacer(),
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
+
+            RegistrationPasswordInput(
+              label: 'Mật khẩu',
+              hintText: 'Hãy nhập mật khẩu',
+            ),
+
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
+
+            RegistrationPasswordInput(
+              label: 'Mật khẩu xác nhận',
+              hintText: 'Hãy nhập mật khẩu xác nhận',
+              isConfirmedPassword: true,
+            ),
+
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
+
+            RegistrationFullNameInput(),
+
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
+
+            RegistrationBirthDatePicker(),
+
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
+
+            RegistrationSexSelection(),
+
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
+
+            RegistrationErrorMessageDisplayer(),
+
+            const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 1.5),
 
             const RegistrationSendOTPButton(),
           ],

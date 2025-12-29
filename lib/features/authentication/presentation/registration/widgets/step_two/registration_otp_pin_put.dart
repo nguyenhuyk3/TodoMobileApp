@@ -39,7 +39,7 @@ class RegistrationOtpPinInput extends StatelessWidget {
 
     return BlocSelector<RegistrationBloc, RegistrationState, String>(
       selector: (state) {
-        return (state is RegistrationError) ? state.error : '';
+        return (state is RegistrationStepTwo) ? state.error : '';
       },
       builder: (context, error) {
         final hasError = error.isNotEmpty;

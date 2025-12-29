@@ -7,7 +7,7 @@ class UpdatePasswordUseCase extends AuthenticationUsecase {
     required String email,
     required String newPassword,
   }) {
-    return authenticationRepository.updatePassword(
+    return _authenticationRepository.updatePassword(
       email: email,
       newPassword: newPassword,
     );

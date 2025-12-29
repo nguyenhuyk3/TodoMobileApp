@@ -17,23 +17,6 @@ class RegistrationEmailChanged extends RegistrationEvent {
   List<Object?> get props => [email];
 }
 
-class RegistrationEmailSubmitted extends RegistrationEvent {}
-
-// Step 2
-class RegistrationOtpChanged extends RegistrationEvent {
-  final String otp;
-
-  const RegistrationOtpChanged({required this.otp});
-
-  @override
-  List<Object?> get props => [otp];
-}
-
-class RegistrationResendOTPRequested extends RegistrationEvent {}
-
-class RegistrationOtpSubmitted extends RegistrationEvent {}
-
-// Step 3
 class RegistrationPasswordChanged extends RegistrationEvent {
   final String password;
   final String confirmedPassword;
@@ -47,9 +30,6 @@ class RegistrationPasswordChanged extends RegistrationEvent {
   List<Object?> get props => [password];
 }
 
-class RegistrationPasswordSubmitted extends RegistrationEvent {}
-
-// Step 4
 class RegistrationInformationChanged extends RegistrationEvent {
   final String fullName;
   final String birthDate;
@@ -69,6 +49,22 @@ class RegistrationInformationChanged extends RegistrationEvent {
   List<Object?> get props => [fullName, birthDate, sex];
 }
 
-class RegistrationSubmitted extends RegistrationEvent {}
+class RegistrationStepOneSubmitted extends RegistrationEvent {}
+// ========================== || ========================== //
+
+// Step 2
+class RegistrationOtpChanged extends RegistrationEvent {
+  final String otp;
+
+  const RegistrationOtpChanged({required this.otp});
+
+  @override
+  List<Object?> get props => [otp];
+}
+
+class RegistrationResendOTPRequested extends RegistrationEvent {}
+
+class RegistrationOtpSubmitted extends RegistrationEvent {}
+// ========================== || ========================== //
 
 class RegistrationReset extends RegistrationEvent {}

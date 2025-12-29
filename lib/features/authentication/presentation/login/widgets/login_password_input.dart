@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
-import '../../../../../core/constants/errors.dart';
+import '../../../../../core/errors/failure.dart';
 import '../../password/bloc/bloc.dart';
 import '../bloc/bloc.dart';
 
@@ -45,8 +45,8 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
       final state = bloc.state;
       final errorMsg = state.error;
 
-      if (errorMsg == EMAIL_CAN_NOT_BE_BLANK ||
-          errorMsg == INVALID_EMAIL_ERROR) {
+      if (errorMsg == ErrorInformation.EMAIL_CAN_NOT_BE_BLANK.message ||
+          errorMsg == ErrorInformation.INVALID_EMAIL.message) {
         return '';
       }
 

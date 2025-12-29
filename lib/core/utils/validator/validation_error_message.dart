@@ -3,16 +3,15 @@ import 'package:todo_mobile_app/core/errors/failure.dart';
 import '../../../features/authentication/inputs/email.dart';
 import '../../../features/authentication/inputs/otp.dart';
 import '../../../features/authentication/inputs/password.dart';
-import '../../constants/errors.dart';
 import '../../constants/others.dart';
 
 class ValidationErrorMessage {
   static String? getEmailErrorMessage({EmailValidationError? error}) {
     switch (error) {
       case EmailValidationError.empty:
-        return EMAIL_CAN_NOT_BE_BLANK;
+        return ErrorInformation.EMAIL_CAN_NOT_BE_BLANK.message;
       case EmailValidationError.invalid:
-        return INVALID_EMAIL_ERROR;
+        return ErrorInformation.INVALID_EMAIL.message;
       default:
         return null;
     }
@@ -25,7 +24,15 @@ class ValidationErrorMessage {
       case PasswordValidationError.empty:
         return ErrorInformation.EMPTY_PASSWORD.message;
       case PasswordValidationError.tooShort:
-        return "Mật khẩu không được ngắn hơn $MINIMUM_LENGTH_FOR_PASSWORD kí tự";
+        return ErrorInformation.PASSWORD_TOO_SHORT.message;
+      case PasswordValidationError.missingLowercase:
+        return ErrorInformation.PASSWORD_MISSING_LOWERCASE.message;
+      case PasswordValidationError.missingUppercase:
+        return ErrorInformation.PASSWORD_MISSING_UPPERCASE.message;
+      case PasswordValidationError.missingNumber:
+        return ErrorInformation.PASSWORD_MISSING_NUMBER.message;
+      case PasswordValidationError.missingSpecialChar:
+        return ErrorInformation.PASSWORD_MISSING_SPECIAL_CHAR.message;
       default:
         return null;
     }

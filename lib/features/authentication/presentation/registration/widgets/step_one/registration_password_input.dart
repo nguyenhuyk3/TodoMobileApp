@@ -51,23 +51,25 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
     final displayError = context.select<RegistrationBloc, String>((bloc) {
       final state = bloc.state;
 
-      if (state is! RegistrationStepThree) {
+      if (state is! RegistrationStepOne) {
         return '';
       }
 
       final errorMsg = state.error;
 
       if (widget.isConfirmedPassword) {
-        // Ô xác nhận chỉ hiện lỗi nếu lỗi liên quan đến 'Empty Confirm' hoặc 'Mismatch'
         if (errorMsg == ErrorInformation.EMPTY_CONFIRMED_PASSWORD.message ||
             errorMsg == ErrorInformation.CONFIRMED_PASSWORD_MISSMATCH.message) {
           return errorMsg;
         }
       } else {
-        // Ô mật khẩu chính chỉ hiện lỗi 'Empty Password' hoặc 'Too short'
         if (errorMsg == ErrorInformation.EMPTY_PASSWORD.message ||
-            errorMsg.contains('kí tự')) {
-          // Nhận diện lỗi 'ngắn hơn x kí tự'
+            errorMsg == ErrorInformation.PASSWORD_TOO_SHORT.message ||
+            errorMsg == ErrorInformation.PASSWORD_MISSING_LOWERCASE.message ||
+            errorMsg == ErrorInformation.PASSWORD_MISSING_UPPERCASE.message ||
+            errorMsg == ErrorInformation.PASSWORD_MISSING_NUMBER.message ||
+            errorMsg ==
+                ErrorInformation.PASSWORD_MISSING_SPECIAL_CHAR.message) {
           return errorMsg;
         }
       }
@@ -105,7 +107,7 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
                   onChanged: (value) {
                     final currentState = context.read<RegistrationBloc>().state;
 
-                    if (currentState is RegistrationStepThree) {
+                    if (currentState is RegistrationStepOne) {
                       context.read<RegistrationBloc>().add(
                         RegistrationPasswordChanged(
                           password:

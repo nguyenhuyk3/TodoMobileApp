@@ -4,8 +4,14 @@ import 'package:formz/formz.dart';
 
 import '../../../core/constants/others.dart';
 
-
-enum PasswordValidationError { empty, tooShort }
+enum PasswordValidationError {
+  empty,
+  tooShort,
+  missingUppercase,
+  missingLowercase,
+  missingNumber,
+  missingSpecialChar,
+}
 
 class Password extends FormzInput<String, PasswordValidationError> {
   const Password.pure() : super.pure('');
@@ -19,6 +25,22 @@ class Password extends FormzInput<String, PasswordValidationError> {
 
     if (value.length < MINIMUM_LENGTH_FOR_PASSWORD) {
       return PasswordValidationError.tooShort;
+    }
+
+    if (!RegExp(r'[a-z]').hasMatch(value)) {
+      return PasswordValidationError.missingLowercase;
+    }
+
+    if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return PasswordValidationError.missingUppercase;
+    }
+
+    if (!RegExp(r'[0-9]').hasMatch(value)) {
+      return PasswordValidationError.missingNumber;
+    }
+
+      if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+      return PasswordValidationError.missingSpecialChar;
     }
 
     return null;

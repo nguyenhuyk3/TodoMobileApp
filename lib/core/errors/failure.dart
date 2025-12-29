@@ -7,8 +7,19 @@ enum ErrorInformation {
   CONFIRMED_PASSWORD_MISSMATCH(message: 'Mật khẩu xác nhận không khớp'),
   EMPTY_FULL_NAME(message: 'Họ và tên không được bỏ trống'),
 
+  EMAIL_CAN_NOT_BE_BLANK(message: 'Email không được bỏ trống'),
+  INVALID_EMAIL(message: 'Email không hợp lệ'),
   EMAIL_NOT_EXISTS(message: 'Email không tồn tại trong hệ thống'),
   EMAIL_ALREADY_EXISTS(message: 'Email đã được sử dụng'),
+
+  // Password strength
+  PASSWORD_CAN_NOT_BE_BLANK(message: 'Mật khẩu không được bỏ trống'),
+  CONFIRMED_PASSWORD_MISMATCH(message: 'Mật khẩu xác nhận không khớp'),
+  PASSWORD_TOO_SHORT(message: 'Mật khẩu phải có ít nhất 8 ký tự'),
+  PASSWORD_MISSING_LOWERCASE(message: 'Mật khẩu phải chứa chữ thường'),
+  PASSWORD_MISSING_UPPERCASE(message: 'Mật khẩu phải chứa chữ hoa'),
+  PASSWORD_MISSING_NUMBER(message: 'Mật khẩu phải chứa ít nhất một chữ số'),
+  PASSWORD_MISSING_SPECIAL_CHAR(message: 'Mật khẩu phải chứa ký tự đặc biệt'),
 
   // OTP / Auth
   OTP_TOO_MANY_REQUESTS(message: 'Bạn đã yêu cầu mã OTP quá nhiều lần'),

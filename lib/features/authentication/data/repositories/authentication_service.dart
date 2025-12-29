@@ -1,10 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:todo_mobile_app/features/authentication/domain/entities/user_registration.dart';
 
+import '../../../../core/constants/others.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/errors/supabase_error_mapper.dart';
+import '../../domain/entities/registration_params.dart';
 import '../../domain/repositories/authentication.dart';
 import '../datasources/authentication_remote_data_source.dart';
 
@@ -34,28 +35,33 @@ class AuthenticationService implements AuthenticationRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, Object>> sendOTP({required String email}) async {
-    try {
-      await _authenticationRemoteDataSource.sendEmailOTP(email: email);
+  // @override
+  // Future<Either<Failure, Object>> sendOTP({required String email}) async {
+  //   try {
+  //     await _authenticationRemoteDataSource.sendEmailOTP(email: email);
 
-      return Right(Object());
-    } on AuthException catch (e) {
-      return Left(Failure(error: mapAuthException(e), details: e));
-    } catch (e) {
-      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
-    }
-  }
+  //     return Right(Object());
+  //   } on AuthException catch (e) {
+  //     LOGGER.d(e);
+
+  //     return Left(Failure(error: mapAuthException(e), details: e));
+  //   } catch (e) {
+  //     LOGGER.e(e);
+  //     return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+  //   }
+  // }
 
   @override
   Future<Either<Failure, Object>> verifyOTP({
     required String email,
     required String otp,
+    required OtpType type,
   }) async {
     try {
       await _authenticationRemoteDataSource.verifyEmailOtp(
         email: email,
         otp: otp,
+        type: type,
       );
 
       return Right(Object());
@@ -67,21 +73,21 @@ class AuthenticationService implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> register(UserRegistrationEntity user) async {
+  Future<Either<Failure, bool>> register(RegistrationParams params) async {
     try {
-      await _authenticationRemoteDataSource.register(user: user);
+      await _authenticationRemoteDataSource.register(params: params);
 
       return const Right(true);
     } on PostgrestException catch (e) {
-      // LOGGER.e('PostgrestException: ${e.message}');
+      LOGGER.e('PostgrestException: ${e.message}');
 
       return Left(Failure(error: mapPostgrestException(e), details: e));
     } on AuthException catch (e) {
-      // LOGGER.e('AuthException: ${e.message}');
+      LOGGER.e('AuthException: ${e.message}');
 
       return Left(Failure(error: mapAuthException(e), details: e));
     } catch (e) {
-      // LOGGER.e('Undefined exception: $e');
+      LOGGER.e('Undefined exception: $e');
 
       return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
     }
@@ -104,6 +110,39 @@ class AuthenticationService implements AuthenticationRepository {
     } on AuthException catch (e) {
       return Left(Failure(error: mapAuthException(e), details: e));
     } catch (e) {
+      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Object>> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final res = await _authenticationRemoteDataSource.login(
+        email: email,
+        password: password,
+      );
+
+      return Right(res);
+    } catch (e) {
+      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> resendOTP({
+    required String email,
+    required OtpType type,
+  }) async {
+    try {
+      await _authenticationRemoteDataSource.resendOTP(email: email, type: type);
+
+      return Right(true);
+    } catch (e) {
+      LOGGER.e(e);
+
       return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
     }
   }

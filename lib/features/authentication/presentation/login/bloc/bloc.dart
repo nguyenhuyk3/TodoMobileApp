@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:todo_mobile_app/core/constants/others.dart';
+import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
 
 import '../../../../../core/utils/validator/validation_error_message.dart';
 import '../../../inputs/email.dart';
@@ -12,7 +14,11 @@ part 'event.dart';
 part 'state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(const LoginState()) {
+  final LoginUseCase _loginUseCase;
+
+  LoginBloc({required LoginUseCase loginUseCase})
+    : _loginUseCase = loginUseCase,
+      super(const LoginState()) {
     on<LoginEmailChanged>(_onUsernameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onSubmitted);
@@ -75,24 +81,40 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
-    if (state.email.value == '1notthingm@gmail.com' &&
-        state.password.value == '12345678') {
-      await Future.delayed(const Duration(seconds: 2));
+    final res = await _loginUseCase.execute(
+      email: state.email.value,
+      password: state.password.value,
+    );
 
-      emit(state.copyWith(status: FormzSubmissionStatus.success));
+    LOGGER.i(res);
 
-      return;
-    } else {
-      await Future.delayed(const Duration(seconds: 2));
+    res.fold(
+      (failure) {
+        LOGGER.i(failure.details);
+      },
+      (data) {
+        LOGGER.i(data);
+      },
+    );
 
-      emit(
-        state.copyWith(
-          status: FormzSubmissionStatus.failure,
-          error: 'Email hoặc mật khẩu không đúng',
-        ),
-      );
+    // if (state.email.value == '1notthingm@gmail.com' &&
+    //     state.password.value == '12345678') {
+    //   await Future.delayed(const Duration(seconds: 2));
 
-      return;
-    }
+    //   emit(state.copyWith(status: FormzSubmissionStatus.success));
+
+    //   return;
+    // } else {
+    //   await Future.delayed(const Duration(seconds: 2));
+
+    //   emit(
+    //     state.copyWith(
+    //       status: FormzSubmissionStatus.failure,
+    //       error: 'Email hoặc mật khẩu không đúng',
+    //     ),
+    //   );
+
+    //   return;
+    // }
   }
 }

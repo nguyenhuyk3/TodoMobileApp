@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:todo_mobile_app/core/errors/failure.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../entities/user_registration.dart';
+import '../../../../core/errors/failure.dart';
+import '../entities/registration_params.dart';
 
 /*
   dartz là functional programming library cho Dart
@@ -23,11 +24,23 @@ import '../entities/user_registration.dart';
 */
 abstract class AuthenticationRepository {
   Future<Either<Failure, bool>> checkEmailExists({required String email});
-  Future<Either<Failure, Object>> sendOTP({required String email});
+  // Future<Either<Failure, Object>> sendOTP({required String email});
+  Future<Either<Failure, bool>> resendOTP({
+    required String email,
+    required OtpType type,
+  });
   Future<Either<Failure, Object>> verifyOTP({
     required String email,
     required String otp,
+    required OtpType type,
   });
-  Future<Either<Failure, bool>> register(UserRegistrationEntity user);
-  Future<Either<Failure, bool>> updatePassword({required String email, required String newPassword});
+  Future<Either<Failure, bool>> register(RegistrationParams params);
+  Future<Either<Failure, bool>> updatePassword({
+    required String email,
+    required String newPassword,
+  });
+  Future<Either<Failure, Object>> login({
+    required String email,
+    required String password,
+  });
 }

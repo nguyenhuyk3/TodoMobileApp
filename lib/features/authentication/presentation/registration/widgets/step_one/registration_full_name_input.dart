@@ -32,7 +32,7 @@ class RegistrationFullNameInputState extends State<RegistrationFullNameInput> {
   @override
   Widget build(BuildContext context) {
     return BlocSelector<RegistrationBloc, RegistrationState, String>(
-      selector: (state) => state is RegistrationStepFour ? state.error : '',
+      selector: (state) => state is RegistrationStepOne ? state.error : '',
       builder: (context, error) {
         // CHỈ hiển thị lỗi nếu lỗi đó là EMPTY_FULL_NAME
         final bool isNameError =
@@ -63,7 +63,7 @@ class RegistrationFullNameInputState extends State<RegistrationFullNameInput> {
                 onChanged: (fullName) {
                   final currentState = context.read<RegistrationBloc>().state;
 
-                  if (currentState is RegistrationStepFour) {
+                  if (currentState is RegistrationStepOne) {
                     context.read<RegistrationBloc>().add(
                       RegistrationInformationChanged(
                         fullName: fullName,
