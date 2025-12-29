@@ -11,7 +11,6 @@ enum ErrorInformation {
   INVALID_EMAIL(message: 'Email không hợp lệ'),
   EMAIL_NOT_EXISTS(message: 'Email không tồn tại trong hệ thống'),
   EMAIL_ALREADY_EXISTS(message: 'Email đã được sử dụng'),
-
   // Password strength
   PASSWORD_CAN_NOT_BE_BLANK(message: 'Mật khẩu không được bỏ trống'),
   CONFIRMED_PASSWORD_MISMATCH(message: 'Mật khẩu xác nhận không khớp'),
@@ -21,7 +20,6 @@ enum ErrorInformation {
   PASSWORD_MISSING_NUMBER(message: 'Mật khẩu phải chứa ít nhất một chữ số'),
   PASSWORD_MISSING_SPECIAL_CHAR(message: 'Mật khẩu phải chứa ký tự đặc biệt'),
   SAME_PASSWORD(message: 'Mật khẩu phải khác với mật khẩu cũ'),
-
   // OTP / Auth
   OTP_TOO_MANY_REQUESTS(message: 'Bạn đã yêu cầu mã OTP quá nhiều lần'),
   OTP_INVALID(message: 'Mã OTP không hợp lệ hoặc đã hết hạn'),
@@ -29,10 +27,8 @@ enum ErrorInformation {
   AUTH_INVALID_CREDENTIALS(message: 'Thông tin đăng nhập không hợp lệ'),
   OTP_EXPIRED(message: 'Mã OTP đã hết hạn'),
   OTP_VERIFY_FAILED(message: 'Xác thực OTP thất bại'),
-
   // Password
   PASSWORD_UPDATE_FAILED(message: 'Cập nhật mật khẩu thất bại'),
-
   // Database
   DB_NOT_NULL_VIOLATION(message: 'Thiếu dữ liệu bắt buộc'),
   DB_FOREIGN_KEY_VIOLATION(message: 'Dữ liệu liên kết không tồn tại'),

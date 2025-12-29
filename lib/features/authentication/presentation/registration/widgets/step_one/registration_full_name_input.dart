@@ -174,6 +174,7 @@ class RegistrationFullNameInputState extends State<RegistrationFullNameInput> {
               disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
+                  // ignore: deprecated_member_use
                   color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(0.5),
                   width: 0.5,
                 ),

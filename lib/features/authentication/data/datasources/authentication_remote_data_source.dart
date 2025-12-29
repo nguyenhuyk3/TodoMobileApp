@@ -53,7 +53,6 @@ class AuthenticationRemoteDataSource {
     await _supabaseClient.auth.updateUser(
       UserAttributes(password: newPassword),
     );
-
     // 2. Đăng xuất người dùng ngay lập tức
     // Sử dụng scope: SignOutScope.global để đăng xuất khỏi TẤT CẢ các thiết bị (nếu có)
     // Đây là cách bảo mật nhất khi đổi mật khẩu (phòng trường hợp bị hack nick)
@@ -73,7 +72,6 @@ class AuthenticationRemoteDataSource {
     if (authResponse.user == null) {
       throw const AuthException('Đăng nhập thất bại.');
     }
-
     // 2. Query thông tin từ bảng profiles (Vì AuthUser chỉ có id & email)
     final profileData =
         await _supabaseClient
@@ -81,7 +79,6 @@ class AuthenticationRemoteDataSource {
             .select()
             .eq('id', authResponse.user!.id)
             .single();
-
     // 3. Merge data thành Model hoàn chỉnh
     return UserModel.fromSupabase(
       profileData,

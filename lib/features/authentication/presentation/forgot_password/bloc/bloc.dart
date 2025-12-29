@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:todo_mobile_app/core/constants/others.dart';
 
 import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/validator/validation_error_message.dart';

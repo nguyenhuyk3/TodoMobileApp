@@ -39,7 +39,7 @@ class Password extends FormzInput<String, PasswordValidationError> {
       return PasswordValidationError.missingNumber;
     }
 
-      if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
       return PasswordValidationError.missingSpecialChar;
     }
 
