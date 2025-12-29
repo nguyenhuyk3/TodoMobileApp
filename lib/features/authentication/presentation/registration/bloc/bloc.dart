@@ -149,26 +149,26 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     // Giả lập thời gian chờ (Có thể xóa khi dùng thật)
     await Future.delayed(const Duration(seconds: 2));
 
-    final registrationResult = await _registerUseCase.execute(
-      RegistrationParams(
-        email: _email,
-        password: currentState.password.value,
-        fullName: currentState.fullName,
-        dateOfBirth: DateTime.parse(
-          currentState.birthDate,
-        ), // Convert String ISO -> DateTime
-        sex: Sex.fromString(currentState.sex),
-      ),
-    );
+    // final registrationResult = await _registerUseCase.execute(
+    //   RegistrationParams(
+    //     email: _email,
+    //     password: currentState.password.value,
+    //     fullName: currentState.fullName,
+    //     dateOfBirth: DateTime.parse(
+    //       currentState.birthDate,
+    //     ), // Convert String ISO -> DateTime
+    //     sex: Sex.fromString(currentState.sex),
+    //   ),
+    // );
 
-    registrationResult.fold(
-      (failure) {
-        emit(currentState.copyWith(error: failure.message));
-      },
-      (_) {
-        emit(RegistrationStepTwo(otp: const Otp.pure()));
-      },
-    );
+    // registrationResult.fold(
+    //   (failure) {
+    //     emit(currentState.copyWith(error: failure.message));
+    //   },
+    //   (_) {
+    //     emit(RegistrationStepTwo(otp: const Otp.pure()));
+    //   },
+    // );
   }
   // ========================== || ========================== //
 

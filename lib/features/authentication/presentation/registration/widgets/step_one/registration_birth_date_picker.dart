@@ -6,22 +6,27 @@ import '../../../../../../core/constants/sizes.dart';
 import '../../bloc/bloc.dart';
 
 class RegistrationBirthDatePicker extends StatelessWidget {
+  const RegistrationBirthDatePicker({super.key});
+
   @override
   Widget build(BuildContext context) {
-    // 1. Lấy ngày sinh từ state
-    // birthDateStr có định dạng ISO 8601: YYYY-MM-DDTHH:MM:SS.mmmuuuZ
+    // 1. Lấy thông tin từ state
     final birthDateStr = context.select<RegistrationBloc, String>((bloc) {
       final state = bloc.state;
 
       return state is RegistrationStepOne ? state.birthDate : '';
     });
-    // 2. Logic xác định ngày để hiển thị
-    // Nếu birthDateStr rỗng, ta sử dụng fallback là 2000-01-01
+    // 2. Lấy trạng thái Loading
+    final bool isLoading = context.select<RegistrationBloc, bool>((bloc) {
+      final state = bloc.state;
+
+      return state is RegistrationStepOne && state.isLoading;
+    });
+    // 3. Logic xác định ngày để hiển thị
     final effectiveDate =
         birthDateStr.isNotEmpty
             ? DateTime.parse(birthDateStr)
             : DateTime(2000, 1, 1);
-    // Chuyển về định dạng mà người Việt hay sử dụng là DD/MM/YYYY để hiển thị lên UI
     final formattedDate =
         "${effectiveDate.day.toString().padLeft(2, '0')}/"
         "${effectiveDate.month.toString().padLeft(2, '0')}/"
@@ -43,39 +48,45 @@ class RegistrationBirthDatePicker extends StatelessWidget {
         ),
 
         InkWell(
-          onTap: () async {
-            final picked = await showDatePicker(
-              context: context,
-              initialDate: DateTime(2000),
-              firstDate: DateTime(1950),
-              lastDate: DateTime.now(),
-            );
+          // [QUAN TRỌNG] Nếu đang loading thì onTap = null -> Button bị vô hiệu hóa
+          onTap:
+              isLoading
+                  ? null
+                  : () async {
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate:
+                          effectiveDate, // Dùng ngày hiện tại đang chọn thay vì fix cứng 2000
+                      firstDate: DateTime(1950),
+                      lastDate: DateTime.now(),
+                    );
 
-            if (picked != null) {
-              final currentState = context.read<RegistrationBloc>().state;
+                    if (picked != null) {
+                      final currentState =
+                          context.read<RegistrationBloc>().state;
 
-              // picked = YYYY-MM-DD HH:MM:SS.mmmuuuZ, ex: 2000-01-20 00:00:00.000
-              // picked.toIso8601String() = YYYY-MM-DDTHH:MM:SS.mmmuuuZ ex: 2000-01-20T00:00:00.000
-
-              if (currentState is RegistrationStepOne) {
-                context.read<RegistrationBloc>().add(
-                  RegistrationInformationChanged(
-                    fullName: currentState.fullName,
-                    birthDate: picked.toIso8601String(),
-                    sex: currentState.sex,
-                  ),
-                );
-              }
-            }
-          },
+                      if (currentState is RegistrationStepOne) {
+                        context.read<RegistrationBloc>().add(
+                          RegistrationInformationChanged(
+                            fullName: currentState.fullName,
+                            birthDate: picked.toIso8601String(),
+                            sex: currentState.sex,
+                          ),
+                        );
+                      }
+                    }
+                  },
           borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
-              color: COLORS.INPUT_BG_COLOR,
+              // Đổi màu nền nhẹ nếu disabled (tùy chọn)
+              color: isLoading ? Colors.grey.shade100 : COLORS.INPUT_BG_COLOR,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: COLORS.UNFOCUSED_BORDER_IP_COLOR,
+                color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(
+                  isLoading ? 0.5 : 1.0, // Làm mờ border khi loading
+                ),
                 width: 0.7,
               ),
             ),
@@ -83,7 +94,10 @@ class RegistrationBirthDatePicker extends StatelessWidget {
               children: [
                 Icon(
                   Icons.calendar_month_outlined,
-                  color: COLORS.ICON_PRIMARY_COLOR,
+                  color:
+                      isLoading
+                          ? Colors.grey.shade400
+                          : COLORS.ICON_PRIMARY_COLOR,
                 ),
 
                 const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 3),
@@ -92,16 +106,31 @@ class RegistrationBirthDatePicker extends StatelessWidget {
                   formattedDate,
                   style: TextStyle(
                     fontSize: TextSizes.TITLE_SMALL,
+                    fontWeight: FontWeight.w500,
+                    // Làm mờ text khi loading
                     color:
-                        birthDateStr.isEmpty
-                            ? COLORS.HINT_TEXT_COLOR
-                            : COLORS.PRIMARY_TEXT_COLOR,
+                        isLoading
+                            ? Colors.grey.shade400
+                            : (birthDateStr.isEmpty
+                                ? COLORS.HINT_TEXT_COLOR
+                                : COLORS.PRIMARY_TEXT_COLOR),
                   ),
                 ),
 
                 const Spacer(),
 
-                Icon(Icons.arrow_drop_down, color: COLORS.ICON_PRIMARY_COLOR),
+                // Logic hiển thị icon cuối hàng: Loading -> Spinner, Thường -> Mũi tên
+                if (isLoading)
+                  SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: COLORS.FOCUSED_BORDER_IP_COLOR,
+                    ),
+                  )
+                else
+                  Icon(Icons.arrow_drop_down, color: COLORS.ICON_PRIMARY_COLOR),
               ],
             ),
           ),

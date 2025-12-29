@@ -33,6 +33,11 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
 
     _controller = TextEditingController();
     _focusNode = FocusNode();
+
+    // Lắng nghe thay đổi controller để render lại nút xóa (X)
+    _controller.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -45,7 +50,7 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
 
   @override
   Widget build(BuildContext context) {
-    // ---- [FIX LOGIC BẮT LỖI TẠI ĐÂY] ----
+    // ---- LOGIC BẮT LỖI & LOADING ----
     final String errorDisplay = context.select<RegistrationBloc, String>((
       bloc,
     ) {
@@ -63,7 +68,6 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
 
       return '';
     });
-    // ------------------------------------
     final bool hasError = errorDisplay.isNotEmpty;
     // Cần lấy isLoading để disable nút xóa
     final bool isLoading = context.select<RegistrationBloc, bool>((bloc) {
@@ -71,6 +75,7 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
 
       return state is RegistrationStepOne && state.isLoading;
     });
+    // ------------------------------------
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +86,8 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
-              if (_focusNode.hasFocus)
+              if (_focusNode.hasFocus &&
+                  !isLoading) // Không show shadow khi đang loading
                 BoxShadow(
                   color: (hasError ? COLORS.ERROR_COLOR : Colors.black)
                   // ignore: deprecated_member_use
@@ -95,6 +101,8 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
             key: const Key('registration_emailInput_stepOne_textField'),
             controller: _controller,
             focusNode: _focusNode,
+            // [QUAN TRỌNG 1] Khóa thao tác khi đang loading
+            enabled: !isLoading,
             onChanged:
                 (email) => {
                   context.read<RegistrationBloc>().add(
@@ -103,14 +111,20 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
                 },
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: TextSizes.TITLE_SMALL,
               fontWeight: FontWeight.w500,
+              // Giữ màu chữ đậm hơn một chút kể cả khi disabled để dễ đọc (tuỳ chọn)
+              color:
+                  isLoading ? Colors.grey.shade600 : COLORS.PRIMARY_TEXT_COLOR,
             ),
             decoration: InputDecoration(
               filled: true,
+              // Khi disable màu nền thường bị xám đi, logic này giúp giữ màu đẹp hơn
               fillColor:
-                  _focusNode.hasFocus ? Colors.white : COLORS.INPUT_BG_COLOR,
+                  (_focusNode.hasFocus && !isLoading)
+                      ? Colors.white
+                      : COLORS.INPUT_BG_COLOR,
               hintText: 'Nhập địa chỉ email',
               hintStyle: TextStyle(
                 color: Colors.grey.shade400,
@@ -139,12 +153,31 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
                             : COLORS.UNFOCUSED_BORDER_IP_COLOR),
                 size: IconSizes.ICON_INPUT_SIZE,
               ),
-              // suffixIcon:
-              // - Chỉ hiển thị khi TextField có nội dung (_controller.text.isNotEmpty)
-              // - Nếu đang loading → ẩn icon để tránh user thao tác
-              // - Khi không loading → hiển thị nút clear (icon cancel)
+              /*
+                suffixIcon:
+                - Chỉ hiển thị khi TextField có nội dung (_controller.text.isNotEmpty)
+                - Nếu đang loading → ẩn icon để tránh user thao tác
+                - Khi không loading → hiển thị nút clear (icon cancel)
+                [QUAN TRỌNG 2] Xử lý Suffix Icon
+                - Khi Loading: Hiện vòng xoay
+                - Khi có text & không loading: Hiện nút xóa
+              */
               suffixIcon:
-                  (_controller.text.isNotEmpty && !isLoading)
+                  isLoading
+                      ? Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color:
+                                COLORS
+                                    .FOCUSED_BORDER_IP_COLOR, // Thay màu phù hợp
+                          ),
+                        ),
+                      )
+                      : (_controller.text.isNotEmpty)
                       ? IconButton(
                         icon: Icon(
                           Icons.cancel,
@@ -156,7 +189,6 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
                         ),
                         onPressed: () {
                           _controller.clear();
-
                           context.read<RegistrationBloc>().add(
                             const RegistrationEmailChanged(email: ''),
                           );
@@ -190,6 +222,14 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
                           ? COLORS.ERROR_COLOR
                           : COLORS.FOCUSED_BORDER_IP_COLOR,
                   width: 1,
+                ),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  // ignore: deprecated_member_use
+                  color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(0.5),
+                  width: 0.5,
                 ),
               ),
               errorBorder: OutlineInputBorder(
