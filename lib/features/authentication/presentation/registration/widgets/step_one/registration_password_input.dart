@@ -31,8 +31,8 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode();
 
+    _focusNode = FocusNode();
     // Lắng nghe focus để setState (dành cho các hiệu ứng UI nếu cần)
     _focusNode.addListener(() {
       if (mounted) setState(() {});
@@ -42,6 +42,7 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
   @override
   void dispose() {
     _focusNode.dispose();
+
     super.dispose();
   }
 
@@ -50,9 +51,11 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
     // 1. LOGIC LỌC LỖI
     final displayError = context.select<RegistrationBloc, String>((bloc) {
       final state = bloc.state;
+      
       if (state is! RegistrationStepOne) {
         return '';
       }
+
       final errorMsg = state.error;
 
       if (widget.isConfirmedPassword) {
@@ -71,14 +74,15 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
           return errorMsg;
         }
       }
+
       return '';
     });
-
     final hasError = displayError.isNotEmpty;
 
     // 2. LOGIC LOADING
     final bool isLoading = context.select<RegistrationBloc, bool>((bloc) {
       final state = bloc.state;
+
       return state is RegistrationStepOne && state.isLoading;
     });
 
@@ -112,6 +116,7 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
                   obscureText: passwordState.obscureText,
                   onChanged: (value) {
                     final currentState = context.read<RegistrationBloc>().state;
+
                     if (currentState is RegistrationStepOne) {
                       context.read<RegistrationBloc>().add(
                         RegistrationPasswordChanged(

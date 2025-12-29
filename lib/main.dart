@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_mobile_app/features/authentication/data/datasources/authentication_remote_data_source.dart';
 import 'package:todo_mobile_app/features/authentication/domain/repositories/authentication.dart';
-import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
+import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_use_case.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentation/registration/bloc/bloc.dart';
 
@@ -80,9 +80,12 @@ class _MainAppState extends State<MainApp> {
                   checkEmailExistsUseCase: CheckEmailExistsUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),
-                  // sendOTPUseCase: SendOTPUseCase(
-                  //   authenticationRepository: _authenticationRepository,
-                  // ),
+                  sendForgotPasswordOTPUseCase: SendForgotPasswordOTPUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
+                  resendOTPUseCase: ResendOTPUseCase(
+                    authenticationRepository: _authenticationRepository,
+                  ),
                   verifyOTPUseCase: VerifyOTPUseCase(
                     authenticationRepository: _authenticationRepository,
                   ),

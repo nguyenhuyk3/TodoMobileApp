@@ -1,4 +1,4 @@
-part of 'authentication_usecase.dart';
+part of 'authentication_use_case.dart';
 
 class LoginUseCase extends AuthenticationUsecase {
   LoginUseCase({required super.authenticationRepository});

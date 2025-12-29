@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo_mobile_app/core/constants/others.dart';
 
 import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/validator/validation_error_message.dart';
-import '../../../domain/usecases/authentication_usecase.dart';
+import '../../../domain/usecases/authentication_use_case.dart';
 import '../../../inputs/email.dart';
 import '../../../inputs/otp.dart';
 import '../../../inputs/password.dart';
@@ -17,7 +19,8 @@ part 'state.dart';
 class ForgotPasswordBloc
     extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
   final CheckEmailExistsUseCase _checkEmailExistsUseCase;
-  // final SendOTPUseCase _sendOTPUseCase;
+  final SendForgotPasswordOTPUseCase _sendForgotPasswordOTPUseCase;
+  final ResendOTPUseCase _resendOTPUseCase;
   final VerifyOTPUseCase _verifyOTPUseCase;
   final UpdatePasswordUseCase _updatePasswordUseCase;
 
@@ -27,15 +30,17 @@ class ForgotPasswordBloc
 
   ForgotPasswordBloc({
     required CheckEmailExistsUseCase checkEmailExistsUseCase,
-    // required SendOTPUseCase sendOTPUseCase,
+    required SendForgotPasswordOTPUseCase sendForgotPasswordOTPUseCase,
+    required ResendOTPUseCase resendOTPUseCase,
     required VerifyOTPUseCase verifyOTPUseCase,
     required UpdatePasswordUseCase updatePasswordUseCase,
   }) : _checkEmailExistsUseCase = checkEmailExistsUseCase,
-      //  _sendOTPUseCase = sendOTPUseCase,
+       _sendForgotPasswordOTPUseCase = sendForgotPasswordOTPUseCase,
+       _resendOTPUseCase = resendOTPUseCase,
        _verifyOTPUseCase = verifyOTPUseCase,
        _updatePasswordUseCase = updatePasswordUseCase,
        super(const ForgotPasswordInitial()) {
-    on<ForgotPasswordEmailChanged>(_onForgotPasswordChanged);
+    on<ForgotPasswordEmailChanged>(_onEmailChanged);
     on<ForgotPasswordEmailSubmitted>(_onEmailSubmitted);
 
     on<ForgotPasswordOtpChanged>(_onOtpChanged);
@@ -47,7 +52,7 @@ class ForgotPasswordBloc
   }
 
   // Step 1
-  FutureOr<void> _onForgotPasswordChanged(
+  FutureOr<void> _onEmailChanged(
     ForgotPasswordEmailChanged event,
     Emitter<ForgotPasswordState> emit,
   ) {
@@ -58,55 +63,54 @@ class ForgotPasswordBloc
     ForgotPasswordEmailSubmitted event,
     Emitter<ForgotPasswordState> emit,
   ) async {
-    // final currentState = state;
+    final currentState = state;
 
-    // if (currentState is ForgotPasswordStepOne) {
-    //   // 1. VALIDATION
-    //   final error = ValidationErrorMessage.getEmailErrorMessage(
-    //     error: currentState.email.error,
-    //   );
+    if (currentState is ForgotPasswordStepOne) {
+      // 1. VALIDATION
+      final error = ValidationErrorMessage.getEmailErrorMessage(
+        error: currentState.email.error,
+      );
 
-    //   if (error != null) {
-    //     emit(ForgotPasswordError(error: error));
+      if (error != null) {
+        emit(ForgotPasswordError(error: error));
 
-    //     return;
-    //   }
+        return;
+      }
 
-    //   // 2. LOADING
-    //   emit(currentState.copyWith(isLoading: true));
+      // 2. LOADING
+      emit(currentState.copyWith(isLoading: true));
 
-    //   await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
 
-    //   // 3. CHECK EMAIL EXISTS
-    //   final checkEmailResult = await _checkEmailExistsUseCase.execute(
-    //     email: currentState.email.value,
-    //   );
+      // 3. CHECK EMAIL EXISTS
+      final checkEmailResult = await _checkEmailExistsUseCase.execute(
+        email: currentState.email.value,
+      );
+      final checkResult = checkEmailResult.fold((l) => l, (r) => r);
 
-    //   final checkResult = checkEmailResult.fold((l) => l, (r) => r);
+      // 4. HANDLE RESULT
+      // Tức là email đã tồn tại
+      if (checkResult is bool) {
+        final sendOTResult = await _sendForgotPasswordOTPUseCase.execute(
+          email: currentState.email.value,
+        );
 
-    //   // 4. HANDLE RESULT
-    //   // Tức là email đã tồn tại
-    //   if (checkResult is Failure) {
-    //     final sendOTResult = await _sendOTPUseCase.execute(
-    //       email: currentState.email.value,
-    //     );
+        sendOTResult.fold(
+          (failure) {
+            emit(ForgotPasswordError(error: failure.message));
+          },
+          (_) {
+            _email = currentState.email.value;
 
-    //     sendOTResult.fold(
-    //       (failure) {
-    //         emit(ForgotPasswordError(error: failure.message));
-    //       },
-    //       (_) {
-    //         _email = currentState.email.value;
-
-    //         emit(ForgotPasswordStepTwo(otp: const Otp.pure()));
-    //       },
-    //     );
-    //   } else {
-    //     emit(
-    //       ForgotPasswordError(error: ErrorInformation.EMAIL_NOT_EXISTS.message),
-    //     );
-    //   }
-    // }
+            emit(ForgotPasswordStepTwo(otp: const Otp.pure()));
+          },
+        );
+      } else {
+        emit(
+          ForgotPasswordError(error: ErrorInformation.EMAIL_NOT_EXISTS.message),
+        );
+      }
+    }
   }
   // ==========================  || ========================== //
 
@@ -122,63 +126,67 @@ class ForgotPasswordBloc
     ForgotPasswordResendOTPRequested event,
     Emitter<ForgotPasswordState> emit,
   ) async {
-    // final currentState = state;
+    final currentState = state;
 
-    // if (currentState is ForgotPasswordStepTwo) {
-    //   final sendOTResult = await _sendOTPUseCase.execute(email: _email);
+    if (currentState is ForgotPasswordStepTwo) {
+      final resendOTPResult = await _resendOTPUseCase.execute(
+        email: _email,
+        type: OtpType.recovery,
+      );
 
-    //   sendOTResult.fold(
-    //     (failure) {
-    //       emit(ForgotPasswordError(error: failure.message));
-    //     },
-    //     (_) {
-    //       emit(ForgotPasswordStepTwo(otp: Otp.dirty(currentState.otp.value)));
-    //     },
-    //   );
-    // }
+      resendOTPResult.fold(
+        (failure) {
+          emit(ForgotPasswordError(error: failure.message));
+        },
+        (_) {
+          emit(ForgotPasswordStepTwo(otp: Otp.dirty(currentState.otp.value)));
+        },
+      );
+    }
   }
 
   FutureOr<void> _onOtpSubmitted(
     ForgotPasswordOtpSubmitted event,
     Emitter<ForgotPasswordState> emit,
   ) async {
-    // final currentState = state;
+    final currentState = state;
 
-    // if (currentState is ForgotPasswordStepTwo) {
-    //   final error = ValidationErrorMessage.getOtpErrorMessage(
-    //     error: currentState.otp.error,
-    //   );
+    if (currentState is ForgotPasswordStepTwo) {
+      final error = ValidationErrorMessage.getOtpErrorMessage(
+        error: currentState.otp.error,
+      );
 
-    //   if (error != null) {
-    //     emit(ForgotPasswordError(error: error));
+      if (error != null) {
+        emit(ForgotPasswordError(error: error));
 
-    //     return;
-    //   }
+        return;
+      }
 
-    //   emit(const ForgotPasswordLoading());
+      emit(const ForgotPasswordLoading());
 
-    //   await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
 
-    //   final verifyOTPResult = await _verifyOTPUseCase.execute(
-    //     email: email,
-    //     otp: currentState.otp.value,
-    //   );
+      final verifyOTPResult = await _verifyOTPUseCase.execute(
+        email: email,
+        otp: currentState.otp.value,
+        type: OtpType.recovery,
+      );
 
-    //   verifyOTPResult.fold(
-    //     (failure) {
-    //       emit(ForgotPasswordError(error: failure.message));
-    //     },
-    //     (_) {
-    //       emit(
-    //         ForgotPasswordStepThree(
-    //           password: const Password.pure(),
-    //           confirmedPassword: '',
-    //           error: '',
-    //         ),
-    //       );
-    //     },
-    //   );
-    // }
+      verifyOTPResult.fold(
+        (failure) {
+          emit(ForgotPasswordError(error: failure.message));
+        },
+        (_) {
+          emit(
+            ForgotPasswordStepThree(
+              password: const Password.pure(),
+              confirmedPassword: '',
+              error: '',
+            ),
+          );
+        },
+      );
+    }
   }
   // ========================== || ========================== //
 
@@ -269,5 +277,6 @@ class ForgotPasswordBloc
       );
     }
   }
+
   // ========================== || ========================== //
 }

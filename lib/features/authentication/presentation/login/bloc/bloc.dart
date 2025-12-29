@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:todo_mobile_app/core/constants/others.dart';
-import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_usecase.dart';
+import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_use_case.dart';
 
 import '../../../../../core/utils/validator/validation_error_message.dart';
 import '../../../inputs/email.dart';
@@ -86,16 +85,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       password: state.password.value,
     );
 
-    LOGGER.i(res);
-
-    res.fold(
-      (failure) {
-        LOGGER.i(failure.details);
-      },
-      (data) {
-        LOGGER.i(data);
-      },
-    );
+    res.fold((failure) {}, (data) {});
 
     // if (state.email.value == '1notthingm@gmail.com' &&
     //     state.password.value == '12345678') {

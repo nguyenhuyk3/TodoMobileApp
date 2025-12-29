@@ -46,7 +46,6 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
 
   @override
   Widget build(BuildContext context) {
-    // TÁCH LOGIC LỌC LỖI TẠI ĐÂY
     final displayError = context.select<ForgotPasswordBloc, String>((bloc) {
       final state = bloc.state;
 
@@ -57,23 +56,24 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
       final errorMsg = state.error;
 
       if (widget.isConfirmedPassword) {
-        // Ô xác nhận chỉ hiện lỗi nếu lỗi liên quan đến 'Empty Confirm' hoặc 'Mismatch'
         if (errorMsg == ErrorInformation.EMPTY_CONFIRMED_PASSWORD.message ||
             errorMsg == ErrorInformation.CONFIRMED_PASSWORD_MISSMATCH.message) {
           return errorMsg;
         }
       } else {
-        // Ô mật khẩu chính chỉ hiện lỗi 'Empty Password' hoặc 'Too short'
         if (errorMsg == ErrorInformation.EMPTY_PASSWORD.message ||
-            errorMsg.contains('kí tự')) {
-          // Nhận diện lỗi 'ngắn hơn x kí tự'
+            errorMsg == ErrorInformation.PASSWORD_TOO_SHORT.message ||
+            errorMsg == ErrorInformation.PASSWORD_MISSING_LOWERCASE.message ||
+            errorMsg == ErrorInformation.PASSWORD_MISSING_UPPERCASE.message ||
+            errorMsg == ErrorInformation.PASSWORD_MISSING_NUMBER.message ||
+            errorMsg ==
+                ErrorInformation.PASSWORD_MISSING_SPECIAL_CHAR.message) {
           return errorMsg;
         }
       }
 
-      return ''; // Không phải lỗi của mình thì không hiển thị
+      return '';
     });
-
     final hasError = displayError.isNotEmpty;
 
     return BlocProvider(

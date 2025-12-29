@@ -24,21 +24,26 @@ import '../entities/registration_params.dart';
 */
 abstract class AuthenticationRepository {
   Future<Either<Failure, bool>> checkEmailExists({required String email});
-  // Future<Either<Failure, Object>> sendOTP({required String email});
+
   Future<Either<Failure, bool>> resendOTP({
     required String email,
     required OtpType type,
   });
-  Future<Either<Failure, Object>> verifyOTP({
+
+   Future<Either<Failure, Object>> verifyOTP({
     required String email,
     required String otp,
     required OtpType type,
   });
+
   Future<Either<Failure, bool>> register(RegistrationParams params);
+
+  Future<Either<Failure, bool>> sendForgotPasswordOTP({required String email});
   Future<Either<Failure, bool>> updatePassword({
     required String email,
     required String newPassword,
   });
+
   Future<Either<Failure, Object>> login({
     required String email,
     required String password,

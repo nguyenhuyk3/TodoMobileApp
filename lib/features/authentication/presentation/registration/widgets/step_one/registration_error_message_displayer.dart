@@ -17,18 +17,16 @@ class RegistrationErrorMessageDisplayer extends StatelessWidget {
         }
 
         final error = state.error;
-
         // Kiểm tra chính xác logic ErrorInformation class của bạn
         if (error == ErrorInformation.EMAIL_CAN_NOT_BE_BLANK.message ||
             error == ErrorInformation.INVALID_EMAIL.message ||
             error == ErrorInformation.EMPTY_PASSWORD.message ||
-            error.contains("kí tự") || // check pattern "ngắn hơn 6 kí tự"
+            error == ErrorInformation.PASSWORD_TOO_SHORT.message ||
             error == ErrorInformation.EMPTY_CONFIRMED_PASSWORD.message ||
             error == ErrorInformation.CONFIRMED_PASSWORD_MISSMATCH.message ||
             error == ErrorInformation.EMPTY_FULL_NAME.message) {
           return ''; // Không hiển thị lỗi validation ở đây
         }
-
         // Chỉ hiển thị các lỗi hệ thống, API (VD: "Email đã tồn tại", "Mất kết nối")
         return error;
       },

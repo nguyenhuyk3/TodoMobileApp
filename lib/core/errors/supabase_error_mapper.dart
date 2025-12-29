@@ -5,6 +5,10 @@ import 'failure.dart';
 ErrorInformation mapAuthException(AuthException e) {
   final message = e.message.toLowerCase();
 
+  if (message.contains('should be different from the old password')) {
+    return ErrorInformation.SAME_PASSWORD;
+  }
+
   if (message.contains('invalid login credentials')) {
     return ErrorInformation.EMAIL_NOT_EXISTS;
   }

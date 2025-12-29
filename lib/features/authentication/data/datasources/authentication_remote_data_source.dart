@@ -11,12 +11,10 @@ class AuthenticationRemoteDataSource {
     : _supabaseClient = supabaseClient;
 
   Future<bool> checkEmailExists({required String email}) async {
-    return await _supabaseClient
-            .from('x')
-            .select('u_email')
-            .eq('u_email', email)
-            .maybeSingle() !=
-        null;
+    return await _supabaseClient.rpc(
+      'check_email_exists',
+      params: {'email_check': email},
+    );
   }
 
   Future<void> resendOTP({required String email, required OtpType type}) async {
@@ -46,19 +44,20 @@ class AuthenticationRemoteDataSource {
     );
   }
 
-  Future<void> updatePassword({
-    required String email,
-    required String newPassword,
-  }) async {
-    // Không được update trực tiếp, cần dùng 1 hàm RPC nhỏ hoặc query raw
-    // để gọi crypt(), nhưng Supabase client dart không support query raw
-    // chứa function DB dễ dàng, nên tốt nhất là tạo thêm 1 RPC.
+  Future<void> sendForgotPasswordOTP({required String email}) async {
+    await _supabaseClient.auth.resetPasswordForEmail(email);
+  }
 
-    // Nếu bạn muốn nhanh, tạo 1 hàm SQL RPC "change_user_password(email, pass)"
-    await _supabaseClient.rpc(
-      'change_user_password',
-      params: {'p_email': email, 'p_new_password': newPassword},
+  Future<void> updatePassword({required String newPassword}) async {
+    // 1. Cập nhật mật khẩu mới
+    await _supabaseClient.auth.updateUser(
+      UserAttributes(password: newPassword),
     );
+
+    // 2. Đăng xuất người dùng ngay lập tức
+    // Sử dụng scope: SignOutScope.global để đăng xuất khỏi TẤT CẢ các thiết bị (nếu có)
+    // Đây là cách bảo mật nhất khi đổi mật khẩu (phòng trường hợp bị hack nick)
+    await _supabaseClient.auth.signOut(scope: SignOutScope.global);
   }
 
   Future<UserModel> login({

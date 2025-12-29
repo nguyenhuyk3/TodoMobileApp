@@ -17,7 +17,11 @@ class FPErrorMessageDisplayer extends StatelessWidget {
             error == ErrorInformation.EMPTY_CONFIRMED_PASSWORD.message ||
             error == ErrorInformation.CONFIRMED_PASSWORD_MISSMATCH.message ||
             error == ErrorInformation.EMPTY_PASSWORD.message ||
-            error.contains('kí tự') ||
+            error == ErrorInformation.PASSWORD_TOO_SHORT.message ||
+            error == ErrorInformation.PASSWORD_MISSING_LOWERCASE.message ||
+            error == ErrorInformation.PASSWORD_MISSING_UPPERCASE.message ||
+            error == ErrorInformation.PASSWORD_MISSING_NUMBER.message ||
+            error == ErrorInformation.PASSWORD_MISSING_SPECIAL_CHAR.message ||
             error.isEmpty;
 
         return Column(

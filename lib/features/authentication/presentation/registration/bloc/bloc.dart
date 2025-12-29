@@ -10,7 +10,7 @@ import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/validator/validation_error_message.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/registration_params.dart';
-import '../../../domain/usecases/authentication_usecase.dart';
+import '../../../domain/usecases/authentication_use_case.dart';
 import '../../../inputs/email.dart';
 import '../../../inputs/otp.dart';
 import '../../../inputs/password.dart';
@@ -149,26 +149,26 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     // Giả lập thời gian chờ (Có thể xóa khi dùng thật)
     await Future.delayed(const Duration(seconds: 2));
 
-    // final registrationResult = await _registerUseCase.execute(
-    //   RegistrationParams(
-    //     email: _email,
-    //     password: currentState.password.value,
-    //     fullName: currentState.fullName,
-    //     dateOfBirth: DateTime.parse(
-    //       currentState.birthDate,
-    //     ), // Convert String ISO -> DateTime
-    //     sex: Sex.fromString(currentState.sex),
-    //   ),
-    // );
+    final registrationResult = await _registerUseCase.execute(
+      RegistrationParams(
+        email: _email,
+        password: currentState.password.value,
+        fullName: currentState.fullName,
+        dateOfBirth: DateTime.parse(
+          currentState.birthDate,
+        ), // Convert String ISO -> DateTime
+        sex: Sex.fromString(currentState.sex),
+      ),
+    );
 
-    // registrationResult.fold(
-    //   (failure) {
-    //     emit(currentState.copyWith(error: failure.message));
-    //   },
-    //   (_) {
-    //     emit(RegistrationStepTwo(otp: const Otp.pure()));
-    //   },
-    // );
+    registrationResult.fold(
+      (failure) {
+        emit(currentState.copyWith(error: failure.message));
+      },
+      (_) {
+        emit(RegistrationStepTwo(otp: const Otp.pure()));
+      },
+    );
   }
   // ========================== || ========================== //
 
@@ -187,12 +187,12 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     final currentState = state;
 
     if (currentState is RegistrationStepTwo) {
-      final sendOTPResult = await _resendOTPUseCase.execute(
+      final resendOTPResult = await _resendOTPUseCase.execute(
         email: _email,
         type: OtpType.signup,
       );
 
-      sendOTPResult.fold(
+      resendOTPResult.fold(
         (failure) {
           emit(currentState.copyWith(error: failure.message));
         },

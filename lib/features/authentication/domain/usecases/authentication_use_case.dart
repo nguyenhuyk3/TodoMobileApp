@@ -5,9 +5,9 @@ import '../../../../core/errors/failure.dart';
 import '../entities/registration_params.dart';
 import '../repositories/authentication.dart';
 
-part 'registration_usecase.dart';
-part 'forgot_password_usecasse.dart';
-part 'login_usecase.dart';
+part 'registration_use_case.dart';
+part 'forgot_password_use_case.dart';
+part 'login_use_case.dart';
 
 abstract class AuthenticationUsecase {
   final AuthenticationRepository _authenticationRepository;
@@ -18,6 +18,14 @@ abstract class AuthenticationUsecase {
   AuthenticationUsecase({
     required AuthenticationRepository authenticationRepository,
   }) : _authenticationRepository = authenticationRepository;
+}
+
+class CheckEmailExistsUseCase extends AuthenticationUsecase {
+  CheckEmailExistsUseCase({required super.authenticationRepository});
+
+  Future<Either<Failure, bool>> execute({required String email}) {
+    return _authenticationRepository.checkEmailExists(email: email);
+  }
 }
 
 class ResendOTPUseCase extends AuthenticationUsecase {

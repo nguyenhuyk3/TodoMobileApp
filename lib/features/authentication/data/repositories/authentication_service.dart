@@ -25,8 +25,8 @@ class AuthenticationService implements AuthenticationRepository {
         email: email,
       );
 
-      if (exists) {
-        return Left(Failure(error: ErrorInformation.EMAIL_ALREADY_EXISTS));
+      if (!exists) {
+        return Left(Failure(error: ErrorInformation.EMAIL_NOT_EXISTS));
       }
 
       return const Right(true);
@@ -35,21 +35,19 @@ class AuthenticationService implements AuthenticationRepository {
     }
   }
 
-  // @override
-  // Future<Either<Failure, Object>> sendOTP({required String email}) async {
-  //   try {
-  //     await _authenticationRemoteDataSource.sendEmailOTP(email: email);
+  @override
+  Future<Either<Failure, bool>> resendOTP({
+    required String email,
+    required OtpType type,
+  }) async {
+    try {
+      await _authenticationRemoteDataSource.resendOTP(email: email, type: type);
 
-  //     return Right(Object());
-  //   } on AuthException catch (e) {
-  //     LOGGER.d(e);
-
-  //     return Left(Failure(error: mapAuthException(e), details: e));
-  //   } catch (e) {
-  //     LOGGER.e(e);
-  //     return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
-  //   }
-  // }
+      return Right(true);
+    } catch (e) {
+      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+    }
+  }
 
   @override
   Future<Either<Failure, Object>> verifyOTP({
@@ -79,16 +77,25 @@ class AuthenticationService implements AuthenticationRepository {
 
       return const Right(true);
     } on PostgrestException catch (e) {
-      LOGGER.e('PostgrestException: ${e.message}');
-
       return Left(Failure(error: mapPostgrestException(e), details: e));
     } on AuthException catch (e) {
-      LOGGER.e('AuthException: ${e.message}');
-
       return Left(Failure(error: mapAuthException(e), details: e));
     } catch (e) {
-      LOGGER.e('Undefined exception: $e');
+      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
+    }
+  }
 
+  @override
+  Future<Either<Failure, bool>> sendForgotPasswordOTP({
+    required String email,
+  }) async {
+    try {
+      await _authenticationRemoteDataSource.sendForgotPasswordOTP(email: email);
+
+      return Right(true);
+    } on AuthException catch (e) {
+      return Left(Failure(error: mapAuthException(e), details: e));
+    } catch (e) {
       return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
     }
   }
@@ -100,7 +107,6 @@ class AuthenticationService implements AuthenticationRepository {
   }) async {
     try {
       await _authenticationRemoteDataSource.updatePassword(
-        email: email,
         newPassword: newPassword,
       );
 
@@ -127,22 +133,6 @@ class AuthenticationService implements AuthenticationRepository {
 
       return Right(res);
     } catch (e) {
-      return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> resendOTP({
-    required String email,
-    required OtpType type,
-  }) async {
-    try {
-      await _authenticationRemoteDataSource.resendOTP(email: email, type: type);
-
-      return Right(true);
-    } catch (e) {
-      LOGGER.e(e);
-
       return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
     }
   }

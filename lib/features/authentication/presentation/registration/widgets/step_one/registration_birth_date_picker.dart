@@ -84,6 +84,7 @@ class RegistrationBirthDatePicker extends StatelessWidget {
               color: isLoading ? Colors.grey.shade100 : COLORS.INPUT_BG_COLOR,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
+                // ignore: deprecated_member_use
                 color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(
                   isLoading ? 0.5 : 1.0, // Làm mờ border khi loading
                 ),

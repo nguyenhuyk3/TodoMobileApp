@@ -20,6 +20,7 @@ enum ErrorInformation {
   PASSWORD_MISSING_UPPERCASE(message: 'Mật khẩu phải chứa chữ hoa'),
   PASSWORD_MISSING_NUMBER(message: 'Mật khẩu phải chứa ít nhất một chữ số'),
   PASSWORD_MISSING_SPECIAL_CHAR(message: 'Mật khẩu phải chứa ký tự đặc biệt'),
+  SAME_PASSWORD(message: 'Mật khẩu phải khác với mật khẩu cũ'),
 
   // OTP / Auth
   OTP_TOO_MANY_REQUESTS(message: 'Bạn đã yêu cầu mã OTP quá nhiều lần'),
