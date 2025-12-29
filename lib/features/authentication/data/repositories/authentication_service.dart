@@ -2,7 +2,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/constants/others.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/errors/supabase_error_mapper.dart';
 import '../../domain/entities/registration_params.dart';
