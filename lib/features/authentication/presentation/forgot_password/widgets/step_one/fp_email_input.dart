@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_mobile_app/core/widgets/error_displayer.dart';
-import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
 
 import '../../../../../../../core/constants/others.dart';
 import '../../../../../../../core/constants/sizes.dart';
+import '../../../../../../core/widgets/error_displayer.dart';
+import '../../bloc/bloc.dart';
 
 class FPEmailInput extends StatefulWidget {
   const FPEmailInput({super.key});

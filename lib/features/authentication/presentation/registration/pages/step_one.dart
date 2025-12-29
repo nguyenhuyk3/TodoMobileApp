@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_mobile_app/features/authentication/presentation/registration/widgets/step_one/registration_send_otp_button.dart';
 
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
 import '../bloc/bloc.dart';
 import '../widgets/step_one/registration_email_input.dart';
+import '../widgets/step_one/registration_send_otp_button.dart';
 import 'step_two.dart';
 
 class RegistrationStepOnePage extends StatelessWidget {

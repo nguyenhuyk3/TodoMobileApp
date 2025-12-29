@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_mobile_app/features/authentication/presentation/login/bloc/bloc.dart';
 
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
 import '../../../../../core/constants/errors.dart';
 import '../../password/bloc/bloc.dart';
+import '../bloc/bloc.dart';
 
 class LoginPasswordInput extends StatefulWidget {
   final String label;

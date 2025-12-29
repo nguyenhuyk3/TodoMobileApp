@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:todo_mobile_app/core/widgets/authentication_form.dart';
-import 'package:todo_mobile_app/features/home/pages/home_page.dart';
 
 import '../../../../../core/constants/sizes.dart';
+import '../../../../../core/widgets/authentication_form.dart';
+import '../../../../home/pages/home_page.dart';
 import '../bloc/bloc.dart';
 import '../widgets/login_email_input.dart';
 import '../widgets/login_password_input.dart';
