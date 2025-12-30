@@ -48,8 +48,6 @@ class RegistrationStepOnePage extends StatelessWidget {
     return LongAuthenticationForm(
       title: 'Đăng ký',
       allowBack: true,
-      resizeToAvoidBottomInset: true,
-      showLogo: false,
       child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is RegistrationStepTwo) {

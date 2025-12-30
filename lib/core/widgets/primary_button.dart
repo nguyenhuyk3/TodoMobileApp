@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import '../constants/others.dart';
 import '../constants/sizes.dart';
 
+/*
+    Trong Flutter, ElevatedButton là widget nút bấm chuẩn theo Material Design, 
+  dùng để kích hoạt hành động chính (primary action) trong giao diện.
+    ElevatedButton = nút bấm nổi, có shadow, thể hiện hành động quan trọng nhất trên màn hình.
+*/
 class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String title;
@@ -75,6 +80,7 @@ class PrimaryButton extends StatelessWidget {
 
                       const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 2),
                     ],
+                    
                     Text(
                       title,
                       style: TextStyle(

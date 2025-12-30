@@ -6,6 +6,11 @@ import '../../../../../../../core/constants/sizes.dart';
 import '../../../../../../core/widgets/error_displayer.dart';
 import '../../bloc/bloc.dart';
 
+/*
+    Trong Flutter, AnimatedContainer là một implicit animation widget, dùng để tự động animate (chuyển động mượt) 
+  khi các thuộc tính của Container thay đổi theo setState — không cần AnimationController.
+    AnimatedContainer = Container + animation tự động.
+*/
 class FPEmailInput extends StatefulWidget {
   const FPEmailInput({super.key});
 

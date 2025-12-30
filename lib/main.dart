@@ -13,6 +13,10 @@ import 'features/authentication/data/repositories/authentication_service.dart';
 import 'features/authentication/presentation/login/bloc/bloc.dart';
 import 'features/authentication/presentation/login/pages/login.dart';
 
+/* 
+  Trong Flutter, MaterialApp là widget gốc (root widget) dùng để cấu hình toàn bộ ứng dụng theo Material Design.
+  Nếu ví Scaffold là khung của một màn hình, thì MaterialApp là khung của cả ứng dụng.
+*/
 Future<void> main() async {
   // Nó đảm bảo Flutter đã sẵn sàng trước khi chạy code bất đồng bộ hoặc dùng plugin.
   WidgetsFlutterBinding.ensureInitialized();
