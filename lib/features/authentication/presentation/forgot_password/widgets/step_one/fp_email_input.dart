@@ -23,6 +23,10 @@ class _FPEmailInputState extends State<FPEmailInput> {
 
     _controller = TextEditingController();
     _focusNode = FocusNode();
+
+    _controller.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -38,8 +42,11 @@ class _FPEmailInputState extends State<FPEmailInput> {
     return BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
       builder: (context, state) {
         final String error = (state is ForgotPasswordError) ? state.error : '';
-        final isStepOne = state is ForgotPasswordStepOne;
-        final isLoading = isStepOne && state.isLoading;
+        final isLoading = context.select<ForgotPasswordBloc, bool>((bloc) {
+          final state = bloc.state;
+
+          return state is ForgotPasswordStepOne && state.isLoading;
+        });
         final hasError = error.isNotEmpty;
 
         return Column(
@@ -51,7 +58,7 @@ class _FPEmailInputState extends State<FPEmailInput> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
-                  if (_focusNode.hasFocus)
+                  if (_focusNode.hasFocus && !isLoading)
                     BoxShadow(
                       color: (hasError ? COLORS.ERROR_COLOR : Colors.black)
                       // ignore: deprecated_member_use
@@ -65,20 +72,25 @@ class _FPEmailInputState extends State<FPEmailInput> {
                 key: const Key('registration_emailInput_stepOne_textField'),
                 controller: _controller,
                 focusNode: _focusNode,
+                enabled: !isLoading,
                 onChanged:
                     (email) => context.read<ForgotPasswordBloc>().add(
                       ForgotPasswordEmailChanged(email: email),
                     ),
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: TextSizes.TITLE_SMALL,
                   fontWeight: FontWeight.w500,
+                  color:
+                      isLoading
+                          ? COLORS.SECONDARY_TEXT_COLOR
+                          : COLORS.PRIMARY_TEXT_COLOR,
                 ),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor:
-                      _focusNode.hasFocus
+                      (_focusNode.hasFocus && !isLoading)
                           ? Colors.white
                           : COLORS.INPUT_BG_COLOR,
                   hintText: 'Nhập địa chỉ email',
@@ -111,12 +123,20 @@ class _FPEmailInputState extends State<FPEmailInput> {
                                 : COLORS.UNFOCUSED_BORDER_IP_COLOR),
                     size: IconSizes.ICON_INPUT_SIZE,
                   ),
-                  // suffixIcon:
-                  // - Chỉ hiển thị khi TextField có nội dung (_controller.text.isNotEmpty)
-                  // - Nếu đang loading → ẩn icon để tránh user thao tác
-                  // - Khi không loading → hiển thị nút clear (icon cancel)
                   suffixIcon:
-                      (_controller.text.isNotEmpty && isStepOne && !isLoading)
+                      isLoading
+                          ? Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: COLORS.FOCUSED_BORDER_IP_COLOR,
+                              ),
+                            ),
+                          )
+                          : (_controller.text.isNotEmpty)
                           ? IconButton(
                             icon: Icon(
                               Icons.cancel,
@@ -164,6 +184,14 @@ class _FPEmailInputState extends State<FPEmailInput> {
                       width: 1,
                     ),
                   ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      // ignore: deprecated_member_use
+                      color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(0.5),
+                      width: 0.5,
+                    ),
+                  ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: COLORS.ERROR_COLOR, width: 1),
@@ -172,14 +200,11 @@ class _FPEmailInputState extends State<FPEmailInput> {
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: COLORS.ERROR_COLOR, width: 1),
                   ),
-                  // Xóa errorText mặc định để custom vị trí đẹp hơn
                   errorText: null,
                 ),
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
               ),
             ),
-
-            // Tùy chỉnh Error Message dưới TextField (mượt hơn)
             if (hasError) ErrorDisplayer(message: error),
           ],
         );

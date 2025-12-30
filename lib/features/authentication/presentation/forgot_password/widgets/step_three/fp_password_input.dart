@@ -32,9 +32,12 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
     super.initState();
 
     _focusNode = FocusNode();
-    // _focusNode.addListener(
-    //   () => setState(() {}),
-    // ); // Rebuild để hiệu ứng Shadow mượt mà
+    _focusNode.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+      ;
+    });
   }
 
   @override
@@ -75,6 +78,11 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
       return '';
     });
     final hasError = displayError.isNotEmpty;
+    final bool isLoading = context.select<ForgotPasswordBloc, bool>((bloc) {
+      final state = bloc.state;
+
+      return state is ForgotPasswordStepThree && state.isLoading;
+    });
 
     return BlocProvider(
       create: (context) => PasswordBloc(),
@@ -88,7 +96,7 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
-                    if (_focusNode.hasFocus)
+                    if (_focusNode.hasFocus && !isLoading)
                       BoxShadow(
                         color: (hasError ? COLORS.ERROR_COLOR : Colors.black)
                         // ignore: deprecated_member_use
@@ -100,6 +108,7 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                 ),
                 child: TextField(
                   focusNode: _focusNode,
+                  enabled: !isLoading,
                   obscureText: passwordState.obscureText,
                   onChanged: (value) {
                     final currentState =
@@ -124,14 +133,15 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                       widget.isConfirmedPassword
                           ? TextInputAction.done
                           : TextInputAction.next,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: TextSizes.TITLE_SMALL,
                     fontWeight: FontWeight.w500,
+                    color: isLoading ? COLORS.SECONDARY_TEXT_COLOR : null,
                   ),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor:
-                        _focusNode.hasFocus
+                        (_focusNode.hasFocus && !isLoading)
                             ? Colors.white
                             : COLORS.INPUT_BG_COLOR,
                     hintText: widget.hintText,
@@ -164,23 +174,36 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                                   : COLORS.UNFOCUSED_BORDER_IP_COLOR),
                       size: IconSizes.ICON_INPUT_SIZE,
                     ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        passwordState.obscureText
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        size: IconSizes.ICON_INPUT_SIZE,
-                        color:
-                            hasError
-                                ? COLORS.ERROR_COLOR
-                                : COLORS.UNFOCUSED_BORDER_IP_COLOR,
-                      ),
-                      onPressed: () {
-                        context.read<PasswordBloc>().add(
-                          PasswordToggleVisibility(),
-                        );
-                      },
-                    ),
+                    suffixIcon:
+                        isLoading
+                            ? Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: COLORS.FOCUSED_BORDER_IP_COLOR,
+                                ),
+                              ),
+                            )
+                            : IconButton(
+                              icon: Icon(
+                                passwordState.obscureText
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                size: IconSizes.ICON_INPUT_SIZE,
+                                color:
+                                    hasError
+                                        ? COLORS.ERROR_COLOR
+                                        : COLORS.UNFOCUSED_BORDER_IP_COLOR,
+                              ),
+                              onPressed: () {
+                                context.read<PasswordBloc>().add(
+                                  PasswordToggleVisibility(),
+                                );
+                              },
+                            ),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 16,
@@ -205,6 +228,16 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                         width: 1,
                       ),
                     ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        // ignore: deprecated_member_use
+                        color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(
+                          0.5,
+                        ),
+                        width: 0.5,
+                      ),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -215,7 +248,6 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
             },
           ),
 
-          // HIỂN THỊ LỖI CỤ THỂ CHO TỪNG Ô
           if (hasError) ErrorDisplayer(message: displayError),
         ],
       ),

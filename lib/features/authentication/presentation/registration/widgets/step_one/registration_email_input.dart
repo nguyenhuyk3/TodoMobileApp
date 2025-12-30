@@ -59,7 +59,6 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
       if (state is! RegistrationStepOne) {
         return '';
       }
-
       // Chỉ lấy lỗi nếu chuỗi lỗi trùng với các lỗi quy định của Email
       if (state.error == ErrorInformation.EMAIL_CAN_NOT_BE_BLANK.message ||
           state.error == ErrorInformation.INVALID_EMAIL.message) {
@@ -116,7 +115,9 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
               fontWeight: FontWeight.w500,
               // Giữ màu chữ đậm hơn một chút kể cả khi disabled để dễ đọc (tuỳ chọn)
               color:
-                  isLoading ? Colors.grey.shade600 : COLORS.PRIMARY_TEXT_COLOR,
+                  isLoading
+                      ? COLORS.SECONDARY_TEXT_COLOR
+                      : COLORS.PRIMARY_TEXT_COLOR,
             ),
             decoration: InputDecoration(
               filled: true,
@@ -246,7 +247,6 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
             onTapOutside: (event) => FocusScope.of(context).unfocus(),
           ),
         ),
-
         // Tùy chỉnh Error Message dưới TextField (mượt hơn)
         if (hasError) ErrorDisplayer(message: errorDisplay),
       ],

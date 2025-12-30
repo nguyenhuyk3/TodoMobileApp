@@ -35,7 +35,10 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
     _focusNode = FocusNode();
     // Lắng nghe focus để setState (dành cho các hiệu ứng UI nếu cần)
     _focusNode.addListener(() {
-      if (mounted) setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
+      ;
     });
   }
 
@@ -51,7 +54,7 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
     // 1. LOGIC LỌC LỖI
     final displayError = context.select<RegistrationBloc, String>((bloc) {
       final state = bloc.state;
-      
+
       if (state is! RegistrationStepOne) {
         return '';
       }
@@ -140,7 +143,7 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
                     fontSize: TextSizes.TITLE_SMALL,
                     fontWeight: FontWeight.w500,
                     // Làm mờ text đi một chút khi loading/disabled
-                    color: isLoading ? Colors.grey.shade600 : null,
+                    color: isLoading ? COLORS.SECONDARY_TEXT_COLOR : null,
                   ),
                   decoration: InputDecoration(
                     filled: true,
@@ -210,7 +213,6 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
                                 );
                               },
                             ),
-
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 16,
@@ -255,6 +257,7 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
               );
             },
           ),
+          
           if (hasError) ErrorDisplayer(message: displayError),
         ],
       ),
