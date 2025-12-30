@@ -18,16 +18,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({required LoginUseCase loginUseCase})
     : _loginUseCase = loginUseCase,
       super(const LoginState()) {
-    on<LoginEmailChanged>(_onUsernameChanged);
+    on<LoginEmailChanged>(_onEmailChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onSubmitted);
   }
 
-  FutureOr<void> _onUsernameChanged(
+  FutureOr<void> _onEmailChanged(
     LoginEmailChanged event,
     Emitter<LoginState> emit,
   ) {
-    emit(state.copyWith(email: Email.dirty(event.email), error: state.error));
+    emit(
+      state.copyWith(
+        email: Email.dirty(event.email),
+        status: FormzSubmissionStatus.initial,
+        error: state.error,
+      ),
+    );
   }
 
   FutureOr<void> _onPasswordChanged(
@@ -37,6 +43,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(
       state.copyWith(
         password: Password.dirty(event.password),
+        status: FormzSubmissionStatus.initial,
         error: state.error,
       ),
     );

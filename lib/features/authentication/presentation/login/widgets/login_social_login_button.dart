@@ -66,7 +66,7 @@ class _SocialButton extends StatelessWidget {
                 style: TextStyle(
                   color: COLORS.PRIMARY_TEXT_COLOR,
                   fontWeight: FontWeight.w600,
-                  fontSize: TextSizes.TITLE_XX_SMALL,
+                  fontSize: TextSizes.TITLE_X_SMALL,
                 ),
               ),
             ],
