@@ -131,6 +131,10 @@ class AuthenticationService implements AuthenticationRepository {
       );
 
       return Right(res);
+    } on AuthException catch (e) {
+      return Left(Failure(error: mapAuthException(e), details: e));
+    } on PostgrestException catch (e) {
+      return Left(Failure(error: mapPostgrestException(e), details: e));
     } catch (e) {
       return Left(Failure(error: ErrorInformation.UNDEFINED_ERROR, details: e));
     }

@@ -78,33 +78,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       return;
     }
 
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress, error: ''));
 
     final res = await _loginUseCase.execute(
       email: state.email.value,
       password: state.password.value,
     );
 
-    res.fold((failure) {}, (data) {});
-
-    // if (state.email.value == '1notthingm@gmail.com' &&
-    //     state.password.value == '12345678') {
-    //   await Future.delayed(const Duration(seconds: 2));
-
-    //   emit(state.copyWith(status: FormzSubmissionStatus.success));
-
-    //   return;
-    // } else {
-    //   await Future.delayed(const Duration(seconds: 2));
-
-    //   emit(
-    //     state.copyWith(
-    //       status: FormzSubmissionStatus.failure,
-    //       error: 'Email hoặc mật khẩu không đúng',
-    //     ),
-    //   );
-
-    //   return;
-    // }
+    res.fold(
+      (failure) {
+        emit(state.copyWith(status: FormzSubmissionStatus.failure));
+      },
+      (data) {
+        emit(state.copyWith(status: FormzSubmissionStatus.success));
+      },
+    );
   }
 }

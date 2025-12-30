@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:todo_mobile_app/core/utils/toats.dart';
 
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
@@ -22,11 +23,20 @@ class LoginPage extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) async {
         if (state.status.isFailure) {
+          ToastUtils.showError(
+            context: context,
+            message: 'Vui lòng kiểm tra thông tin đăng nhập',
+          );
         } else if (state.status.isSuccess) {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (_) => HomePage()),
             (Route<dynamic> route) => false,
+          );
+
+          ToastUtils.showSuccess(
+            context: context,
+            message: 'Đăng nhập thành công',
           );
         }
       },

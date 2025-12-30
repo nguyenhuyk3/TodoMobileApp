@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 import '../../../../../../core/constants/others.dart';
 import '../../../../../../core/constants/sizes.dart';
 import '../../../../../core/errors/failure.dart';
+import '../../../../../core/widgets/error_displayer.dart';
 import '../../password/bloc/bloc.dart';
 import '../bloc/bloc.dart';
 
@@ -29,6 +31,12 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
     super.initState();
 
     _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+      ;
+    });
   }
 
   @override
@@ -40,7 +48,7 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
 
   @override
   Widget build(BuildContext context) {
-    // Bắt lỗi ở password input để không hiển thị ở email input
+    // Bắt lỗi ở email input để không hiển thị ở email input
     final displayError = context.select<LoginBloc, String>((bloc) {
       final state = bloc.state;
       final errorMsg = state.error;
@@ -53,6 +61,9 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
       return errorMsg;
     });
     final hasError = displayError.isNotEmpty;
+    final isLoading =
+        context.watch<LoginBloc>().state.status ==
+        FormzSubmissionStatus.inProgress;
 
     return BlocProvider(
       create: (context) => PasswordBloc(),
@@ -66,7 +77,7 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
-                    if (_focusNode.hasFocus)
+                    if (_focusNode.hasFocus && !isLoading)
                       BoxShadow(
                         color: (hasError ? COLORS.ERROR_COLOR : Colors.black)
                         // ignore: deprecated_member_use
@@ -78,6 +89,7 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
                 ),
                 child: TextField(
                   focusNode: _focusNode,
+                  enabled: !isLoading,
                   obscureText: passwordState.obscureText,
                   onChanged: (password) {
                     context.read<LoginBloc>().add(
@@ -123,23 +135,36 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
                                   : COLORS.UNFOCUSED_BORDER_IP_COLOR),
                       size: IconSizes.ICON_INPUT_SIZE,
                     ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        passwordState.obscureText
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        size: IconSizes.ICON_INPUT_SIZE,
-                        color:
-                            hasError
-                                ? COLORS.ERROR_COLOR
-                                : COLORS.UNFOCUSED_BORDER_IP_COLOR,
-                      ),
-                      onPressed: () {
-                        context.read<PasswordBloc>().add(
-                          PasswordToggleVisibility(),
-                        );
-                      },
-                    ),
+                    suffixIcon:
+                        isLoading
+                            ? Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: COLORS.FOCUSED_BORDER_IP_COLOR,
+                                ),
+                              ),
+                            )
+                            : IconButton(
+                              icon: Icon(
+                                passwordState.obscureText
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                size: IconSizes.ICON_INPUT_SIZE,
+                                color:
+                                    hasError
+                                        ? COLORS.ERROR_COLOR
+                                        : COLORS.UNFOCUSED_BORDER_IP_COLOR,
+                              ),
+                              onPressed: () {
+                                context.read<PasswordBloc>().add(
+                                  PasswordToggleVisibility(),
+                                );
+                              },
+                            ),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 16,
@@ -164,6 +189,16 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
                         width: 1,
                       ),
                     ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        // ignore: deprecated_member_use
+                        color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(
+                          0.5,
+                        ),
+                        width: 0.5,
+                      ),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -174,32 +209,7 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
             },
           ),
 
-          if (hasError)
-            Padding(
-              padding: const EdgeInsets.only(top: 8, left: 12),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: IconSizes.ICON_MINI_SIZE,
-                    color: COLORS.ERROR_COLOR,
-                  ),
-
-                  const SizedBox(width: X_MIN_WIDTH_SIZED_BOX),
-
-                  Expanded(
-                    child: Text(
-                      displayError,
-                      style: TextStyle(
-                        color: COLORS.ERROR_COLOR,
-                        fontSize: TextSizes.TITLE_XX_SMALL,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          if (hasError) ErrorDisplayer(message: displayError),
         ],
       ),
     );
