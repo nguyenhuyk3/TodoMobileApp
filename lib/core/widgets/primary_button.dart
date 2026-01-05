@@ -64,29 +64,33 @@ class PrimaryButton extends StatelessWidget {
         ),
         child:
             isLoading
-                ? const SizedBox(
+                ? SizedBox(
                   height: 24,
                   width: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,
-                    color: Colors.white,
+                    color: COLORS.ICON_DEFAULT_COLOR,
                   ),
                 )
                 : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (icon != null) ...[
-                      Icon(icon, size: 20, color: COLORS.PRIMARY_TEXT_COLOR),
+                      Icon(
+                        icon,
+                        size: IconSizes.ICON_MEDIUM_SIZE,
+                        color: COLORS.PRIMARY_TEXT_COLOR,
+                      ),
 
                       const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 2),
                     ],
-                    
+
                     Text(
                       title,
                       style: TextStyle(
                         color: COLORS.PRIMARY_TEXT_COLOR,
                         fontSize: TextSizes.TITLE_MEDIUM,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0.7, // Dùng để giãn chữ theo chiều ngang
                       ),
                     ),

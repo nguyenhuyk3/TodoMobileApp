@@ -22,6 +22,7 @@ class IconSizes {
   static const double ICON_HEADER_SIZE = 28;
   static const double ICON_INPUT_SIZE = 20;
   
+  static const double ICON_MEDIUM_SIZE = 20;
   static const double ICON_SMALL_SIZE = 16;
   static const double ICON_MINI_SIZE = 12;
 }

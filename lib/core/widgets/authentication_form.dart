@@ -110,7 +110,7 @@ class AuthenticationForm extends StatelessWidget {
                     title,
                     style: TextStyle(
                       fontSize: HeaderSizes.HEADER_SECTION_TITLE,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       color: COLORS.HEADER_PAGE_COLOR,
                     ),
                   ),

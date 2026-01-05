@@ -50,8 +50,8 @@ class _SocialButton extends StatelessWidget {
             color: COLORS.INPUT_BG_COLOR,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: COLORS.UNFOCUSED_BORDER_IP_COLOR,
-              width: 0.7,
+              color: COLORS.FOCUSED_BORDER_IP_COLOR,
+              width: 1,
             ),
           ),
           child: Row(

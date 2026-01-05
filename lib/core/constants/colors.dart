@@ -27,6 +27,7 @@ class AppColors {
   final PRIMARY_APP_COLOR = Color.fromRGBO(249, 202, 33, 1);
   // Icon
   final ICON_PRIMARY_COLOR = const Color.fromARGB(255, 152, 150, 150);
+  final ICON_DEFAULT_COLOR = Colors.black;
   // Process
   final PENDING_COLOR = Color(0xFF5F9FFF);
   final IN_PROGRESS_COLOR = Color.fromRGBO(249, 202, 33, 1);
