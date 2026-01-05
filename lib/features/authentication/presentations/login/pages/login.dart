@@ -5,7 +5,7 @@ import 'package:todo_mobile_app/core/utils/toats.dart';
 
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/widgets/authentication_form.dart';
-import '../../../../home/pages/home_page.dart';
+import '../../../../home/presentations/home_page.dart';
 import '../bloc/bloc.dart';
 import '../widgets/login_email_input.dart';
 import '../widgets/login_password_input.dart';

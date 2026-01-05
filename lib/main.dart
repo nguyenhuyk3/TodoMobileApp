@@ -5,13 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_mobile_app/features/authentication/data/datasources/authentication_remote_data_source.dart';
 import 'package:todo_mobile_app/features/authentication/domain/repositories/authentication.dart';
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_use_case.dart';
-import 'package:todo_mobile_app/features/authentication/presentation/forgot_password/bloc/bloc.dart';
-import 'package:todo_mobile_app/features/authentication/presentation/registration/bloc/bloc.dart';
+import 'package:todo_mobile_app/features/authentication/presentations/forgot_password/bloc/bloc.dart';
+import 'package:todo_mobile_app/features/authentication/presentations/registration/bloc/bloc.dart';
+import 'package:todo_mobile_app/features/home/presentations/home_page.dart';
 
 import 'core/constants/keys.dart';
 import 'features/authentication/data/repositories/authentication_service.dart';
-import 'features/authentication/presentation/login/bloc/bloc.dart';
-import 'features/authentication/presentation/login/pages/login.dart';
+import 'features/authentication/presentations/login/bloc/bloc.dart';
+import 'features/authentication/presentations/login/pages/login.dart';
 
 /* 
   Trong Flutter, MaterialApp là widget gốc (root widget) dùng để cấu hình toàn bộ ứng dụng theo Material Design.
@@ -107,7 +108,7 @@ class _MainAppState extends State<MainApp> {
                 ),
           ),
         ],
-        child: MaterialApp(home: LoginPage()),
+        child: MaterialApp(home: HomePage()),
       ),
     );
   }

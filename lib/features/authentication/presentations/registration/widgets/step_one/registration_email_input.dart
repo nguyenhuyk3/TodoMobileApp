@@ -35,6 +35,10 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
     _focusNode = FocusNode();
 
     // Lắng nghe thay đổi controller để render lại nút xóa (X)
+    /*
+      👉 Mục đích duy nhất: Ép widget rebuild mỗi khi nội dung TextField thay đổi, 
+    để cập nhật UI phụ thuộc vào _controller.text (cụ thể là suffixIcon nút ❌).
+    */
     _controller.addListener(() {
       setState(() {});
     });
@@ -75,7 +79,6 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
       return state is RegistrationStepOne && state.isLoading;
     });
     // ------------------------------------
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

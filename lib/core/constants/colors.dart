@@ -7,7 +7,7 @@ class AppColors {
   final FOCUSED_BORDER_IP_COLOR = Colors.black;
   final UNFOCUSED_BORDER_IP_COLOR = const Color.fromARGB(255, 152, 150, 150);
   // Background
-  final PRIMARY_BG_COLOR = Colors.white;
+  final PRIMARY_BG_COLOR = Color(0xFFF6F8FA);
   final INPUT_BG_COLOR = Color.fromARGB(255, 247, 247, 247);
   // Label
   final FOCUSED_LABEL_COLOR = Colors.black;
@@ -27,4 +27,11 @@ class AppColors {
   final PRIMARY_APP_COLOR = Color.fromRGBO(249, 202, 33, 1);
   // Icon
   final ICON_PRIMARY_COLOR = const Color.fromARGB(255, 152, 150, 150);
+  // Process
+  final PENDING_COLOR = Color(0xFF5F9FFF);
+  final IN_PROGRESS_COLOR = Color.fromRGBO(249, 202, 33, 1);
+  final COMPLETED_COLOR = const Color(0xFF4CBDB2);
+  final CANCELED_COLOR = Colors.redAccent;
+  // Shadow
+  final PRIMARY_SHADOW_COLOR = Colors.black;
 }
