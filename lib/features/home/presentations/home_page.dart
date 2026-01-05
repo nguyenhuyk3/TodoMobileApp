@@ -31,16 +31,6 @@ class HomePage extends StatelessWidget {
                     const HomeStatusGrid(),
 
                     const SizedBox(height: MAX_HEIGTH_SIZED_BOX * 2),
-                    Text(
-                      "Recent Task",
-                      style: TextStyle(
-                        fontSize: HeaderSizes.HEADER_SMALL,
-                        fontWeight: FontWeight.bold,
-                        color: COLORS.HEADER_PAGE_COLOR,
-                      ),
-                    ),
-
-                    const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
                     const HomeRecentTaskList(),
 

@@ -8,6 +8,24 @@ import '../../../../../core/errors/failure.dart';
 import '../../../../../core/widgets/error_displayer.dart';
 import '../bloc/bloc.dart';
 
+/* 
+  AnimatedContainer là gì?
+    AnimatedContainer là Container có khả năng animate tự động khi các thuộc tính của nó thay đổi.
+    📌 Khi bất kỳ thuộc tính nào sau đây thay đổi:\
+      - decoration
+      - padding
+      - margin
+      - width, height
+      - alignment
+      - color, borderRadius, boxShadow, … 
+    👉 Flutter tự động tạo animation mượt từ trạng thái cũ → trạng thái mới.
+    boxShadow:
+      - offset: Offset(0, 3):
+        + Shadow chỉ đổ xuống dưới
+        + Trục X = 0 (không lệch ngang)
+        + Trục Y = 3 (đổ xuống)
+      ➡️ Tạo cảm giác nút nổi lên khỏi mặt phẳng
+*/
 class LoginEmailInput extends StatefulWidget {
   const LoginEmailInput({super.key});
 
@@ -69,7 +87,6 @@ class _LoginEmailInputState extends State<LoginEmailInput> {
         final isLoading =
             context.watch<LoginBloc>().state.status ==
             FormzSubmissionStatus.inProgress;
-
         // Xử lý hiệu ứng focus
         final isFocused = _focusNode.hasFocus;
         // Màu sắc dựa trên trạng thái

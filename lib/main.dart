@@ -108,7 +108,7 @@ class _MainAppState extends State<MainApp> {
                 ),
           ),
         ],
-        child: MaterialApp(home: LoginPage()),
+        child: MaterialApp(home: HomePage()),
       ),
     );
   }

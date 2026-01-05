@@ -32,19 +32,34 @@ class HomeRecentTaskList extends StatelessWidget {
     ];
 
     return Column(
-      children:
-          tasks
-              .map(
-                (task) => Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: _HomeTaskItem(
-                    title: task["title"] as String,
-                    progress: task["progress"] as double,
-                    progressColor: task["color"] as Color,
-                  ),
-                ),
-              )
-              .toList(),
+      children: [
+        Row(
+          children: [
+            Text(
+              "Các tác vụ gần đây",
+              style: TextStyle(
+                fontSize: HeaderSizes.HEADER_SMALL,
+                fontWeight: FontWeight.bold,
+                color: COLORS.HEADER_PAGE_COLOR,
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
+
+        // ===== Task List =====
+        ...tasks.map(
+          (task) => Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: _HomeTaskItem(
+              title: task["title"] as String,
+              progress: task["progress"] as double,
+              progressColor: task["color"] as Color,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -72,7 +87,7 @@ class _HomeTaskItem extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: COLORS.PRIMARY_SHADOW_COLOR,
-            offset: Offset(0, 3), // Lệch xuống dưới
+            offset: Offset(1, 5),
             blurRadius: 0.5, // Không mờ -> Hiệu ứng khối 3D
           ),
         ],

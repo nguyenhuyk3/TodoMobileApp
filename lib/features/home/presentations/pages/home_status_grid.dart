@@ -91,6 +91,14 @@ class _HomeStatusCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: COLORS.FOCUSED_BORDER_IP_COLOR, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: COLORS.PRIMARY_SHADOW_COLOR,
+            offset: Offset(0, 3),
+            blurRadius: 0.5,
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
