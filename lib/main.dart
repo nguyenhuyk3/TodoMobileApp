@@ -7,7 +7,6 @@ import 'package:todo_mobile_app/features/authentication/domain/repositories/auth
 import 'package:todo_mobile_app/features/authentication/domain/usecases/authentication_use_case.dart';
 import 'package:todo_mobile_app/features/authentication/presentations/forgot_password/bloc/bloc.dart';
 import 'package:todo_mobile_app/features/authentication/presentations/registration/bloc/bloc.dart';
-import 'package:todo_mobile_app/features/home/presentations/home_page.dart';
 
 import 'core/constants/keys.dart';
 import 'features/authentication/data/repositories/authentication_service.dart';
@@ -108,7 +107,7 @@ class _MainAppState extends State<MainApp> {
                 ),
           ),
         ],
-        child: MaterialApp(home: HomePage()),
+        child: MaterialApp(home: LoginPage()),
       ),
     );
   }

@@ -12,28 +12,46 @@ class RegistrationOtpPinInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Cấu hình cơ bản cho ô OTP bình thường (Neo-brutalism Style)
     final defaultPinTheme = PinTheme(
-      width: 60,
-      height: 70,
+      width: 56, // Độ rộng đồng bộ
+      height: 64, // Chiều cao đồng bộ
       textStyle: TextStyle(
         fontSize: TextSizes.TITLE_LARGE,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         color: COLORS.PRIMARY_TEXT_COLOR,
       ),
       decoration: BoxDecoration(
-        color: COLORS.PRIMARY_BG_COLOR,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: COLORS.UNFOCUSED_BORDER_IP_COLOR, width: 1),
+        border: Border.all(color: COLORS.FOCUSED_BORDER_IP_COLOR, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: COLORS.PRIMARY_SHADOW_COLOR,
+            offset: Offset(0, 3),
+            blurRadius: 0,
+          ),
+        ],
       ),
     );
+    // 2. Cấu hình khi ô được Focus (viền đậm hơn)
     final focusedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
         border: Border.all(color: COLORS.FOCUSED_BORDER_IP_COLOR, width: 1.5),
       ),
     );
+    // 3. Cấu hình khi có Lỗi (Viền đỏ, bóng đỏ)
     final errorPinTheme = defaultPinTheme.copyWith(
+      textStyle: defaultPinTheme.textStyle!.copyWith(color: COLORS.ERROR_COLOR),
       decoration: defaultPinTheme.decoration!.copyWith(
-        border: Border.all(color: COLORS.ERROR_COLOR, width: 1.5),
+        border: Border.all(color: COLORS.ERROR_COLOR, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: COLORS.ERROR_COLOR,
+            offset: const Offset(0, 3),
+            blurRadius: 0,
+          ),
+        ],
       ),
     );
 
@@ -47,30 +65,38 @@ class RegistrationOtpPinInput extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // PHẦN NHẬP MÃ OTP
             Center(
               child: Pinput(
                 length: LENGTH_OF_OTP,
                 defaultPinTheme: defaultPinTheme,
                 focusedPinTheme: focusedPinTheme,
-                errorPinTheme: errorPinTheme, // Theme khi báo lỗi
-                forceErrorState:
-                    hasError, // Kích hoạt trạng thái lỗi cho ô nhập
+                errorPinTheme: errorPinTheme,
+                submittedPinTheme: defaultPinTheme,
+                forceErrorState: hasError,
                 keyboardType: TextInputType.number,
+                cursor: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      width: 22,
+                      height: 1.5,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
                 onChanged:
                     (value) => context.read<RegistrationBloc>().add(
                       RegistrationOtpChanged(otp: value),
                     ),
-                onCompleted:
-                    (pin) => {
-                      context.read<RegistrationBloc>().add(
-                        RegistrationOtpSubmitted(),
-                      ),
-                    },
+                onCompleted: (pin) {
+                  context.read<RegistrationBloc>().add(
+                    RegistrationOtpSubmitted(),
+                  );
+                },
               ),
             ),
 
-            // HIỂN THỊ THÔNG BÁO LỖI PHÍA DƯỚI
             if (hasError) ErrorDisplayer(message: error),
           ],
         );

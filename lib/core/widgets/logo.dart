@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants/others.dart';
 import '../constants/sizes.dart';
 
 class Logo extends StatelessWidget {
@@ -7,7 +8,7 @@ class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color logoColor = Color(0xFF5D3A3A);
+    final Color logoColor = COLORS.PRIMARY_APP_COLOR;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -16,7 +17,7 @@ class Logo extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Text(
               '3B',
               style: TextStyle(
@@ -41,7 +42,7 @@ class Logo extends StatelessWidget {
 
         const SizedBox(height: X_MIN_HEIGHT_SIZED_BOX),
 
-        const Text(
+        Text(
           'PRODUCTIVITY',
           style: TextStyle(fontSize: 12, color: logoColor, letterSpacing: 2),
         ),

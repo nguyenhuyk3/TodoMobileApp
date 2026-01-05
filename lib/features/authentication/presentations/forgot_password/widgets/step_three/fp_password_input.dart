@@ -36,7 +36,6 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
       if (mounted) {
         setState(() {});
       }
-      ;
     });
   }
 
@@ -49,6 +48,7 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Logic bắt lỗi phức tạp (Giữ nguyên)
     final displayError = context.select<ForgotPasswordBloc, String>((bloc) {
       final state = bloc.state;
 
@@ -77,12 +77,18 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
 
       return '';
     });
+
     final hasError = displayError.isNotEmpty;
+    // 2. Logic Loading
     final bool isLoading = context.select<ForgotPasswordBloc, bool>((bloc) {
       final state = bloc.state;
 
       return state is ForgotPasswordStepThree && state.isLoading;
     });
+    // 3. Logic Style (Color/Shadow)
+    final borderColor = hasError ? COLORS.ERROR_COLOR : Colors.black;
+    final shadowColor = hasError ? COLORS.ERROR_COLOR : Colors.black;
+    final isFocused = _focusNode.hasFocus;
 
     return BlocProvider(
       create: (context) => PasswordBloc(),
@@ -92,18 +98,18 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
           BlocBuilder<PasswordBloc, PasswordState>(
             builder: (context, passwordState) {
               return AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: borderColor, width: 1),
                   boxShadow: [
-                    if (_focusNode.hasFocus && !isLoading)
-                      BoxShadow(
-                        color: (hasError ? COLORS.ERROR_COLOR : Colors.black)
-                        // ignore: deprecated_member_use
-                        .withOpacity(0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
+                    BoxShadow(
+                      color: shadowColor,
+                      offset: const Offset(0, 3),
+                      blurRadius: 0,
+                    ),
                   ],
                 ),
                 child: TextField(
@@ -135,32 +141,19 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                           : TextInputAction.next,
                   style: TextStyle(
                     fontSize: TextSizes.TITLE_SMALL,
-                    fontWeight: FontWeight.w500,
-                    color: isLoading ? COLORS.SECONDARY_TEXT_COLOR : null,
+                    fontWeight: FontWeight.w600,
+                    color:
+                        isLoading
+                            ? COLORS.SECONDARY_TEXT_COLOR
+                            : COLORS.PRIMARY_TEXT_COLOR,
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor:
-                        (_focusNode.hasFocus && !isLoading)
-                            ? Colors.white
-                            : COLORS.INPUT_BG_COLOR,
+                    fillColor: Colors.transparent,
                     hintText: widget.hintText,
-                    labelText: widget.label,
                     hintStyle: TextStyle(
                       color: COLORS.HINT_TEXT_COLOR,
                       fontSize: TextSizes.TITLE_X_SMALL,
-                    ),
-                    labelStyle: TextStyle(
-                      color: hasError ? COLORS.ERROR_COLOR : COLORS.LABEL_COLOR,
-                      fontSize: TextSizes.TITLE_SMALL,
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color:
-                          hasError
-                              ? COLORS.ERROR_COLOR
-                              : COLORS.PRIMARY_TEXT_COLOR,
-                      fontWeight: FontWeight.bold,
-                      fontSize: TextSizes.TITLE_XX_SMALL,
                     ),
                     prefixIcon: Icon(
                       widget.isConfirmedPassword
@@ -169,24 +162,14 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                       color:
                           hasError
                               ? COLORS.ERROR_COLOR
-                              : (_focusNode.hasFocus
-                                  ? COLORS.FOCUSED_BORDER_IP_COLOR
-                                  : COLORS.UNFOCUSED_BORDER_IP_COLOR),
+                              : (isFocused
+                                  ? COLORS.ICON_DEFAULT_COLOR
+                                  : COLORS.ICON_PRIMARY_COLOR),
                       size: IconSizes.ICON_INPUT_SIZE,
                     ),
                     suffixIcon:
                         isLoading
-                            ? Padding(
-                              padding: EdgeInsets.all(12.0),
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: COLORS.FOCUSED_BORDER_IP_COLOR,
-                                ),
-                              ),
-                            )
+                            ? null
                             : IconButton(
                               icon: Icon(
                                 passwordState.obscureText
@@ -196,7 +179,9 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                                 color:
                                     hasError
                                         ? COLORS.ERROR_COLOR
-                                        : COLORS.UNFOCUSED_BORDER_IP_COLOR,
+                                        : (isFocused
+                                            ? COLORS.ICON_DEFAULT_COLOR
+                                            : COLORS.ICON_PRIMARY_COLOR),
                               ),
                               onPressed: () {
                                 context.read<PasswordBloc>().add(
@@ -205,42 +190,15 @@ class _FPPasswordInputState extends State<FPPasswordInput> {
                               },
                             ),
                     contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
+                      horizontal: 20,
                       vertical: 16,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color:
-                            hasError
-                                ? COLORS.ERROR_COLOR
-                                : COLORS.UNFOCUSED_BORDER_IP_COLOR,
-                        width: 0.7,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color:
-                            hasError
-                                ? COLORS.ERROR_COLOR
-                                : COLORS.FOCUSED_BORDER_IP_COLOR,
-                        width: 1,
-                      ),
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        // ignore: deprecated_member_use
-                        color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(
-                          0.5,
-                        ),
-                        width: 0.5,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
                   ),
                   onTapOutside: (event) => FocusScope.of(context).unfocus(),
                 ),

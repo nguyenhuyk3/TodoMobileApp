@@ -34,12 +34,12 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
     _controller = TextEditingController();
     _focusNode = FocusNode();
 
-    // Lắng nghe thay đổi controller để render lại nút xóa (X)
-    /*
-      👉 Mục đích duy nhất: Ép widget rebuild mỗi khi nội dung TextField thay đổi, 
-    để cập nhật UI phụ thuộc vào _controller.text (cụ thể là suffixIcon nút ❌).
-    */
+    // Rebuild khi text thay đổi để update nút xoá (suffixIcon)
     _controller.addListener(() {
+      setState(() {});
+    });
+    // Rebuild khi focus thay đổi để update style border/icon
+    _focusNode.addListener(() {
       setState(() {});
     });
   }
@@ -48,13 +48,12 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
   void dispose() {
     _controller.dispose();
     _focusNode.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // ---- LOGIC BẮT LỖI & LOADING ----
+    // ---- LOGIC BẮT LỖI & LOADING TỪ BLOC ----
     final String errorDisplay = context.select<RegistrationBloc, String>((
       bloc,
     ) {
@@ -63,7 +62,6 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
       if (state is! RegistrationStepOne) {
         return '';
       }
-      // Chỉ lấy lỗi nếu chuỗi lỗi trùng với các lỗi quy định của Email
       if (state.error == ErrorInformation.EMAIL_CAN_NOT_BE_BLANK.message ||
           state.error == ErrorInformation.INVALID_EMAIL.message) {
         return state.error;
@@ -71,52 +69,50 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
 
       return '';
     });
+    // ------------------------------------------
     final bool hasError = errorDisplay.isNotEmpty;
-    // Cần lấy isLoading để disable nút xóa
     final bool isLoading = context.select<RegistrationBloc, bool>((bloc) {
       final state = bloc.state;
 
       return state is RegistrationStepOne && state.isLoading;
     });
-    // ------------------------------------
+    final borderColor = hasError ? COLORS.ERROR_COLOR : Colors.black;
+    final shadowColor = hasError ? COLORS.ERROR_COLOR : Colors.black;
+    final isFocused = _focusNode.hasFocus;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Hiệu ứng bao quanh nhẹ nhàng hơn
         AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeInOut,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: borderColor, width: 1),
             boxShadow: [
-              if (_focusNode.hasFocus &&
-                  !isLoading) // Không show shadow khi đang loading
-                BoxShadow(
-                  color: (hasError ? COLORS.ERROR_COLOR : Colors.black)
-                  // ignore: deprecated_member_use
-                  .withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
+              BoxShadow(
+                color: shadowColor,
+                offset: const Offset(0, 3),
+                blurRadius: 0,
+              ),
             ],
           ),
           child: TextField(
             key: const Key('registration_emailInput_stepOne_textField'),
             controller: _controller,
             focusNode: _focusNode,
-            // [QUAN TRỌNG 1] Khóa thao tác khi đang loading
             enabled: !isLoading,
-            onChanged:
-                (email) => {
-                  context.read<RegistrationBloc>().add(
-                    RegistrationEmailChanged(email: email),
-                  ),
-                },
+            onChanged: (email) {
+              context.read<RegistrationBloc>().add(
+                RegistrationEmailChanged(email: email),
+              );
+            },
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             style: TextStyle(
               fontSize: TextSizes.TITLE_SMALL,
-              fontWeight: FontWeight.w500,
-              // Giữ màu chữ đậm hơn một chút kể cả khi disabled để dễ đọc (tuỳ chọn)
+              fontWeight: FontWeight.w600,
               color:
                   isLoading
                       ? COLORS.SECONDARY_TEXT_COLOR
@@ -124,133 +120,66 @@ class _RegistrationEmailInputState extends State<RegistrationEmailInput> {
             ),
             decoration: InputDecoration(
               filled: true,
-              // Khi disable màu nền thường bị xám đi, logic này giúp giữ màu đẹp hơn
-              fillColor:
-                  (_focusNode.hasFocus && !isLoading)
-                      ? Colors.white
-                      : COLORS.INPUT_BG_COLOR,
+              fillColor: Colors.transparent,
               hintText: 'Nhập địa chỉ email',
               hintStyle: TextStyle(
-                color: Colors.grey.shade400,
+                color: COLORS.HINT_TEXT_COLOR,
                 fontSize: TextSizes.TITLE_X_SMALL,
               ),
-              // Label nổi
-              labelText: 'Địa chỉ Email',
-              labelStyle: TextStyle(
-                color: hasError ? COLORS.ERROR_COLOR : COLORS.LABEL_COLOR,
-                fontSize: TextSizes.TITLE_SMALL,
-              ),
-              floatingLabelStyle: TextStyle(
-                color:
-                    hasError ? COLORS.ERROR_COLOR : COLORS.PRIMARY_TEXT_COLOR,
-                fontWeight: FontWeight.bold,
-                fontSize: TextSizes.TITLE_XX_SMALL,
-              ),
-              // Icons
               prefixIcon: Icon(
-                Icons.mail_rounded,
+                Icons.mail_outline_rounded,
                 color:
                     hasError
                         ? COLORS.ERROR_COLOR
-                        : (_focusNode.hasFocus
-                            ? COLORS.FOCUSED_BORDER_IP_COLOR
-                            : COLORS.UNFOCUSED_BORDER_IP_COLOR),
+                        : (isFocused
+                            ? COLORS.ICON_DEFAULT_COLOR
+                            : COLORS.ICON_PRIMARY_COLOR),
                 size: IconSizes.ICON_INPUT_SIZE,
               ),
               /*
-                suffixIcon:
-                - Chỉ hiển thị khi TextField có nội dung (_controller.text.isNotEmpty)
-                - Nếu đang loading → ẩn icon để tránh user thao tác
-                - Khi không loading → hiển thị nút clear (icon cancel)
-                [QUAN TRỌNG 2] Xử lý Suffix Icon
-                - Khi Loading: Hiện vòng xoay
-                - Khi có text & không loading: Hiện nút xóa
+                LOGIC MỚI CHO SUFFIX ICON:
+                1. isLoading = true -> Ẩn icon (null)
+                2. isLoading = false & có text -> Hiện nút X
+                3. isLoading = false & không có text -> Ẩn (null)
               */
               suffixIcon:
                   isLoading
-                      ? Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color:
-                                COLORS
-                                    .FOCUSED_BORDER_IP_COLOR, // Thay màu phù hợp
-                          ),
-                        ),
-                      )
-                      : (_controller.text.isNotEmpty)
-                      ? IconButton(
-                        icon: Icon(
-                          Icons.cancel,
-                          size: IconSizes.ICON_INPUT_SIZE,
-                          color:
-                              hasError
-                                  ? COLORS.ERROR_COLOR
-                                  : COLORS.FOCUSED_BORDER_IP_COLOR,
-                        ),
-                        onPressed: () {
-                          _controller.clear();
-                          context.read<RegistrationBloc>().add(
-                            const RegistrationEmailChanged(email: ''),
-                          );
-                        },
-                      )
-                      : null,
-              // Border configs
+                      ? null
+                      : (_controller.text.isNotEmpty
+                          ? IconButton(
+                            icon: Icon(
+                              Icons.cancel,
+                              size: IconSizes.ICON_MEDIUM_SIZE,
+                              color:
+                                  hasError
+                                      ? COLORS.ERROR_COLOR
+                                      : COLORS.ICON_PRIMARY_COLOR,
+                            ),
+                            onPressed: () {
+                              _controller.clear();
+
+                              context.read<RegistrationBloc>().add(
+                                const RegistrationEmailChanged(email: ''),
+                              );
+                            },
+                          )
+                          : null),
               contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
+                horizontal: 20,
                 vertical: 16,
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color:
-                      hasError
-                          ? COLORS.ERROR_COLOR
-                          : COLORS.UNFOCUSED_BORDER_IP_COLOR,
-                  width: 0.7,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color:
-                      hasError
-                          ? COLORS.ERROR_COLOR
-                          : COLORS.FOCUSED_BORDER_IP_COLOR,
-                  width: 1,
-                ),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  // ignore: deprecated_member_use
-                  color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(0.5),
-                  width: 0.5,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: COLORS.ERROR_COLOR, width: 1),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: COLORS.ERROR_COLOR, width: 1),
-              ),
-              // Xóa errorText mặc định để custom vị trí đẹp hơn
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              focusedErrorBorder: InputBorder.none,
               errorText: null,
             ),
             onTapOutside: (event) => FocusScope.of(context).unfocus(),
           ),
         ),
-        // Tùy chỉnh Error Message dưới TextField (mượt hơn)
+
         if (hasError) ErrorDisplayer(message: errorDisplay),
       ],
     );

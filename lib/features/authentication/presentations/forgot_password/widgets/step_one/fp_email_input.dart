@@ -6,11 +6,6 @@ import '../../../../../../../core/constants/sizes.dart';
 import '../../../../../../core/widgets/error_displayer.dart';
 import '../../bloc/bloc.dart';
 
-/*
-    Trong Flutter, AnimatedContainer là một implicit animation widget, dùng để tự động animate (chuyển động mượt) 
-  khi các thuộc tính của Container thay đổi theo setState — không cần AnimationController.
-    AnimatedContainer = Container + animation tự động.
-*/
 class FPEmailInput extends StatefulWidget {
   const FPEmailInput({super.key});
 
@@ -32,6 +27,10 @@ class _FPEmailInputState extends State<FPEmailInput> {
     _controller.addListener(() {
       setState(() {});
     });
+    // Lắng nghe thay đổi focus để rebuild UI (cập nhật màu icon/border)
+    _focusNode.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -47,30 +46,35 @@ class _FPEmailInputState extends State<FPEmailInput> {
     return BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
       builder: (context, state) {
         final String error = (state is ForgotPasswordError) ? state.error : '';
+        // Kiểm tra xem bloc có đang load ở step 1 không
         final isLoading = context.select<ForgotPasswordBloc, bool>((bloc) {
           final state = bloc.state;
 
           return state is ForgotPasswordStepOne && state.isLoading;
         });
         final hasError = error.isNotEmpty;
+        final isFocused = _focusNode.hasFocus;
+        // Định nghĩa màu sắc UI theo trạng thái
+        final borderColor = hasError ? COLORS.ERROR_COLOR : Colors.black;
+        final shadowColor = hasError ? COLORS.ERROR_COLOR : Colors.black;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Hiệu ứng bao quanh nhẹ nhàng hơn
+            // Container bọc ngoài tạo hiệu ứng Hard Shadow
             AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 150),
+              curve: Curves.easeInOut,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: borderColor, width: 1),
                 boxShadow: [
-                  if (_focusNode.hasFocus && !isLoading)
-                    BoxShadow(
-                      color: (hasError ? COLORS.ERROR_COLOR : Colors.black)
-                      // ignore: deprecated_member_use
-                      .withOpacity(0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
+                  BoxShadow(
+                    color: shadowColor,
+                    offset: const Offset(0, 3), 
+                    blurRadius: 0, 
+                  ),
                 ],
               ),
               child: TextField(
@@ -86,7 +90,7 @@ class _FPEmailInputState extends State<FPEmailInput> {
                 textInputAction: TextInputAction.next,
                 style: TextStyle(
                   fontSize: TextSizes.TITLE_SMALL,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   color:
                       isLoading
                           ? COLORS.SECONDARY_TEXT_COLOR
@@ -95,121 +99,60 @@ class _FPEmailInputState extends State<FPEmailInput> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor:
-                      (_focusNode.hasFocus && !isLoading)
-                          ? Colors.white
-                          : COLORS.INPUT_BG_COLOR,
+                      Colors.transparent,
                   hintText: 'Nhập địa chỉ email',
                   hintStyle: TextStyle(
-                    color: Colors.grey.shade400,
+                    color: COLORS.HINT_TEXT_COLOR,
                     fontSize: TextSizes.TITLE_X_SMALL,
                   ),
-                  // Label nổi
-                  labelText: 'Địa chỉ Email',
-                  labelStyle: TextStyle(
-                    color: hasError ? COLORS.ERROR_COLOR : COLORS.LABEL_COLOR,
-                    fontSize: TextSizes.TITLE_SMALL,
-                  ),
-                  floatingLabelStyle: TextStyle(
-                    color:
-                        hasError
-                            ? COLORS.ERROR_COLOR
-                            : COLORS.PRIMARY_TEXT_COLOR,
-                    fontWeight: FontWeight.bold,
-                    fontSize: TextSizes.TITLE_XX_SMALL,
-                  ),
-                  // Icons
                   prefixIcon: Icon(
-                    Icons.mail_rounded,
+                    Icons.mail_outline_rounded,
                     color:
                         hasError
                             ? COLORS.ERROR_COLOR
-                            : (_focusNode.hasFocus
-                                ? COLORS.FOCUSED_BORDER_IP_COLOR
-                                : COLORS.UNFOCUSED_BORDER_IP_COLOR),
+                            : (isFocused
+                                ? COLORS.ICON_DEFAULT_COLOR
+                                : COLORS.ICON_PRIMARY_COLOR),
                     size: IconSizes.ICON_INPUT_SIZE,
                   ),
                   suffixIcon:
                       isLoading
-                          ? Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: COLORS.FOCUSED_BORDER_IP_COLOR,
-                              ),
-                            ),
-                          )
-                          : (_controller.text.isNotEmpty)
-                          ? IconButton(
-                            icon: Icon(
-                              Icons.cancel,
-                              size: IconSizes.ICON_INPUT_SIZE,
-                              color:
-                                  hasError
-                                      ? COLORS.ERROR_COLOR
-                                      : COLORS.FOCUSED_BORDER_IP_COLOR,
-                            ),
-                            onPressed: () {
-                              _controller.clear();
+                          ? null
+                          : (_controller.text.isNotEmpty
+                              ? IconButton(
+                                icon: Icon(
+                                  Icons.cancel,
+                                  size: IconSizes.ICON_INPUT_SIZE,
+                                  color:
+                                      hasError
+                                          ? COLORS.ERROR_COLOR
+                                          : COLORS.ICON_PRIMARY_COLOR,
+                                ),
+                                onPressed: () {
+                                  _controller.clear();
+                                  context.read<ForgotPasswordBloc>().add(
+                                    const ForgotPasswordEmailChanged(email: ''),
+                                  );
+                                },
+                              )
+                              : null),
 
-                              context.read<ForgotPasswordBloc>().add(
-                                const ForgotPasswordEmailChanged(email: ''),
-                              );
-                            },
-                          )
-                          : null,
-                  // Border configs
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
+                    horizontal: 20,
                     vertical: 16,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color:
-                          hasError
-                              ? COLORS.ERROR_COLOR
-                              : COLORS.UNFOCUSED_BORDER_IP_COLOR,
-                      width: 0.7,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color:
-                          hasError
-                              ? COLORS.ERROR_COLOR
-                              : COLORS.FOCUSED_BORDER_IP_COLOR,
-                      width: 1,
-                    ),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      // ignore: deprecated_member_use
-                      color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(0.5),
-                      width: 0.5,
-                    ),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: COLORS.ERROR_COLOR, width: 1),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: COLORS.ERROR_COLOR, width: 1),
-                  ),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
                   errorText: null,
                 ),
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
               ),
             ),
+
             if (hasError) ErrorDisplayer(message: error),
           ],
         );

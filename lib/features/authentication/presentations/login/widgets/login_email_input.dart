@@ -159,7 +159,7 @@ class _LoginEmailInputState extends State<LoginEmailInput> {
                           ? IconButton(
                             icon: Icon(
                               Icons.cancel,
-                              size: 20,
+                              size: IconSizes.ICON_MEDIUM_SIZE,
                               color:
                                   hasError
                                       ? COLORS.ERROR_COLOR
@@ -167,6 +167,7 @@ class _LoginEmailInputState extends State<LoginEmailInput> {
                             ),
                             onPressed: () {
                               _controller.clear();
+                              
                               context.read<LoginBloc>().add(
                                 const LoginEmailChanged(email: ''),
                               );

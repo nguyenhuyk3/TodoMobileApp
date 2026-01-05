@@ -12,28 +12,53 @@ class FPOtpPinInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Cấu hình cơ bản cho ô OTP bình thường
     final defaultPinTheme = PinTheme(
-      width: 60,
-      height: 70,
+      width: 56, // Độ rộng mỗi ô
+      height: 64, // Chiều cao mỗi ô
       textStyle: TextStyle(
         fontSize: TextSizes.TITLE_LARGE,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         color: COLORS.PRIMARY_TEXT_COLOR,
       ),
       decoration: BoxDecoration(
-        color: COLORS.PRIMARY_BG_COLOR,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: COLORS.UNFOCUSED_BORDER_IP_COLOR, width: 1),
+        border: Border.all(color: COLORS.FOCUSED_BORDER_IP_COLOR, width: 1),
+        boxShadow: [
+          // Hiệu ứng Hard Shadow (Bóng cứng)
+          BoxShadow(
+            color: COLORS.PRIMARY_SHADOW_COLOR,
+            offset: Offset(0, 3),
+            blurRadius: 0,
+          ),
+        ],
       ),
     );
+    // 2. Cấu hình khi ô được Focus
+    // Ở style này, ta có thể giữ nguyên giống default hoặc đậm viền hơn một chút
+    // Nhưng để đồng bộ Neo-brutalism tĩnh, mình giữ shadow và chỉ nhấn mạnh nội dung
     final focusedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
-        border: Border.all(color: COLORS.FOCUSED_BORDER_IP_COLOR, width: 1.5),
+        border: Border.all(
+          color: COLORS.FOCUSED_BORDER_IP_COLOR,
+          width: 1.5,
+        ), // Viền đậm hơn chút khi đang nhập
       ),
     );
+    // 3. Cấu hình khi có Lỗi
     final errorPinTheme = defaultPinTheme.copyWith(
+      textStyle: defaultPinTheme.textStyle!.copyWith(color: COLORS.ERROR_COLOR),
       decoration: defaultPinTheme.decoration!.copyWith(
-        border: Border.all(color: COLORS.ERROR_COLOR, width: 1.5),
+        border: Border.all(color: COLORS.ERROR_COLOR, width: 1),
+        boxShadow: [
+          // Bóng đổi sang màu đỏ
+          BoxShadow(
+            color: COLORS.ERROR_COLOR,
+            offset: const Offset(0, 3),
+            blurRadius: 0,
+          ),
+        ],
       ),
     );
 
@@ -47,16 +72,30 @@ class FPOtpPinInput extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // PHẦN NHẬP MÃ OTP
             Center(
               child: Pinput(
                 length: LENGTH_OF_OTP,
+                // Áp dụng các Theme đã tạo
                 defaultPinTheme: defaultPinTheme,
                 focusedPinTheme: focusedPinTheme,
-                errorPinTheme: errorPinTheme, // Theme khi báo lỗi
+                errorPinTheme: errorPinTheme,
+                submittedPinTheme:
+                    defaultPinTheme, // Khi nhập xong thì giữ nguyên style mặc định
                 forceErrorState:
-                    hasError, // Kích hoạt trạng thái lỗi cho ô nhập
+                    hasError, // Kích hoạt trạng thái lỗi cho Pinput
                 keyboardType: TextInputType.number,
+                // Cấu hình con trỏ nhấp nháy
+                cursor: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      width: 22,
+                      height: 1.5,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
                 onChanged:
                     (value) => context.read<ForgotPasswordBloc>().add(
                       ForgotPasswordOtpChanged(otp: value),
@@ -68,7 +107,6 @@ class FPOtpPinInput extends StatelessWidget {
               ),
             ),
 
-            // HIỂN THỊ THÔNG BÁO LỖI PHÍA DƯỚI
             if (hasError) ErrorDisplayer(message: error),
           ],
         );

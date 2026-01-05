@@ -16,7 +16,7 @@ class AppColors {
   final ERROR_COLOR = Colors.redAccent;
   final SUCCESS_COLOR = const Color.fromARGB(255, 10, 202, 32);
   // Button
-  final PRIMARY_BUTTON_COLOR = Color.fromRGBO(253, 205, 32, 1);
+  final PRIMARY_BUTTON_COLOR = Color(0xFFFF6B5B);
   // Title
   final HEADER_PAGE_COLOR = Colors.black;
   // Text
@@ -24,7 +24,7 @@ class AppColors {
   final SECONDARY_TEXT_COLOR = const Color.fromARGB(255, 152, 151, 150);
   final HINT_TEXT_COLOR = Colors.grey.shade400;
   // App
-  final PRIMARY_APP_COLOR = Color.fromRGBO(249, 202, 33, 1);
+  final PRIMARY_APP_COLOR = Color(0xFFFF6B5B);
   // Icon
   final ICON_PRIMARY_COLOR = const Color.fromARGB(255, 152, 150, 150);
   final ICON_DEFAULT_COLOR = Colors.black;

@@ -32,17 +32,7 @@ class PrimaryButton extends StatelessWidget {
 
     return Container(
       width: width ?? double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        // boxShadow: [
-        //   if (!isDisabled)
-        //     BoxShadow(
-        //       color: COLORS.PRIMARY_BUTTON_COLOR.withOpacity(0.3),
-        //       blurRadius: 12,
-        //       offset: const Offset(0, 4), // Tạo độ nổi (depth)
-        //     ),
-        // ],
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
       child: ElevatedButton(
         onPressed: isDisabled ? null : onPressed,
         style: ElevatedButton.styleFrom(
@@ -57,7 +47,7 @@ class PrimaryButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation:
-              2, // Sử dụng nếu không có thuộc tính boxShadow từ BoxDecoration
+              1.5, // Sử dụng nếu không có thuộc tính boxShadow từ BoxDecoration
           padding: const EdgeInsets.symmetric(horizontal: 24),
           // Hiệu ứng loang khi nhấn (Ripple effect)
           // tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -69,7 +59,7 @@ class PrimaryButton extends StatelessWidget {
                   width: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,
-                    color: COLORS.ICON_DEFAULT_COLOR,
+                    color: Colors.white,
                   ),
                 )
                 : Row(
@@ -88,9 +78,9 @@ class PrimaryButton extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        color: COLORS.PRIMARY_TEXT_COLOR,
+                        color: Colors.white,
                         fontSize: TextSizes.TITLE_MEDIUM,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                         letterSpacing: 0.7, // Dùng để giãn chữ theo chiều ngang
                       ),
                     ),

@@ -75,18 +75,15 @@ class ForgotPasswordBloc
 
         return;
       }
-
       // 2. LOADING
       emit(currentState.copyWith(isLoading: true));
 
       await Future.delayed(const Duration(seconds: 2));
-
       // 3. CHECK EMAIL EXISTS
       final checkEmailResult = await _checkEmailExistsUseCase.execute(
         email: currentState.email.value,
       );
       final checkResult = checkEmailResult.fold((l) => l, (r) => r);
-
       // 4. HANDLE RESULT
       // Tức là email đã tồn tại
       if (checkResult is bool) {

@@ -48,7 +48,6 @@ class HomeRecentTaskList extends StatelessWidget {
 
         const SizedBox(height: MAX_HEIGTH_SIZED_BOX),
 
-        // ===== Task List =====
         ...tasks.map(
           (task) => Padding(
             padding: const EdgeInsets.only(bottom: 16.0),

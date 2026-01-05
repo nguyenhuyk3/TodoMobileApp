@@ -10,7 +10,7 @@ class RegistrationBirthDatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Lấy thông tin từ state
+    // 1. Lấy dữ liệu ngày sinh
     final birthDateStr = context.select<RegistrationBloc, String>((bloc) {
       final state = bloc.state;
 
@@ -19,10 +19,9 @@ class RegistrationBirthDatePicker extends StatelessWidget {
     // 2. Lấy trạng thái Loading
     final bool isLoading = context.select<RegistrationBloc, bool>((bloc) {
       final state = bloc.state;
-
       return state is RegistrationStepOne && state.isLoading;
     });
-    // 3. Logic xác định ngày để hiển thị
+    // 3. Logic xử lý hiển thị ngày
     final effectiveDate =
         birthDateStr.isNotEmpty
             ? DateTime.parse(birthDateStr)
@@ -35,28 +34,15 @@ class RegistrationBirthDatePicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 8),
-          child: Text(
-            "Ngày sinh",
-            style: TextStyle(
-              color: COLORS.LABEL_COLOR,
-              fontWeight: FontWeight.bold,
-              fontSize: TextSizes.TITLE_XX_SMALL,
-            ),
-          ),
-        ),
-
+        // Widget bấm để chọn ngày
         InkWell(
-          // [QUAN TRỌNG] Nếu đang loading thì onTap = null -> Button bị vô hiệu hóa
           onTap:
               isLoading
                   ? null
                   : () async {
                     final picked = await showDatePicker(
                       context: context,
-                      initialDate:
-                          effectiveDate, // Dùng ngày hiện tại đang chọn thay vì fix cứng 2000
+                      initialDate: effectiveDate,
                       firstDate: DateTime(1950),
                       lastDate: DateTime.now(),
                     );
@@ -76,29 +62,31 @@ class RegistrationBirthDatePicker extends StatelessWidget {
                       }
                     }
                   },
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          borderRadius: BorderRadius.circular(16),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
             decoration: BoxDecoration(
-              // Đổi màu nền nhẹ nếu disabled (tùy chọn)
-              color: isLoading ? Colors.grey.shade100 : COLORS.INPUT_BG_COLOR,
-              borderRadius: BorderRadius.circular(12),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              // Viền đen cứng
               border: Border.all(
-                // ignore: deprecated_member_use
-                color: COLORS.UNFOCUSED_BORDER_IP_COLOR.withOpacity(
-                  isLoading ? 0.5 : 1.0, // Làm mờ border khi loading
-                ),
-                width: 0.7,
+                color: COLORS.FOCUSED_BORDER_IP_COLOR,
+                width: 1,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: COLORS.PRIMARY_SHADOW_COLOR,
+                  offset: Offset(0, 3),
+                  blurRadius: 0,
+                ),
+              ],
             ),
             child: Row(
               children: [
                 Icon(
                   Icons.calendar_month_outlined,
-                  color:
-                      isLoading
-                          ? Colors.grey.shade400
-                          : COLORS.ICON_PRIMARY_COLOR,
+                  color: isLoading ? Colors.grey.shade400 : Colors.black,
                 ),
 
                 const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 3),
@@ -107,31 +95,22 @@ class RegistrationBirthDatePicker extends StatelessWidget {
                   formattedDate,
                   style: TextStyle(
                     fontSize: TextSizes.TITLE_SMALL,
-                    fontWeight: FontWeight.w500,
-                    // Làm mờ text khi loading
+                    fontWeight: FontWeight.w700,
+                    // Màu chữ: Nếu loading -> mờ, chưa chọn -> hint, đã chọn -> đen đậm
                     color:
                         isLoading
-                            ? Colors.grey.shade400
-                            : (birthDateStr.isEmpty
-                                ? COLORS.HINT_TEXT_COLOR
-                                : COLORS.PRIMARY_TEXT_COLOR),
+                            ? COLORS.SECONDARY_TEXT_COLOR
+                            : COLORS.PRIMARY_TEXT_COLOR,
                   ),
                 ),
 
                 const Spacer(),
 
-                // Logic hiển thị icon cuối hàng: Loading -> Spinner, Thường -> Mũi tên
-                if (isLoading)
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: COLORS.FOCUSED_BORDER_IP_COLOR,
-                    ),
-                  )
-                else
-                  Icon(Icons.arrow_drop_down, color: COLORS.ICON_PRIMARY_COLOR),
+                // Logic Icon:
+                // isLoading -> Ẩn (trả về Empty Widget hoặc null)
+                // !isLoading -> Icon Dropdown
+                if (!isLoading)
+                  Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white),
               ],
             ),
           ),
