@@ -19,6 +19,7 @@ class RegistrationBirthDatePicker extends StatelessWidget {
     // 2. Lấy trạng thái Loading
     final bool isLoading = context.select<RegistrationBloc, bool>((bloc) {
       final state = bloc.state;
+      
       return state is RegistrationStepOne && state.isLoading;
     });
     // 3. Logic xử lý hiển thị ngày

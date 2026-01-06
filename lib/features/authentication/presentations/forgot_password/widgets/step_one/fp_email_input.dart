@@ -130,6 +130,7 @@ class _FPEmailInputState extends State<FPEmailInput> {
                                 ),
                                 onPressed: () {
                                   _controller.clear();
+                                  
                                   context.read<ForgotPasswordBloc>().add(
                                     const ForgotPasswordEmailChanged(email: ''),
                                   );

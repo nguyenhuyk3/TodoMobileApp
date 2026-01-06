@@ -65,8 +65,10 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
         context.watch<LoginBloc>().state.status ==
         FormzSubmissionStatus.inProgress;
     // Màu sắc và trạng thái UI
-    final borderColor = hasError ? COLORS.ERROR_COLOR : Colors.black;
-    final shadowColor = hasError ? COLORS.ERROR_COLOR : Colors.black;
+    final borderColor =
+        hasError ? COLORS.ERROR_COLOR : COLORS.FOCUSED_BORDER_IP_COLOR;
+    final shadowColor =
+        hasError ? COLORS.ERROR_COLOR : COLORS.PRIMARY_SHADOW_COLOR;
     final isFocused = _focusNode.hasFocus;
 
     return BlocProvider(

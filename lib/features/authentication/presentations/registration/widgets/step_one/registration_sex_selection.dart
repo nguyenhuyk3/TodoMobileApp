@@ -36,7 +36,7 @@ class RegistrationSexSelection extends StatelessWidget {
               isLoading: isLoading,
             ),
 
-            const SizedBox(width: 16),
+            const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 4),
 
             _buildSexOption(
               context: context,
