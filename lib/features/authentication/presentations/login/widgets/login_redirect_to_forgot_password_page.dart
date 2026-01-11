@@ -26,7 +26,7 @@ class LoginRedirectToForgotPasswordPage extends StatelessWidget {
         child: Text(
           'Quên mật khẩu?',
           style: TextStyle(
-            color: COLORS.PRIMARY_TEXT_COLOR, 
+            color: COLORS.PRIMARY_TEXT_COLOR,
             fontSize: TextSizes.TITLE_XX_SMALL,
             fontWeight: FontWeight.w500,
           ),

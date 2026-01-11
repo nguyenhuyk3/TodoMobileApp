@@ -45,7 +45,6 @@ class Logo extends StatelessWidget {
         Text(
           'PRODUCTIVITY',
           style: TextStyle(fontSize: 12, color: logoColor, letterSpacing: 2),
-          
         ),
       ],
     );

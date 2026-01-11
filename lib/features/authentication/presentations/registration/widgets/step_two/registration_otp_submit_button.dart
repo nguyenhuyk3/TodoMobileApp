@@ -14,7 +14,7 @@ class RegistrationOtpSubmitButton extends StatelessWidget {
         if (previous is RegistrationStepTwo && current is RegistrationStepTwo) {
           return previous.isLoading != current.isLoading;
         }
-        
+
         return false;
       },
       builder: (context, state) {
