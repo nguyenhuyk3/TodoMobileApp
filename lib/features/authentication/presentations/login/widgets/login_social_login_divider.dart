@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/constants/others.dart';
+import '../../../../../core/constants/sizes.dart';
 
 class LoginSocialLoginDivider extends StatelessWidget {
   @override
@@ -22,13 +23,13 @@ class LoginSocialLoginDivider extends StatelessWidget {
               "HOẶC",
               style: TextStyle(
                 color: COLORS.LABEL_COLOR,
-                fontSize: 10,
+                fontSize: TextSizes.TITLE_XX_SMALL,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.5,
               ),
             ),
           ),
-          
+
           Expanded(
             child: Divider(
               color: COLORS.UNFOCUSED_BORDER_IP_COLOR,
