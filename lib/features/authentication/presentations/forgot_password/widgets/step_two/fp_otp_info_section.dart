@@ -5,7 +5,7 @@ import '../../../../../../core/constants/sizes.dart';
 
 class FPOtpInfoSection extends StatelessWidget {
   final String email;
-  
+
   const FPOtpInfoSection({super.key, required this.email});
 
   @override

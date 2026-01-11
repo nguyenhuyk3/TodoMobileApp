@@ -72,8 +72,8 @@ class _FPEmailInputState extends State<FPEmailInput> {
                 boxShadow: [
                   BoxShadow(
                     color: shadowColor,
-                    offset: const Offset(0, 3), 
-                    blurRadius: 0, 
+                    offset: const Offset(0, 3),
+                    blurRadius: 0,
                   ),
                 ],
               ),
@@ -98,8 +98,7 @@ class _FPEmailInputState extends State<FPEmailInput> {
                 ),
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor:
-                      Colors.transparent,
+                  fillColor: Colors.transparent,
                   hintText: 'Nhập địa chỉ email',
                   hintStyle: TextStyle(
                     color: COLORS.HINT_TEXT_COLOR,
@@ -130,7 +129,7 @@ class _FPEmailInputState extends State<FPEmailInput> {
                                 ),
                                 onPressed: () {
                                   _controller.clear();
-                                  
+
                                   context.read<ForgotPasswordBloc>().add(
                                     const ForgotPasswordEmailChanged(email: ''),
                                   );

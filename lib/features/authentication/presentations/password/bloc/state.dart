@@ -13,4 +13,3 @@ class PasswordInitial extends PasswordState {
 class PasswordUpdatedVisibility extends PasswordState {
   const PasswordUpdatedVisibility(super.obscureText);
 }
-

@@ -14,7 +14,7 @@ class LoginSocialLoginButton extends StatelessWidget {
           icon: const Icon(Icons.facebook, color: Color(0xFF1877F2), size: 28),
           label: 'Facebook',
         ),
-        
+
         const SizedBox(width: X_MIN_WIDTH_SIZED_BOX * 4),
 
         _SocialButton(
@@ -49,10 +49,7 @@ class _SocialButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: COLORS.INPUT_BG_COLOR,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: COLORS.FOCUSED_BORDER_IP_COLOR,
-              width: 1,
-            ),
+            border: Border.all(color: COLORS.FOCUSED_BORDER_IP_COLOR, width: 1),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
