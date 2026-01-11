@@ -5,7 +5,7 @@ import '../../../../../../core/constants/sizes.dart';
 
 class RegistrationOtpInfoSection extends StatelessWidget {
   final String email;
-  
+
   const RegistrationOtpInfoSection({super.key, required this.email});
 
   @override

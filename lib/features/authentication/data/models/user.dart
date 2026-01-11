@@ -16,14 +16,18 @@ class UserModel extends AppUser {
   /// Factory để parse dữ liệu kết hợp từ:
   /// 1. Supabase User Object (cho id, email)
   /// 2. Data từ bảng 'profiles' (cho full_name, sex...)
-  factory UserModel.fromSupabase(Map<String, dynamic> profileJson, String email, String uid) {
+  factory UserModel.fromSupabase(
+    Map<String, dynamic> profileJson,
+    String email,
+    String uid,
+  ) {
     return UserModel(
       id: uid,
       email: email,
       fullName: profileJson['full_name'] as String? ?? '',
       avatarUrl: profileJson['avatar_url'] as String? ?? '',
       // Supabase trả date dạng string 'yyyy-MM-dd'
-      dateOfBirth: DateTime.parse(profileJson['date_of_birth']), 
+      dateOfBirth: DateTime.parse(profileJson['date_of_birth']),
       sex: Sex.fromString(profileJson['sex'] as String),
     );
   }
