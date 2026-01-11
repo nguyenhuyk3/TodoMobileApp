@@ -82,7 +82,7 @@ class _RegistrationPasswordInputState extends State<RegistrationPasswordInput> {
       return state is RegistrationStepOne && state.isLoading;
     });
     // 3. Logic Style
-   final borderColor =
+    final borderColor =
         hasError ? COLORS.ERROR_COLOR : COLORS.FOCUSED_BORDER_IP_COLOR;
     final shadowColor =
         hasError ? COLORS.ERROR_COLOR : COLORS.PRIMARY_SHADOW_COLOR;
