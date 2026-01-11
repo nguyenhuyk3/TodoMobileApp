@@ -28,7 +28,7 @@ class LoginSocialLoginDivider extends StatelessWidget {
               ),
             ),
           ),
-          
+
           Expanded(
             child: Divider(
               color: COLORS.UNFOCUSED_BORDER_IP_COLOR,

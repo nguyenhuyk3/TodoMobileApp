@@ -30,7 +30,7 @@ abstract class AuthenticationRepository {
     required OtpType type,
   });
 
-   Future<Either<Failure, Object>> verifyOTP({
+  Future<Either<Failure, Object>> verifyOTP({
     required String email,
     required String otp,
     required OtpType type,

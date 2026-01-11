@@ -11,7 +11,9 @@ class PasswordBloc extends Bloc<PasswordEvent, PasswordState> {
   }
 
   FutureOr<void> _onToggleVisibility(
-      PasswordToggleVisibility event, Emitter<PasswordState> emit) {
+    PasswordToggleVisibility event,
+    Emitter<PasswordState> emit,
+  ) {
     emit(PasswordUpdatedVisibility(!state.obscureText));
   }
 }
